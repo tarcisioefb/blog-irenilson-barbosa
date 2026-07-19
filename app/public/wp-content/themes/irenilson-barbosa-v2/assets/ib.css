@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ELITE NOTÍCIAS — tema (Grafite & Ouro-no-logo). Layout largo (estilo folha).
+   IRENILSON BARBOSA — tema (Grafite & Ouro-no-logo). Layout largo (estilo folha).
    Seções: tokens · base · header · home · single · arquivo · footer · mobile
    ========================================================================== */
 :root{
@@ -242,8 +242,8 @@ a{color:inherit;text-decoration:none}
 .article__body .wp-block-pullquote cite{display:block;margin-top:14px;font-size:.85em;font-style:normal;color:var(--tx-dim);text-transform:uppercase;letter-spacing:.04em}
 .article__body .wp-block-pullquote p:last-child{margin-bottom:0}
 .article__body .wp-block-separator{margin:40px auto;border:0;height:1px;background:var(--line)}
-.elite-meta-box{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 20px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);margin:0 0 22px;max-width:720px;font-size:14px}
-.elite-meta-item strong{color:var(--tx)}
+.ib-meta-box{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 20px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);margin:0 0 22px;max-width:720px;font-size:14px}
+.ib-meta-item strong{color:var(--tx)}
 .article__body .wp-block-separator.is-style-wide{max-width:none}
 .article__body .wp-block-separator.is-style-dots{height:auto;background:none;text-align:center;color:var(--tx-dim);font-size:1.4em;letter-spacing:4px}
 .article__body .wp-block-separator.is-style-dots::before{content:"···"}
@@ -263,18 +263,18 @@ a{color:inherit;text-decoration:none}
 .tags a:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-1px);box-shadow:0 2px 8px -4px rgba(0,0,0,.15)}
 
 .related h2,.comments-area h2{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin:40px 0 20px;padding-bottom:10px;border-bottom:2px solid var(--ink)}
-.elite-inline-related{margin:28px 0;padding:24px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);border-left:3px solid var(--ink)}
-.elite-inline-related__head{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:18px}
-.elite-inline-related__grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.elite-inline-related .elite-inline-item{display:flex;flex-direction:column;gap:0;color:inherit;text-decoration:none;line-height:1.05}
-.elite-inline-item__img{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#ddd7cc}
-.elite-inline-item__img.is-empty{background:linear-gradient(140deg,#cfc9bd,#b3ac9f)}
-.elite-inline-item__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.elite-inline-item__img .en-tag{position:absolute;left:12px;top:12px;z-index:1}
-.elite-inline-related .elite-inline-item:hover .elite-inline-item__img img{transform:scale(1.04)}
-.elite-inline-item__body{display:block;padding-top:12px}
-.elite-inline-related .elite-inline-item__t{font-family:var(--serif);font-weight:700;font-size:.9375rem;line-height:1.05;color:var(--tx);background-image:linear-gradient(var(--tx),var(--tx));background-repeat:no-repeat;background-position:0 100%;background-size:0 2px;transition:background-size .25s;display:inline}
-.elite-inline-related .elite-inline-item:hover .elite-inline-item__t{background-size:100% 2px}
+.ib-inline-related{margin:28px 0;padding:24px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);border-left:3px solid var(--ink)}
+.ib-inline-related__head{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:18px}
+.ib-inline-related__grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.ib-inline-related .ib-inline-item{display:flex;flex-direction:column;gap:0;color:inherit;text-decoration:none;line-height:1.05}
+.ib-inline-item__img{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#ddd7cc}
+.ib-inline-item__img.is-empty{background:linear-gradient(140deg,#cfc9bd,#b3ac9f)}
+.ib-inline-item__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.ib-inline-item__img .en-tag{position:absolute;left:12px;top:12px;z-index:1}
+.ib-inline-related .ib-inline-item:hover .ib-inline-item__img img{transform:scale(1.04)}
+.ib-inline-item__body{display:block;padding-top:12px}
+.ib-inline-related .ib-inline-item__t{font-family:var(--serif);font-weight:700;font-size:.9375rem;line-height:1.05;color:var(--tx);background-image:linear-gradient(var(--tx),var(--tx));background-repeat:no-repeat;background-position:0 100%;background-size:0 2px;transition:background-size .25s;display:inline}
+.ib-inline-related .ib-inline-item:hover .ib-inline-item__t{background-size:100% 2px}
 .related__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 
 /* ==================== MICRO-INTERAÇÕES ==================== */
@@ -366,7 +366,7 @@ a{color:inherit;text-decoration:none}
 	.eh-lead{grid-column:1 / -1;grid-row:auto;min-height:clamp(280px,44vw,360px)}
 	.eh-feat{min-height:clamp(140px,22vw,180px)}
 	.eh-feat--wide{grid-column:1 / -1;grid-row:auto}
-	.related__grid,.elite-inline-related__grid{grid-template-columns:1fr 1fr}
+	.related__grid,.ib-inline-related__grid{grid-template-columns:1fr 1fr}
 }
 
 /* ---- md ≤768: "Mais recentes" empilha, toques maiores, sem zoom-no-foco (iOS) ---- */
@@ -384,10 +384,10 @@ a{color:inherit;text-decoration:none}
 
 /* ---- sm ≤640: uma coluna; 2 matérias por editoria; rodapé/postnav empilham ---- */
 @media(max-width:640px){
-	.eh-cards,.arch-grid,.related__grid,.elite-inline-related__grid{grid-template-columns:1fr}
-	.elite-inline-related .elite-inline-item{flex-direction:row;gap:14px}
-	.elite-inline-related .elite-inline-item__img{width:100px;height:72px;flex-shrink:0;aspect-ratio:auto}
-	.elite-inline-related .elite-inline-item__body{align-self:center}
+	.eh-cards,.arch-grid,.related__grid,.ib-inline-related__grid{grid-template-columns:1fr}
+	.ib-inline-related .ib-inline-item{flex-direction:row;gap:14px}
+	.ib-inline-related .ib-inline-item__img{width:100px;height:72px;flex-shrink:0;aspect-ratio:auto}
+	.ib-inline-related .ib-inline-item__body{align-self:center}
 	.eh-content .eh-cards>article:nth-child(n+3){display:none}
 	.footer__row{flex-direction:column;align-items:flex-start;gap:16px}
 	.footer__social{margin-left:0}

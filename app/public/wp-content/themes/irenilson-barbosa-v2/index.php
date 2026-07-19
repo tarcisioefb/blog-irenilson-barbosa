@@ -1,5 +1,5 @@
 <?php
-/** ELITE NOTÍCIAS — fallback (blog / últimas notícias). */
+/** IRENILSON BARBOSA — fallback (blog / últimas notícias). */
 defined( 'ABSPATH' ) || exit;
 get_header();
 ?>

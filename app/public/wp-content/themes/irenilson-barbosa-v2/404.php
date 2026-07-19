@@ -1,5 +1,5 @@
 <?php
-/** ELITE NOTÍCIAS — página não encontrada. */
+/** IRENILSON BARBOSA — página não encontrada. */
 defined( 'ABSPATH' ) || exit;
 get_header();
 ?>

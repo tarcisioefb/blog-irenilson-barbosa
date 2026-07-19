@@ -1,5 +1,5 @@
 <?php
-/** ELITE NOTÍCIAS — matéria (single). */
+/** IRENILSON BARBOSA — matéria (single). */
 defined( 'ABSPATH' ) || exit;
 get_header();
 while ( have_posts() ) : the_post();
@@ -20,7 +20,7 @@ while ( have_posts() ) : the_post();
 				<h1 class="article__title"><?php the_title(); ?></h1>
 
 				<div class="article__meta">
-					<span>por <b>Elite Notícias</b></span>
+					<span>por <b>Irenilson Barbosa</b></span>
 					<span><?php echo esc_html( get_the_date() ); ?></span>
 					<?php if ( $cat ) : ?><span>em <b><?php echo esc_html( $cat->name ); ?></b></span><?php endif; ?>
 					<span><?php echo (int) $mins; ?> min de leitura</span>
@@ -58,7 +58,7 @@ while ( have_posts() ) : the_post();
 				?>
 
 				<?php if ( comments_open() || get_comments_number() ) { ?><div class="article-section-divider"></div><?php comments_template(); } ?>
-			<script>fetch('/wp-json/elite/v1/view',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_id:<?php echo (int) $pid; ?>})});</script>
+
 			</article>
 
 			<?php get_sidebar(); ?>

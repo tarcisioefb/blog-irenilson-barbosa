@@ -1,5 +1,5 @@
 <?php
-/** ELITE NOTÍCIAS — arquivo (categoria, tag, data, autor). */
+/** IRENILSON BARBOSA — arquivo (categoria, tag, data, autor). */
 defined( 'ABSPATH' ) || exit;
 get_header();
 ?>

@@ -1,5 +1,5 @@
 <?php
-/** ELITE NOTÍCIAS — resultados de busca. */
+/** IRENILSON BARBOSA — resultados de busca. */
 defined( 'ABSPATH' ) || exit;
 get_header();
 ?>

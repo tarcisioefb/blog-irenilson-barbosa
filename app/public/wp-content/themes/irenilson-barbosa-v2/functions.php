@@ -37,8 +37,8 @@ add_action('wp_enqueue_scripts', function () {
 
 // CSS + JS
 add_action('wp_enqueue_scripts', function () {
-	wp_enqueue_style('irenilson', get_template_directory_uri() . '/assets/elite.css', [], IRENILSON_VER);
-	wp_enqueue_script('irenilson', get_template_directory_uri() . '/assets/elite.js', [], IRENILSON_VER, true);
+	wp_enqueue_style('irenilson', get_template_directory_uri() . '/assets/ib.css', [], IRENILSON_VER);
+	wp_enqueue_script('irenilson', get_template_directory_uri() . '/assets/ib.js', [], IRENILSON_VER, true);
 	if (is_singular() && comments_open()) {
 		wp_enqueue_script('comment-reply');
 	}

@@ -2,6 +2,21 @@
 /** IRENILSON BARBOSA — helpers de template. */
 defined( 'ABSPATH' ) || exit;
 
+/** Redes sociais (placeholder - configurar futuramente). */
+function ib_social() {
+	return array(
+		'facebook'  => 'https://facebook.com/',
+		'instagram' => 'https://instagram.com/',
+	);
+}
+function ib_render_social( $class = 'soc' ) {
+	foreach ( ib_social() as $net => $url ) {
+		if ( empty( $url ) ) { continue; }
+		printf( '<a class="%s" href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></a>',
+			esc_attr( $class ), esc_url( $url ), esc_attr( ucfirst( $net ) ) );
+	}
+}
+
 /** Categoria principal do post (ignora Uncategorized). */
 function ib_primary_cat( $id ) {
 	$cats = get_the_category( $id );

@@ -1,5 +1,5 @@
 <?php
-/** ELITE NOTÍCIAS — comentários. */
+/** IRENILSON BARBOSA — comentários. */
 defined( 'ABSPATH' ) || exit;
 if ( post_password_required() ) { return; }
 ?>
