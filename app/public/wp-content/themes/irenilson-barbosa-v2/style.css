@@ -1,0 +1,16 @@
+/*
+Theme Name: Irenilson Barbosa v2
+Theme URI: https://irenilsonbarbosa.com.br
+Author: Irenilson Barbosa
+Author URI: https://irenilsonbarbosa.com.br
+Description: Portal editorial com foco em ensaios, pensamento contemporâneo e publicações acadêmicas. Layout baseado no Elite Notícias, adaptado com a identidade visual do autor.
+Version: 2.0.0
+Requires at least: 6.0
+Tested up to: 7.0
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: irenilson-barbosa
+*/
+
+/* Os estilos do tema estão em assets/elite.css (carregado via wp_enqueue_style). */
