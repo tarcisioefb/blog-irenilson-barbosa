@@ -192,6 +192,15 @@ a{color:inherit;text-decoration:none}
 .ib-poem-notes p{margin:0 0 var(--space-3)}
 .ib-poem-notes p:last-child{margin-bottom:0}
 
+/* ==================== POIÉSIS HOME ==================== */
+.eh-poem-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.eh-poem-card{display:block;text-align:center;padding:var(--space-8) var(--space-6);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);text-decoration:none;color:inherit;transition:all .25s}
+.eh-poem-card:hover{box-shadow:var(--shadow-card);transform:translateY(-2px)}
+.eh-poem-card__t{font-family:var(--font-heading);font-size:var(--text-lg);font-weight:500;color:var(--ink);margin:0 0 var(--space-3);line-height:var(--leading-tight)}
+.eh-poem-card:hover .eh-poem-card__t{color:var(--accent)}
+.eh-poem-card__ex{font-size:var(--text-sm);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-4);line-height:var(--leading-snug)}
+.eh-poem-card__meta{font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider)}
+
 
 .eh-lead{position:relative;display:flex;align-items:flex-end;grid-column:1;grid-row:1 / span 2;min-height:0;border-radius:var(--radius-lg);overflow:hidden;color:#fff;background:#2a2620;box-shadow:var(--shadow-card)}
 .eh-lead.is-empty{background:linear-gradient(135deg,#2a3540,#4a5560)}
@@ -500,7 +509,7 @@ a{color:inherit;text-decoration:none}
 /* ---- md ≤780: cards viram 1 coluna no mobile ---- */
 @media(max-width:780px){
 	.eh-cards,.eh-cards--3col,.eh-cards--4col{grid-template-columns:1fr;gap:var(--space-5)}
-	.eh-strip-grid{grid-template-columns:1fr}
+	.eh-strip-grid,.eh-poem-grid{grid-template-columns:1fr}
 }
 
 /* ---- sm ≤640: uma coluna; 2 matérias por editoria; rodapé/postnav empilham ---- */

@@ -116,6 +116,25 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		</div>
 		<?php endif; ?>
 
+		<?php
+		$poems = get_posts( array( 'numberposts' => 2, 'post_status' => 'publish', 'post_type' => 'poiesis', 'fields' => 'ids' ) );
+		if ( ! empty( $poems ) ) : ?>
+		<div class="wrap" style="margin-top:var(--space-8)">
+			<div class="eh-sec-head"><h2>Poiésis</h2><a href="/poiesis/">Ver todas →</a></div>
+			<div class="eh-poem-grid">
+				<?php foreach ( $poems as $pid ) : ?>
+					<a class="eh-poem-card" href="<?php echo esc_url( get_permalink( $pid ) ); ?>">
+						<h3 class="eh-poem-card__t"><?php echo esc_html( get_the_title( $pid ) ); ?></h3>
+						<?php if ( has_excerpt( $pid ) ) : ?>
+							<p class="eh-poem-card__ex"><?php echo esc_html( get_the_excerpt( $pid ) ); ?></p>
+						<?php endif; ?>
+						<span class="eh-poem-card__meta">Poema</span>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php endif; ?>
+
 		<?php $banner_img = ib_opt('banner_image'); if ($banner_img) : ?>
 		<div class="wrap" style="margin-top:var(--space-10)">
 			<a href="<?php echo esc_url( ib_opt('banner_link') ?: '#' ); ?>" class="ib-banner" target="_blank" rel="noopener">
