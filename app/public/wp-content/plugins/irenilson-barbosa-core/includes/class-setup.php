@@ -148,6 +148,7 @@ class Setup {
 			'link_amazon'      => ['type' => 'string', 'post_types' => ['livro']],
 			'link_marinete'    => ['type' => 'string', 'post_types' => ['livro']],
 			'descricao'        => ['type' => 'string', 'post_types' => ['material']],
+			'poiesis_notas'    => ['type' => 'string', 'post_types' => ['poiesis']],
 		];
 
 		foreach ($meta_fields as $key => $config) {

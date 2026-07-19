@@ -3,20 +3,29 @@ namespace IrenilsonBarbosa\Core;
 
 class AuthorBox {
 	public static function init() {
-		add_filter('the_content', [__CLASS__, 'display_author_box']);
+		add_filter('the_content', [__CLASS__, 'auto_append']);
 	}
 
-	public static function display_author_box($content) {
-		if (! is_single() || ! in_the_loop()) {
+	public static function auto_append($content) {
+		if (! is_single() || ! in_the_loop() || 'poiesis' === get_post_type()) {
 			return $content;
 		}
+		return $content . self::render_html();
+	}
 
+	public static function render() {
+		if (is_single() && 'poiesis' === get_post_type()) {
+			echo self::render_html();
+		}
+	}
+
+	private static function render_html() {
 		$author_id   = get_the_author_meta('ID');
 		$author_name = get_the_author();
 		$author_bio  = get_the_author_meta('description');
 		$author_avatar = get_avatar($author_id, 80, '', $author_name, ['class' => 'avatar']);
 
-		$html = sprintf(
+		return sprintf(
 			'<div class="ib-author-box">
 				<div class="ib-author-box__inner">
 					<div class="ib-author-box__avatar">%s</div>
@@ -31,7 +40,5 @@ class AuthorBox {
 			esc_html($author_name),
 			esc_html($author_bio)
 		);
-
-		return $content . $html;
 	}
 }
