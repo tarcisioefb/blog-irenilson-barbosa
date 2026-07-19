@@ -4,17 +4,14 @@ namespace IrenilsonBarbosa\Core;
 class RelatedPosts {
 	public static function init() {}
 
-	public static function render() {
-		if (! is_single() || ! function_exists('ib_card')) return;
+	public static function get_ids($post_id = null, $limit = 4) {
+		if (! $post_id) $post_id = get_the_ID();
+		$cats = wp_get_post_categories($post_id, ['fields' => 'ids']);
+		if (empty($cats)) return [];
 
-		$post_id = get_the_ID();
-		$cats    = wp_get_post_categories($post_id, ['fields' => 'ids']);
-		if (empty($cats)) return;
-
-		// Primeiro tenta buscar 4 da mesma categoria
 		$related = new \WP_Query([
 			'post_type'      => 'post',
-			'posts_per_page' => 5,
+			'posts_per_page' => $limit + 1,
 			'post__not_in'   => [$post_id],
 			'category__in'   => $cats,
 			'orderby'        => 'rand',
@@ -23,17 +20,13 @@ class RelatedPosts {
 
 		$ids = [];
 		if ($related->have_posts()) {
-			while ($related->have_posts()) {
-				$related->the_post();
-				$ids[] = get_the_ID();
-			}
+			while ($related->have_posts()) { $related->the_post(); $ids[] = get_the_ID(); }
 		}
 		wp_reset_postdata();
 
-		// Se não tem 4, completa com os mais recentes (excluindo já selecionados)
-		if (count($ids) < 4) {
+		if (count($ids) < $limit) {
 			$fill = get_posts([
-				'posts_per_page' => 4 - count($ids),
+				'posts_per_page' => $limit - count($ids),
 				'post__not_in'   => array_merge([$post_id], $ids),
 				'orderby'        => 'date',
 				'order'          => 'DESC',
@@ -42,15 +35,17 @@ class RelatedPosts {
 			$ids = array_merge($ids, $fill);
 		}
 
+		return array_slice($ids, 0, $limit);
+	}
+
+	public static function render() {
+		if (! is_single() || ! function_exists('ib_card')) return;
+		$ids = self::get_ids();
 		if (empty($ids)) return;
 
 		echo '<div class="eh-sec-head"><h2>Artigos relacionados</h2></div>';
 		echo '<div class="eh-cards eh-cards--4col">';
-
-		foreach ($ids as $rid) {
-			ib_card($rid);
-		}
-
+		foreach ($ids as $rid) { ib_card($rid); }
 		echo '</div>';
 	}
 }

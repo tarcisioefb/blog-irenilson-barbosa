@@ -13,14 +13,12 @@ defined( 'ABSPATH' ) || exit;
 	<?php endif; ?>
 
 	<?php if ( is_singular( 'post' ) ) :
-		$cat = ib_primary_cat( get_the_ID() );
-		if ( $cat ) :
-			$rel = get_posts( array( 'numberposts' => 5, 'post_status' => 'publish', 'category' => $cat->term_id, 'post__not_in' => array( get_the_ID() ), 'fields' => 'ids', 'suppress_filters' => false ) );
-			if ( ! empty( $rel ) ) : ?>
+		$rel_ids = \IrenilsonBarbosa\Core\RelatedPosts::get_ids( get_the_ID(), 4 );
+		if ( ! empty( $rel_ids ) ) : ?>
 			<div class="eh-widget">
 				<span class="eh-widget__head">Leia também</span>
 				<div class="ib-rel-list">
-					<?php foreach ( $rel as $rid ) : ?>
+					<?php foreach ( $rel_ids as $rid ) : ?>
 						<a class="ib-rel-item" href="<?php echo esc_url( get_permalink( $rid ) ); ?>">
 							<?php if ( has_post_thumbnail( $rid ) ) : ?>
 								<span class="ib-rel-item__img">
@@ -35,8 +33,7 @@ defined( 'ABSPATH' ) || exit;
 					<?php endforeach; ?>
 				</div>
 			</div>
-			<?php endif;
-		endif;
+		<?php endif;
 	endif; ?>
 
 	<div class="eh-widget">
