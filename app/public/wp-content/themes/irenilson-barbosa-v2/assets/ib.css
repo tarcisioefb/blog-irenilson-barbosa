@@ -218,7 +218,7 @@ a{color:inherit;text-decoration:none}
 .eh-feat--wide{grid-column:2 / span 2;grid-row:1}
 .eh-feat--wide .eh-feat__body{padding:var(--space-5) 22px}
 .eh-feat--wide .eh-feat__t{font-size:clamp(1.125rem,1.025rem + 0.43vw,1.375rem)}
-.eh-strip{background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-lg);margin-top:24px;display:flex;overflow:hidden;transition:box-shadow .3s}
+.eh-strip{background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-lg);margin-top:var(--space-5);display:flex;overflow:hidden;transition:box-shadow .3s}
 .eh-strip:hover{box-shadow:0 4px 24px -12px rgba(62,44,27,.12)}
 .eh-strip__label{background:var(--ink);color:#fff;display:flex;align-items:center;gap:9px;padding:0 24px;font-weight:600;font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .eh-strip__label span{color:var(--bege-300)}
