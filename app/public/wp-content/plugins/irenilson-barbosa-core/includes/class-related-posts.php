@@ -18,11 +18,24 @@ class RelatedPosts {
 
 		$related = new \WP_Query([
 			'post_type'      => 'post',
-			'posts_per_page' => 3,
+			'posts_per_page' => 4,
 			'post__not_in'   => [$post_id],
 			'category__in'   => $cats,
 			'orderby'        => 'rand',
+			'no_found_rows'  => true,
 		]);
+
+		// Se não tem 3 na mesma categoria, busca dos mais recentes
+		if ($related->post_count < 3) {
+			$related = new \WP_Query([
+				'post_type'      => 'post',
+				'posts_per_page' => 3,
+				'post__not_in'   => [$post_id],
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+				'no_found_rows'  => true,
+			]);
+		}
 
 		if (! $related->have_posts()) return $content;
 
