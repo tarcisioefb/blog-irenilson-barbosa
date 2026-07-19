@@ -15,19 +15,22 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( is_singular( 'post' ) ) :
 		$cat = ib_primary_cat( get_the_ID() );
 		if ( $cat ) :
-			$rel = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'category' => $cat->term_id, 'post__not_in' => array( get_the_ID() ), 'fields' => 'ids', 'suppress_filters' => false ) );
+			$rel = get_posts( array( 'numberposts' => 5, 'post_status' => 'publish', 'category' => $cat->term_id, 'post__not_in' => array( get_the_ID() ), 'fields' => 'ids', 'suppress_filters' => false ) );
 			if ( ! empty( $rel ) ) : ?>
 			<div class="eh-widget">
 				<span class="eh-widget__head">Leia também</span>
-				<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+				<div class="ib-rel-list">
 					<?php foreach ( $rel as $rid ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $rid ) ); ?>" style="display:flex;gap:var(--space-4);text-decoration:none;color:inherit;align-items:flex-start">
+						<a class="ib-rel-item" href="<?php echo esc_url( get_permalink( $rid ) ); ?>">
 							<?php if ( has_post_thumbnail( $rid ) ) : ?>
-								<span style="flex-shrink:0;width:100px;height:70px;border-radius:var(--radius-sm);overflow:hidden;background:var(--paper-2)">
-									<?php echo get_the_post_thumbnail( $rid, 'ib-thumb', array( 'style' => 'width:100%;height:100%;object-fit:cover', 'loading' => 'lazy' ) ); ?>
+								<span class="ib-rel-item__img">
+									<?php echo get_the_post_thumbnail( $rid, 'ib-thumb', array( 'loading' => 'lazy' ) ); ?>
 								</span>
 							<?php endif; ?>
-							<span style="font-size:var(--text-15);font-weight:var(--weight-semibold);line-height:var(--leading-snug);color:var(--ink);transition:color .2s;hyphens:auto;overflow-wrap:break-word;word-break:break-word" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
+							<span class="ib-rel-item__body">
+								<span class="ib-rel-item__t"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
+								<span class="ib-rel-item__date"><?php echo esc_html( get_the_date( 'j F Y', $rid ) ); ?></span>
+							</span>
 						</a>
 					<?php endforeach; ?>
 				</div>
