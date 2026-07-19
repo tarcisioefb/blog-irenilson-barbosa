@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 /**
  * Sanitiza conteúdos dos posts:
  * 1. Remove imagens duplicadas (thumbnail repetida no corpo)
@@ -89,15 +91,50 @@ foreach ($posts as $post) {
 
 	// --- 1. Remove imagem duplicada da featured image ---
 	if (has_post_thumbnail($pid)) {
-		$thumb_url = wp_get_attachment_url(get_post_thumbnail_id($pid));
-		if ($thumb_url && strpos($content, $thumb_url) !== false) {
-			$new = preg_replace('/<figure[^>]*>.*?' . preg_quote($thumb_url, '/') . '.*?<\/figure>/is', '', $content);
-			$new = preg_replace('/<img[^>]*src=["\']' . preg_quote($thumb_url, '/') . '["\'][^>]*\/?>/i', '', $new);
+		$thumb_file = get_attached_file(get_post_thumbnail_id($pid));
+		if (!$thumb_file) continue;
+
+		// Normaliza filename do thumbnail: remove acentos, tamanhos, +, _, hífens, espaços
+		$raw = pathinfo(basename($thumb_file), PATHINFO_FILENAME);
+		$normal = function_exists('remove_accents') ? mb_strtolower(remove_accents($raw)) : mb_strtolower($raw);
+		$normal = preg_replace('/[\s_+\-]+/', '', $normal);
+		$normal = preg_replace('/\d+x\d+$/', '', $normal);
+
+		if (strlen($normal) < 5) continue iterate; // filename muito curto, pula
+
+		// Percorre todas as imagens do conteúdo e remove se filename bater
+		$new = preg_replace_callback('/<img[^>]*src=["\']([^"\']+)["\'][^>]*\/?>/i', function($m) use ($normal) {
+			$url = basename($m[1]);
+			$url_name = pathinfo($url, PATHINFO_FILENAME);
+			$url_normal = mb_strtolower(remove_accents($url_name));
+			$url_normal = preg_replace('/[\s_+\-%20]+/', '', $url_normal);
+			$url_normal = preg_replace('/\d+x\d+$/', '', $url_normal);
+
+			if (strlen($url_normal) < 5) return $m[0];
+			// Match se um contém o outro (ignorando variações de normalização)
+			if (strpos($url_normal, $normal) !== false || strpos($normal, $url_normal) !== false) {
+				return '';
+			}
+			return $m[0];
+		}, $content);
+
+		if ($new !== $content) {
+			// Remove <figure> e parágrafos/divs vazios
+			$new = preg_replace('/<figure[^>]*>\s*<\/figure>/is', '', $new);
+			$new = preg_replace('/<p>\s*<\/p>/', '', $new);
+			$new = preg_replace('/<div>\s*<\/div>/', '', $new);
+			$content = $new;
+			$changed = true;
+			$dup_removed++;
+			echo "  Duplicata removida: {$post->post_title} (thumb: " . basename($thumb_file) . ")\n";
+		}
+	}
+
 			if ($new !== $content) {
 				$content = $new;
 				$changed = true;
 				$dup_removed++;
-				echo "  Duplicata removida: {$post->post_title}\n";
+				echo "  Duplicata removida: {$post->post_title} (thumb: {$thumb_filename})\n";
 			}
 		}
 	}
