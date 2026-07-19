@@ -19,6 +19,8 @@ class AdminSettings {
 			'font_heading'     => 'Literata',
 			'font_body'        => 'Inter',
 			'facebook_app_id'  => '',
+			'banner_image'     => '',
+			'banner_link'      => '',
 		];
 	}
 
@@ -78,6 +80,8 @@ class AdminSettings {
 		$allowed_body = ['Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System'];
 		$out['font_body'] = in_array($in['font_body'] ?? '', $allowed_body, true) ? $in['font_body'] : 'Inter';
 		$out['facebook_app_id'] = isset($in['facebook_app_id']) ? sanitize_text_field(trim($in['facebook_app_id'])) : '';
+		$out['banner_image'] = isset($in['banner_image']) ? esc_url_raw(trim($in['banner_image'])) : '';
+		$out['banner_link'] = isset($in['banner_link']) ? esc_url_raw(trim($in['banner_link'])) : '';
 		return $out;
 	}
 
@@ -129,6 +133,21 @@ class AdminSettings {
 							<tr>
 								<th scope="row" style="width:120px;padding:8px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
 								<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
+							</tr>
+						</tbody></table>
+					</div>
+
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🖼️ Banner (Home)</h2>
+						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Banner responsivo exibido abaixo de "Mais recentes" na página inicial.</p>
+						<table class="form-table" role="presentation" style="margin:0"><tbody>
+							<tr>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image" style="color:#3E2C1B;font-weight:600">Imagem</label></th>
+								<td style="padding:8px 0"><input type="url" id="banner_image" name="ib_opts[banner_image]" value="<?php echo esc_attr(self::opt('banner_image')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+							</tr>
+							<tr>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_link" style="color:#3E2C1B;font-weight:600">Link</label></th>
+								<td style="padding:8px 0"><input type="url" id="banner_link" name="ib_opts[banner_link]" value="<?php echo esc_attr(self::opt('banner_link')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
 							</tr>
 						</tbody></table>
 					</div>

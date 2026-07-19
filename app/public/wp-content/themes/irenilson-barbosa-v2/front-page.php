@@ -115,6 +115,14 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 			</div>
 		</div>
 		<?php endif; ?>
+
+		<?php $banner_img = ib_opt('banner_image'); if ($banner_img) : ?>
+		<div class="wrap" style="margin-top:var(--space-5)">
+			<a href="<?php echo esc_url( ib_opt('banner_link') ?: '#' ); ?>" class="ib-banner" target="_blank" rel="noopener">
+				<img src="<?php echo esc_url($banner_img); ?>" alt="" loading="lazy">
+			</a>
+		</div>
+		<?php endif; ?>
 	</section>
 	<?php endif; ?>
 

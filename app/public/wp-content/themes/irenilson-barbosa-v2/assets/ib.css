@@ -217,6 +217,9 @@ a{color:inherit;text-decoration:none}
 .eh-feat--wide .eh-feat__body{padding:var(--space-5) 22px}
 .eh-feat--wide .eh-feat__t{font-size:clamp(1.125rem,1.025rem + 0.43vw,1.375rem)}
 .eh-strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5)}
+.ib-banner{display:block;border-radius:var(--radius-md);overflow:hidden;transition:opacity .2s}
+.ib-banner:hover{opacity:.9}
+.ib-banner img{width:100%;height:auto;display:block}
 
 .eh-main{padding:clamp(28px,4vw,44px) 0 8px}
 .eh-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:var(--section-gap);align-items:start}
