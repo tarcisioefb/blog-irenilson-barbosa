@@ -1,5 +1,5 @@
 /* ==========================================================================
-   IRENILSON BARBOSA — tema (Grafite & Ouro-no-logo). Layout largo (estilo folha).
+   IRENILSON BARBOSA — tema editorial.
    Seções: tokens · base · header · home · single · arquivo · footer · mobile
    ========================================================================== */
 :root{
@@ -13,7 +13,7 @@
 	--wrap:1300px; --r:8px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:var(--page);color:var(--tx);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-wrap:break-word}
 img{max-width:100%;height:auto;display:block}
@@ -103,10 +103,9 @@ a{color:inherit;text-decoration:none}
 .eh-lead__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform .4s}
 .eh-lead::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(20,18,16,0) 30%,rgba(20,18,16,.5) 60%,rgba(16,14,12,.94) 100%);pointer-events:none}
 .eh-lead:hover .eh-lead__img{transform:scale(1.04)}
-.eh-lead__body{padding:30px 34px 34px;position:relative;z-index:2}
-.eh-lead__body .en-tag{display:inline-block;margin-bottom:10px}
-.eh-lead__title{font-family:var(--serif);font-weight:700;font-size:clamp(1.5rem,1.25rem + 1.3vw,2.3125rem);line-height:1.2;margin:0 0 10px;max-width:20ch;text-wrap:balance;background-image:linear-gradient(#fff,#fff);background-repeat:no-repeat;background-position:0 100%;background-size:0 2px;transition:background-size .25s;display:inline}
-.eh-lead:hover .eh-lead__title{background-size:100% 2px}
+.eh-lead__body{padding:34px 36px 36px;position:relative;z-index:2}
+.eh-lead__body .en-tag{display:inline-block;margin-bottom:12px}
+.eh-lead__title{font-family:var(--serif);font-weight:700;font-size:clamp(1.5rem,1.25rem + 1.3vw,2.3125rem);line-height:1.2;margin:0 0 14px;max-width:22ch;text-wrap:balance}
 .eh-lead__meta{font-size:12.5px;color:#d9d5cc}.eh-lead__meta b{color:#efe7d6;font-weight:600}
 .eh-secondary{display:flex;flex-direction:column;gap:16px}
 .eh-scard{display:grid;grid-template-columns:108px 1fr;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line)}
@@ -409,6 +408,22 @@ a{color:inherit;text-decoration:none}
 	.topbar__row{justify-content:flex-start}
 	.eh-feat__body,.eh-feat--wide .eh-feat__body{padding:12px 14px}
 	.eh-lead__body{padding:20px 18px 22px}
+}
+
+/* ==================== MODERNIZAÇÕES UI ==================== */
+body{transition:background .3s}
+::selection{background:var(--accent);color:#fff}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.eh-card{transition:transform .25s,box-shadow .25s}
+.eh-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px -12px rgba(62,44,27,.18)}
+.eh-lead,.eh-feat{transition:transform .3s}
+.eh-lead:hover,.eh-feat:hover{transform:scale(1.01)}
+.eh-strip{transition:box-shadow .3s}
+.eh-strip:hover{box-shadow:0 4px 20px -10px rgba(62,44,27,.15)}
+.en-tag{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.masthead{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+@media(prefers-reduced-motion:reduce){
+	*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
 /* ==================== ACESSIBILIDADE / MOBILE HARDENING ==================== */

@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 	<div class="eh-widget">
 		<span class="eh-widget__head">Sobre</span>
 		<div style="font-size:0.9rem;color:var(--tx-2);line-height:1.7">
-			<p><strong style="color:var(--ink)">Irenilson Barbosa</strong> é professor universitário, escritor e pesquisador. Doutor em Educação, autor de ensaios sobre filosofia, política, educação e cultura.</p>
+			<p><strong style="color:var(--ink)">Irenilson Barbosa</strong> <?php echo esc_html( ib_opt( 'sidebar_bio' ) ?: 'Professor universitário, escritor e pesquisador.' ); ?></p>
 		</div>
 	</div>
 

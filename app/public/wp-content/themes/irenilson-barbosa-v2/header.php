@@ -21,7 +21,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 		<div class="wrap topbar__row">
 			<div class="topbar__date"><?php echo esc_html( ucfirst( date_i18n( 'l, j \d\e F \d\e Y' ) ) ); ?></div>
 			<div class="topbar__right">
-				<span class="topbar__place">Salvador · <b>Bahia</b></span>
+				<span class="topbar__place"><b>Irenilson Barbosa</b> · Professor &amp; Escritor</span>
 				<div class="topbar__social"><?php ib_render_social( 'soc' ); ?></div>
 			</div>
 		</div>
