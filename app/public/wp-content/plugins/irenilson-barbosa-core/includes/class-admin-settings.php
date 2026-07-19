@@ -1,13 +1,13 @@
 <?php
-namespace IrenilsonBarbosa\Core;
-
-// Helpers globais (tema depende destas funções)
+// Helpers globais (tema depende destas)
 if (! function_exists('ib_opt')) {
-	function ib_opt($key) { return AdminSettings::opt($key); }
+	function ib_opt($key) { return \IrenilsonBarbosa\Core\AdminSettings::opt($key); }
 }
 if (! function_exists('ib_opts')) {
-	function ib_opts() { return AdminSettings::opts(); }
+	function ib_opts() { return \IrenilsonBarbosa\Core\AdminSettings::opts(); }
 }
+
+namespace IrenilsonBarbosa\Core;
 
 class AdminSettings {
 	public static function init() {
