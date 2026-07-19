@@ -73,26 +73,7 @@ add_action('wp_enqueue_scripts', function () {
 // Data padrão Brasil
 add_filter('option_date_format', function () { return 'j \d\e F \d\e Y'; });
 
-// ─── Newsletter ─────────────────────────────────────────────
-
-add_action('wp_ajax_ib_newsletter', 'ib_newsletter_handler');
-add_action('wp_ajax_nopriv_ib_newsletter', 'ib_newsletter_handler');
-
-function ib_newsletter_handler() {
-	$email = sanitize_email($_POST['email'] ?? '');
-	if (!is_email($email)) {
-		wp_send_json_error('E-mail inválido.');
-	}
-
-	$subs = (array) get_option('ib_newsletter_subscribers', []);
-	if (in_array($email, $subs, true)) {
-		wp_send_json_error('Este e-mail já está cadastrado.');
-	}
-
-	$subs[] = $email;
-	update_option('ib_newsletter_subscribers', $subs);
-	wp_send_json_success('Cadastro realizado com sucesso!');
-}
+// ─── Newsletter (formulário — exibição no tema) ──────────────
 
 function ib_newsletter_form() {
 	?>

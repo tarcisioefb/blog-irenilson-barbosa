@@ -42,4 +42,5 @@ add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\ReadingTime::init();
 	\IrenilsonBarbosa\Core\RelatedPosts::init();
 	\IrenilsonBarbosa\Core\AuthorBox::init();
+	\IrenilsonBarbosa\Core\Newsletter::init();
 });
