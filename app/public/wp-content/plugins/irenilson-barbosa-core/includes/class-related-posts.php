@@ -35,7 +35,7 @@ class RelatedPosts {
 		if (! $related->have_posts()) { wp_reset_postdata(); return; }
 
 		echo '<div class="eh-sec-head"><h2>Artigos relacionados</h2></div>';
-		echo '<div class="eh-cards eh-cards--3col">';
+		echo '<div class="eh-cards eh-cards--4col">';
 
 		while ($related->have_posts()) {
 			$related->the_post();

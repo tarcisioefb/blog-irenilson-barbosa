@@ -237,6 +237,7 @@ a{color:inherit;text-decoration:none}
 .eh-sec-head a:hover{color:var(--accent)}
 .eh-cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-7) 26px}
 .eh-cards--3col{grid-template-columns:repeat(3,1fr)}
+.eh-cards--4col{grid-template-columns:repeat(4,1fr)}
 .eh-card__imgwrap{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#ddd7cc}
 .eh-card__imgwrap.is-empty{background:linear-gradient(140deg,#cfc9bd,#b3ac9f)}
 .eh-card__imgwrap img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:transform .4s;margin:0;padding:0}
@@ -497,12 +498,12 @@ a{color:inherit;text-decoration:none}
 
 /* ---- md ≤780: cards viram 1 coluna no mobile ---- */
 @media(max-width:780px){
-	.eh-cards,.eh-cards--3col{grid-template-columns:1fr;gap:var(--space-5)}
+	.eh-cards,.eh-cards--3col,.eh-cards--4col{grid-template-columns:1fr;gap:var(--space-5)}
 }
 
 /* ---- sm ≤640: uma coluna; 2 matérias por editoria; rodapé/postnav empilham ---- */
 @media(max-width:640px){
-	.eh-cards,.eh-cards--3col,.arch-grid,.related__grid,.ib-inline-related__grid{grid-template-columns:1fr}
+	.eh-cards,.eh-cards--3col,.eh-cards--4col,.arch-grid,.related__grid,.ib-inline-related__grid{grid-template-columns:1fr}
 	.eh-hero__grid{grid-template-columns:1fr;gap:var(--space-3)}
 	.eh-feat-stack{grid-column:1;grid-row:auto;flex-direction:row}
 	.eh-feat-stack .eh-feat{min-height:clamp(120px,25vw,160px)}
