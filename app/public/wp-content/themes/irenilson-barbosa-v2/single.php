@@ -24,7 +24,7 @@ while ( have_posts() ) : the_post();
 					<span><?php echo esc_html( get_the_date() ); ?></span>
 					<?php if ( $cat ) : ?><span>em <b><?php echo esc_html( $cat->name ); ?></b></span><?php endif; ?>
 					<span><?php echo (int) $mins; ?> min de leitura</span>
-					<?php if ( comments_open() || get_comments_number() ) : ?><span><?php echo (int) get_comments_number(); ?> comentário(s)</span><?php endif; ?>
+	
 				</div>
 
 				<?php if ( has_post_thumbnail() ) : ?>
@@ -57,7 +57,11 @@ while ( have_posts() ) : the_post();
 				endif;
 				?>
 
-				<?php if ( comments_open() || get_comments_number() ) { ?><div class="article-section-divider"></div><?php comments_template(); } ?>
+				<div class="article-section-divider"></div>
+			<section class="related">
+				<h2>Comentários</h2>
+				<div id="fb-comments" class="fb-comments" data-href="<?php echo esc_url( get_permalink( $pid ) ); ?>" data-width="100%" data-numposts="10" data-order-by="social"></div>
+			</section>
 
 			</article>
 

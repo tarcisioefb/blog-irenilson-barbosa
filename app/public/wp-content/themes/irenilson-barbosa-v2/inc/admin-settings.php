@@ -12,6 +12,7 @@ function ib_opts_defaults() {
 		'sidebar_bio'      => 'Professor universitário, escritor e pesquisador. Doutor em Educação, autor de ensaios sobre filosofia, política, educação e cultura.',
 		'font_heading'     => 'Literata',
 		'font_body'        => 'Inter',
+		'facebook_app_id'  => '',
 	];
 }
 
@@ -61,6 +62,7 @@ function ib_opts_sanitize( $in ) {
 	$out['font_heading'] = in_array( $in['font_heading'] ?? '', $allowed_heading, true ) ? $in['font_heading'] : 'Literata';
 	$allowed_body = [ 'Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System' ];
 	$out['font_body'] = in_array( $in['font_body'] ?? '', $allowed_body, true ) ? $in['font_body'] : 'Inter';
+	$out['facebook_app_id'] = isset( $in['facebook_app_id'] ) ? sanitize_text_field( trim( $in['facebook_app_id'] ) ) : '';
 	return $out;
 }
 
@@ -130,6 +132,18 @@ function ib_settings_page() {
 						<tr>
 							<th scope="row" style="width:120px;padding:8px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
 							<td style="padding:8px 0"><textarea id="footer_about" name="ib_opts[footer_about]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea( ib_opt( 'footer_about' ) ); ?></textarea></td>
+						</tr>
+					</tbody></table>
+				</div>
+
+				<!-- Facebook -->
+				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
+					<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">💬 Comentários do Facebook</h2>
+					<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Se você tem um App ID do Facebook, insira aqui. Deixe em branco para usar sem app — funciona, mas sem moderação centralizada. Crie um app em <code>developers.facebook.com</code>.</p>
+					<table class="form-table" role="presentation" style="margin:0"><tbody>
+						<tr>
+							<th scope="row" style="width:120px;padding:8px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600">App ID</label></th>
+							<td style="padding:8px 0"><input type="text" id="facebook_app_id" name="ib_opts[facebook_app_id]" value="<?php echo esc_attr( ib_opt( 'facebook_app_id' ) ); ?>" class="regular-text" placeholder="1234567890" style="border-color:#e0d5c3;border-radius:4px"></td>
 						</tr>
 					</tbody></table>
 				</div>

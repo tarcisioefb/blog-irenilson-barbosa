@@ -6,10 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 	<?php wp_head(); ?>
+<?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) : ?>
+<meta property="fb:app_id" content="<?php echo esc_attr($fb_app_id); ?>">
+<?php endif; ?>
 </head>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v18.0<?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) echo '&appId=' . esc_attr($fb_app_id); ?>"></script>
 
 <?php
 $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_class' => 'menu', 'depth' => 2, 'fallback_cb' => false );
