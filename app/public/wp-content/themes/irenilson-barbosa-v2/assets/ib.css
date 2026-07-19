@@ -64,9 +64,7 @@
 	--border-c:var(--line);
 
 	/* 📝 Decoração */
-	--underline:linear-gradient(var(--accent),var(--accent));
-	--underline-size:0 2px;
-	--underline-hover:100% 2px;
+
 	--shadow-card:var(--shadow-card);
 	--shadow-hero:var(--shadow-hero);
 }
@@ -205,8 +203,8 @@ a{color:inherit;text-decoration:none}
 .eh-scard:hover .eh-scard__img img{transform:scale(1.04)}
 .eh-scard__body{display:flex;flex-direction:column;justify-content:center}
 .eh-scard__cat{font-size:var(--text-xxs);font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-dim)}
-.eh-scard__t{font-family:var(--font-heading);font-weight:700;font-size:var(--text-15);line-height:var(--leading-snug);margin:var(--space-1) 0;color:var(--tx);background-image:linear-gradient(var(--ink),var(--ink));background-repeat:no-repeat;background-position:0 100%;background-size:var(--underline-size);transition:background-size .25s,color .2s}
-.eh-scard:hover .eh-scard__t{color:var(--ink);background-size:var(--underline-hover)}
+.eh-scard__t{font-family:var(--font-heading);font-weight:700;font-size:var(--text-15);line-height:var(--leading-snug);margin:var(--space-1) 0;color:var(--tx);transition:color .2s}
+.eh-scard:hover .eh-scard__t{color:var(--accent)}
 .eh-scard__m{font-size:var(--text-xs);color:var(--tx-dim)}
 /* cards de destaque da primeira dobra (mosaico: 1 largo no topo-direito + 2 embaixo) */
 .eh-feat{position:relative;display:flex;align-items:flex-end;min-height:0;border-radius:var(--radius-md);overflow:hidden;color:#fff;background:#2a2620;box-shadow:var(--shadow-card)}
@@ -216,8 +214,7 @@ a{color:inherit;text-decoration:none}
 .eh-feat:hover .eh-feat__img{transform:scale(1.04)}
 .eh-feat__body{padding:var(--space-4) 18px;position:relative;z-index:2}
 .eh-feat__body .en-tag{display:inline-block;margin-bottom:6px}
-.eh-feat__t{font-family:var(--font-heading);font-weight:700;font-size:clamp(0.875rem,0.825rem + 0.216vw,1rem);line-height:1.2;margin:0;text-wrap:balance;background-image:linear-gradient(#fff,#fff);background-repeat:no-repeat;background-position:0 100%;background-size:var(--underline-size);transition:background-size .25s}
-.eh-feat:hover .eh-feat__t{background-size:var(--underline-hover)}
+.eh-feat__t{font-family:var(--font-heading);font-weight:700;font-size:clamp(0.875rem,0.825rem + 0.216vw,1rem);line-height:1.2;margin:0;text-wrap:balance}
 .eh-feat--wide{grid-column:2 / span 2;grid-row:1}
 .eh-feat--wide .eh-feat__body{padding:var(--space-5) 22px}
 .eh-feat--wide .eh-feat__t{font-size:clamp(1.125rem,1.025rem + 0.43vw,1.375rem)}
@@ -239,6 +236,7 @@ a{color:inherit;text-decoration:none}
 .eh-sec-head a{font-size:var(--text-xs);font-weight:600;letter-spacing:var(--track-wide);color:var(--accent-2);text-transform:uppercase;transition:color .2s}
 .eh-sec-head a:hover{color:var(--accent)}
 .eh-cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-7) 26px}
+.eh-cards--3col{grid-template-columns:repeat(3,1fr)}
 .eh-card__imgwrap{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#ddd7cc}
 .eh-card__imgwrap.is-empty{background:linear-gradient(140deg,#cfc9bd,#b3ac9f)}
 .eh-card__imgwrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}
@@ -374,8 +372,8 @@ a{color:inherit;text-decoration:none}
 .ib-inline-item__img .en-tag{position:absolute;left:12px;top:12px;z-index:1}
 .ib-inline-related .ib-inline-item:hover .ib-inline-item__img img{transform:scale(1.04)}
 .ib-inline-item__body{display:block;padding-top:12px}
-.ib-inline-related .ib-inline-item__t{font-family:var(--font-heading);font-weight:700;font-size:.9375rem;line-height:1.05;color:var(--tx);background-image:linear-gradient(var(--tx),var(--tx));background-repeat:no-repeat;background-position:0 100%;background-size:var(--underline-size);transition:background-size .25s;display:inline}
-.ib-inline-related .ib-inline-item:hover .ib-inline-item__t{background-size:var(--underline-hover)}
+.ib-inline-related .ib-inline-item__t{font-family:var(--font-heading);font-weight:700;font-size:.9375rem;line-height:1.05;color:var(--tx);display:inline}
+.ib-inline-related .ib-inline-item:hover .ib-inline-item__t{color:var(--accent)}
 .related__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6)}
 
 /* ==================== LIVROS ==================== */
@@ -497,12 +495,12 @@ a{color:inherit;text-decoration:none}
 
 /* ---- md ≤780: cards viram 1 coluna no mobile ---- */
 @media(max-width:780px){
-	.eh-cards{grid-template-columns:1fr;gap:var(--space-5)}
+	.eh-cards,.eh-cards--3col{grid-template-columns:1fr;gap:var(--space-5)}
 }
 
 /* ---- sm ≤640: uma coluna; 2 matérias por editoria; rodapé/postnav empilham ---- */
 @media(max-width:640px){
-	.eh-cards,.arch-grid,.related__grid,.ib-inline-related__grid{grid-template-columns:1fr}
+	.eh-cards,.eh-cards--3col,.arch-grid,.related__grid,.ib-inline-related__grid{grid-template-columns:1fr}
 	.eh-hero__grid{grid-template-columns:1fr;gap:var(--space-3)}
 	.eh-feat-stack{grid-column:1;grid-row:auto;flex-direction:row}
 	.eh-feat-stack .eh-feat{min-height:clamp(120px,25vw,160px)}

@@ -40,7 +40,7 @@ class RelatedPosts {
 		if (! $related->have_posts()) return $content;
 
 		$html = '<div class="eh-sec-head" style="margin-top:var(--space-8)"><h2>Artigos relacionados</h2></div>';
-		$html .= '<div class="eh-cards">';
+		$html .= '<div class="eh-cards eh-cards--3col">';
 
 		while ($related->have_posts()) {
 			$related->the_post();
