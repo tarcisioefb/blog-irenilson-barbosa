@@ -38,21 +38,22 @@ class RelatedPosts {
 			return $content;
 		}
 
-		$html = '<div class="related-posts" style="margin-top:var(--wp--preset--spacing--70);padding-top:var(--wp--preset--spacing--50);border-top:1px solid var(--wp--preset--color--bege-300)">';
-		$html .= '<h3 style="font-size:1rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--wp--preset--color--marrom-400);margin-bottom:var(--wp--preset--spacing--40)">Artigos relacionados</h3>';
-		$html .= '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--wp--preset--spacing--40)">';
+		$html = '<div class="ib-related-section">';
+		$html .= '<div class="article-section-divider"></div>';
+		$html .= '<h2 class="ib-related-title">Artigos relacionados</h2>';
+		$html .= '<div class="ib-related-grid">';
 
 		while ($related->have_posts()) {
 			$related->the_post();
-			$html .= '<div style="background:var(--wp--preset--color--branco);border-radius:8px;padding:var(--wp--preset--spacing--40)">';
+			$tid = get_the_ID();
+			$html .= '<a class="ib-related-card" href="' . get_permalink() . '">';
 			if (has_post_thumbnail()) {
-				$html .= get_the_post_thumbnail(get_the_ID(), 'medium', [
-					'style' => 'width:100%;height:140px;object-fit:cover;border-radius:4px;margin-bottom:var(--wp--preset--spacing--30)',
-				]);
+				$html .= '<span class="ib-related-card__img">' . get_the_post_thumbnail($tid, 'ib-card') . '</span>';
 			}
-			$html .= '<h4 style="margin:0 0 var(--wp--preset--spacing--20)"><a href="' . get_permalink() . '" style="color:var(--wp--preset--color--marrom-800);text-decoration:none">' . get_the_title() . '</a></h4>';
-			$html .= '<p style="font-size:0.875rem;color:var(--wp--preset--color--marrom-400);margin:0">' . get_the_date('j F Y') . '</p>';
-			$html .= '</div>';
+			$html .= '<span class="ib-related-card__body">';
+			$html .= '<span class="ib-related-card__t">' . get_the_title() . '</span>';
+			$html .= '<span class="ib-related-card__date">' . get_the_date('j F Y') . '</span>';
+			$html .= '</span></a>';
 		}
 
 		wp_reset_postdata();
