@@ -19,8 +19,10 @@ class AdminSettings {
 			'font_heading'     => 'Literata',
 			'font_body'        => 'Inter',
 			'facebook_app_id'  => '',
-			'banner_image'     => '',
-			'banner_link'      => '',
+			'banner_image'        => '',
+			'banner_image_tablet' => '',
+			'banner_image_mobile' => '',
+			'banner_link'         => '',
 		];
 	}
 
@@ -81,6 +83,8 @@ class AdminSettings {
 		$out['font_body'] = in_array($in['font_body'] ?? '', $allowed_body, true) ? $in['font_body'] : 'Inter';
 		$out['facebook_app_id'] = isset($in['facebook_app_id']) ? sanitize_text_field(trim($in['facebook_app_id'])) : '';
 		$out['banner_image'] = isset($in['banner_image']) ? esc_url_raw(trim($in['banner_image'])) : '';
+		$out['banner_image_tablet'] = isset($in['banner_image_tablet']) ? esc_url_raw(trim($in['banner_image_tablet'])) : '';
+		$out['banner_image_mobile'] = isset($in['banner_image_mobile']) ? esc_url_raw(trim($in['banner_image_mobile'])) : '';
 		$out['banner_link'] = isset($in['banner_link']) ? esc_url_raw(trim($in['banner_link'])) : '';
 		return $out;
 	}
@@ -139,11 +143,19 @@ class AdminSettings {
 
 					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
 						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🖼️ Banner (Home)</h2>
-						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Banner responsivo exibido abaixo de "Mais recentes" na página inicial.</p>
+						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Banner responsivo exibido abaixo de "Mais recentes" na home. Imagens diferentes para desktop, tablet e mobile — a ideal é landscape 1200x300, tablet 800x250, mobile 600x250.</p>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image" style="color:#3E2C1B;font-weight:600">Imagem</label></th>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image" style="color:#3E2C1B;font-weight:600">Desktop</label></th>
 								<td style="padding:8px 0"><input type="url" id="banner_image" name="ib_opts[banner_image]" value="<?php echo esc_attr(self::opt('banner_image')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+							</tr>
+							<tr>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image_tablet" style="color:#3E2C1B;font-weight:600">Tablet</label></th>
+								<td style="padding:8px 0"><input type="url" id="banner_image_tablet" name="ib_opts[banner_image_tablet]" value="<?php echo esc_attr(self::opt('banner_image_tablet')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+							</tr>
+							<tr>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image_mobile" style="color:#3E2C1B;font-weight:600">Mobile</label></th>
+								<td style="padding:8px 0"><input type="url" id="banner_image_mobile" name="ib_opts[banner_image_mobile]" value="<?php echo esc_attr(self::opt('banner_image_mobile')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
 							</tr>
 							<tr>
 								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_link" style="color:#3E2C1B;font-weight:600">Link</label></th>

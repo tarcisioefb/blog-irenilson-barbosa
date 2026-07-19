@@ -119,7 +119,15 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		<?php $banner_img = ib_opt('banner_image'); if ($banner_img) : ?>
 		<div class="wrap" style="margin-top:var(--space-5)">
 			<a href="<?php echo esc_url( ib_opt('banner_link') ?: '#' ); ?>" class="ib-banner" target="_blank" rel="noopener">
-				<img src="<?php echo esc_url($banner_img); ?>" alt="" loading="lazy">
+				<picture>
+					<?php $tab = ib_opt('banner_image_tablet'); if ($tab) : ?>
+						<source media="(max-width:1024px)" srcset="<?php echo esc_url($tab); ?>">
+					<?php endif; ?>
+					<?php $mob = ib_opt('banner_image_mobile'); if ($mob) : ?>
+						<source media="(max-width:640px)" srcset="<?php echo esc_url($mob); ?>">
+					<?php endif; ?>
+					<img src="<?php echo esc_url($banner_img); ?>" alt="" loading="lazy">
+				</picture>
 			</a>
 		</div>
 		<?php endif; ?>
