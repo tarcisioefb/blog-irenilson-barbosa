@@ -33,7 +33,9 @@ add_action('wp_enqueue_scripts', function () {
 	$families = [];
 	if ($heading !== 'System') {
 		$h = str_replace('+', ' ', $heading);
-		$families[] = $h . ':wght@300;400;500;600;700';
+		$is_display = in_array($heading, ['Red+Hat+Display', 'Fraunces', 'Epilogue', 'Playfair+Display'], true);
+		$weights = $is_display ? ':wght@400;500;600;700;800;900' : ':ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500';
+		$families[] = $h . $weights;
 	}
 	if ($body !== 'System') {
 		$b = str_replace('+', ' ', $body);

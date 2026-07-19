@@ -57,7 +57,7 @@ function ib_opts_sanitize( $in ) {
 	$out['footer_tagline']  = isset( $in['footer_tagline'] ) ? sanitize_text_field( $in['footer_tagline'] ) : '';
 	$out['footer_about']    = isset( $in['footer_about'] ) ? sanitize_textarea_field( $in['footer_about'] ) : '';
 	$out['sidebar_bio']     = isset( $in['sidebar_bio'] ) ? sanitize_textarea_field( $in['sidebar_bio'] ) : '';
-	$allowed_heading = [ 'Literata', 'Merriweather', 'Playfair+Display', 'Lora', 'PT+Serif', 'Source+Serif+4', 'Cormorant', 'Cormorant+Upright', 'Georgia', 'System' ];
+	$allowed_heading = [ 'Literata', 'Merriweather', 'Playfair+Display', 'Lora', 'PT+Serif', 'Source+Serif+4', 'Cormorant', 'Cormorant+Upright', 'Red+Hat+Display', 'Fraunces', 'Epilogue', 'Georgia', 'System' ];
 	$out['font_heading'] = in_array( $in['font_heading'] ?? '', $allowed_heading, true ) ? $in['font_heading'] : 'Literata';
 	$allowed_body = [ 'Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System' ];
 	$out['font_body'] = in_array( $in['font_body'] ?? '', $allowed_body, true ) ? $in['font_body'] : 'Inter';
@@ -148,6 +148,8 @@ function ib_settings_page() {
 										'Playfair+Display' => 'Playfair Display', 'Lora' => 'Lora',
 										'PT+Serif' => 'PT Serif', 'Source+Serif+4' => 'Source Serif 4',
 										'Cormorant' => 'Cormorant', 'Cormorant+Upright' => 'Cormorant Upright',
+										'Red+Hat+Display' => 'Red Hat Display', 'Fraunces' => 'Fraunces',
+										'Epilogue' => 'Epilogue',
 										'Georgia' => 'Georgia (nativa)', 'System' => 'Sistema (sem Google Fonts)',
 									]; foreach ($serif_opts as $v => $l) : ?>
 										<option value="<?php echo esc_attr($v); ?>" <?php selected($h, $v); ?>><?php echo esc_html($l); ?></option>
