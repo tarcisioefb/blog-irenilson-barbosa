@@ -39,31 +39,59 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 				</div>
 			<?php endif; ?>
 
-			<!-- Col 3: listagem de livros -->
-			<div class="eh-book-list">
-				<div class="eh-book-list__head">Livros</div>
-				<?php
-				$hero_books = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
-				if ( ! empty( $hero_books ) ) :
-					foreach ( $hero_books as $bid ) :
-						$bthumb = get_the_post_thumbnail_url( $bid, 'ib-thumb' );
-						$bparts = wp_get_post_terms( $bid, 'participacao', array( 'fields' => 'names' ) );
-						$bpart = ! empty( $bparts ) ? $bparts[0] : '';
-				?>
-					<a class="eh-book-item" href="<?php echo esc_url( get_permalink( $bid ) ); ?>">
-						<?php if ( $bthumb ) : ?>
-							<span class="eh-book-item__img"><img src="<?php echo esc_url( $bthumb ); ?>" alt="" loading="lazy"></span>
+			<!-- Col 3: listas empilhadas (livros + publicações) -->
+			<div class="eh-hero-lists">
+				<div class="eh-hero-list">
+					<div class="eh-hero-list__head">Livros</div>
+					<div class="eh-hero-list__items">
+						<?php
+						$hero_books = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
+						if ( ! empty( $hero_books ) ) :
+							foreach ( $hero_books as $bid ) :
+								$bthumb = get_the_post_thumbnail_url( $bid, 'ib-thumb' );
+								$bparts = wp_get_post_terms( $bid, 'participacao', array( 'fields' => 'names' ) );
+								$bpart = ! empty( $bparts ) ? $bparts[0] : '';
+						?>
+							<a class="eh-h-item" href="<?php echo esc_url( get_permalink( $bid ) ); ?>">
+								<?php if ( $bthumb ) : ?>
+									<span class="eh-h-item__img"><img src="<?php echo esc_url( $bthumb ); ?>" alt="" loading="lazy"></span>
+								<?php endif; ?>
+								<span class="eh-h-item__body">
+									<span class="eh-h-item__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>
+									<span class="eh-h-item__meta"><?php echo $bpart ? esc_html( $bpart ) : 'Livro'; ?></span>
+								</span>
+							</a>
+						<?php endforeach; ?>
+							<a class="eh-h-item eh-h-item--all" href="/livros/">Ver todos →</a>
+						<?php else : ?>
+							<p style="color:var(--tx-dim);font-size:var(--text-xs);padding:var(--space-3)">Nenhum livro cadastrado.</p>
 						<?php endif; ?>
-						<span class="eh-book-item__body">
-							<span class="eh-book-item__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>
-							<span class="eh-book-item__meta"><?php echo $bpart ? esc_html( $bpart ) : 'Livro'; ?></span>
-						</span>
-					</a>
-				<?php endforeach; ?>
-					<a class="eh-book-item eh-book-item--all" href="/livros/">Ver todos os livros →</a>
-				<?php else : ?>
-					<p style="color:var(--tx-dim);font-size:var(--text-sm);padding:var(--space-4)">Nenhum livro cadastrado.</p>
-				<?php endif; ?>
+					</div>
+				</div>
+
+				<div class="eh-hero-list">
+					<div class="eh-hero-list__head">Publicações</div>
+					<div class="eh-hero-list__items">
+						<?php
+						$hero_pubs = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'publicacao', 'fields' => 'ids', 'suppress_filters' => false ) );
+						if ( ! empty( $hero_pubs ) ) :
+							foreach ( $hero_pubs as $pid ) :
+								$pparts = wp_get_post_terms( $pid, 'tipo-de-publicacao', array( 'fields' => 'names' ) );
+								$ppart = ! empty( $pparts ) ? $pparts[0] : '';
+						?>
+							<a class="eh-h-item" href="<?php echo esc_url( get_permalink( $pid ) ); ?>">
+								<span class="eh-h-item__body">
+									<span class="eh-h-item__t"><?php echo esc_html( get_the_title( $pid ) ); ?></span>
+									<span class="eh-h-item__meta"><?php echo $ppart ? esc_html( $ppart ) : 'Publicação'; ?></span>
+								</span>
+							</a>
+						<?php endforeach; ?>
+							<a class="eh-h-item eh-h-item--all" href="/publicacoes/">Ver todas →</a>
+						<?php else : ?>
+							<p style="color:var(--tx-dim);font-size:var(--text-xs);padding:var(--space-3)">Nenhuma publicação cadastrada.</p>
+						<?php endif; ?>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -101,33 +129,7 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 					</div>
 				<?php endforeach; ?>
 
-				<?php
-				// Publicações
-				$pub_ids = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'publicacao', 'fields' => 'ids', 'suppress_filters' => false ) );
-				if ( $pub_ids ) : ?>
-					<div class="eh-sec-head">
-						<h2>Publicações</h2>
-						<a href="/publicacoes/">Ver todas →</a>
-					</div>
-					<div class="eh-cards">
-						<?php foreach ( $pub_ids as $pid ) { ib_card( $pid ); } ?>
-					</div>
-				<?php endif; ?>
-
-
 			</div>
-
-				<?php
-				$livro_ids = get_posts( array( 'numberposts' => 2, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
-				if ( ! empty( $livro_ids ) ) : ?>
-					<div class="eh-sec-head">
-						<h2>Livros</h2>
-						<a href="/livros/">Ver todos →</a>
-					</div>
-					<div class="eh-cards">
-						<?php foreach ( $livro_ids as $pid ) { ib_card( $pid ); } ?>
-					</div>
-				<?php endif; ?>
 
 			<?php get_sidebar(); ?>
 		</div>
