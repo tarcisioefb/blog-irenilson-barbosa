@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
 							<?php endif; ?>
 							<span class="ib-rel-item__body">
 								<span class="ib-rel-item__t"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
-								<span class="ib-rel-item__date"><?php echo esc_html( get_the_date( 'j F Y', $rid ) ); ?></span>
+								<span class="ib-rel-item__date"><?php echo esc_html( human_time_diff( get_the_time( 'U', $rid ), current_time( 'timestamp' ) ) . ' atrás' ); ?></span>
 							</span>
 						</a>
 					<?php endforeach; ?>
