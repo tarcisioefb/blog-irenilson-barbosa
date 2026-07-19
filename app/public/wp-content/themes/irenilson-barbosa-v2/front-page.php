@@ -20,6 +20,7 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		?>
 	<section class="eh-hero">
 		<div class="wrap eh-hero__grid">
+			<!-- Lead: col 1, rows 1-2 -->
 			<a class="eh-lead<?php echo $lt ? '' : ' is-empty'; ?>" href="<?php echo esc_url( get_permalink( $lead ) ); ?>">
 				<?php if ( $lt ) : ?><img src="<?php echo esc_url( $lt ); ?>" alt="" class="eh-lead__img"><?php endif; ?>
 				<span class="eh-lead__body">
@@ -27,29 +28,43 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 					<span class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></span>
 				</span>
 			</a>
+
+			<!-- Col 2: dois cards empilhados -->
 			<?php
 			$s = array_values( $secondary );
-			if ( isset( $s[0] ) ) { ib_feat_card( $s[0], 'wide' ); }
-			if ( isset( $s[1] ) ) { ib_feat_card( $s[1] ); }
+			if ( isset( $s[0] ) ) : ?>
+				<div class="eh-feat-stack">
+					<?php ib_feat_card( $s[0] );
+					if ( isset( $s[1] ) ) ib_feat_card( $s[1] ); ?>
+				</div>
+			<?php endif; ?>
 
-			// Último card do hero: livro em destaque (se houver)
-			$hero_book = get_posts( array( 'numberposts' => 1, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
-			if ( ! empty( $hero_book ) ) :
-				$bid = $hero_book[0];
-				$bthumb = get_the_post_thumbnail_url( $bid, 'ib-card' );
-				$blink = get_permalink( $bid );
-				$bamazon = get_post_meta( $bid, 'link_amazon', true );
-			?>
-				<a class="eh-feat<?php echo $bthumb ? '' : ' is-empty'; ?>" href="<?php echo esc_url( $blink ); ?>" aria-label="<?php echo esc_attr( get_the_title( $bid ) ); ?>">
-					<?php if ( $bthumb ) : ?><img src="<?php echo esc_url( $bthumb ); ?>" alt="" class="eh-feat__img"><?php endif; ?>
-					<span class="eh-feat__body">
-						<span class="en-tag en-tag--solid" style="background:var(--accent)">📖 Livro</span><br>
-						<span class="eh-feat__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>
-					</span>
-				</a>
-			<?php elseif ( isset( $s[2] ) ) : ib_feat_card( $s[2] );
-			endif; ?>
-
+			<!-- Col 3: listagem de livros -->
+			<div class="eh-book-list">
+				<div class="eh-book-list__head">Livros</div>
+				<?php
+				$hero_books = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
+				if ( ! empty( $hero_books ) ) :
+					foreach ( $hero_books as $bid ) :
+						$bthumb = get_the_post_thumbnail_url( $bid, 'ib-thumb' );
+						$bparts = wp_get_post_terms( $bid, 'participacao', array( 'fields' => 'names' ) );
+						$bpart = ! empty( $bparts ) ? $bparts[0] : '';
+				?>
+					<a class="eh-book-item" href="<?php echo esc_url( get_permalink( $bid ) ); ?>">
+						<?php if ( $bthumb ) : ?>
+							<span class="eh-book-item__img"><img src="<?php echo esc_url( $bthumb ); ?>" alt="" loading="lazy"></span>
+						<?php endif; ?>
+						<span class="eh-book-item__body">
+							<span class="eh-book-item__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>
+							<span class="eh-book-item__meta"><?php echo $bpart ? esc_html( $bpart ) : 'Livro'; ?></span>
+						</span>
+					</a>
+				<?php endforeach; ?>
+					<a class="eh-book-item eh-book-item--all" href="/livros/">Ver todos os livros →</a>
+				<?php else : ?>
+					<p style="color:var(--tx-dim);font-size:var(--text-sm);padding:var(--space-4)">Nenhum livro cadastrado.</p>
+				<?php endif; ?>
+			</div>
 		</div>
 
 		<?php if ( ! empty( $strip ) ) : ?>
