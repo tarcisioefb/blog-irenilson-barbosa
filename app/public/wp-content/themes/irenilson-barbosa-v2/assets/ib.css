@@ -326,6 +326,9 @@ a{color:inherit;text-decoration:none}
 .related h2,.comments-area h2{font-size:var(--text-13);font-weight:var(--weight-semibold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:10px;border-bottom:1.5px solid var(--accent)}
 .ib-inline-related{margin:var(--space-7) 0;padding:var(--space-6);background:var(--paper-2);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);border-left:3px solid var(--accent)}
 .related{background:var(--paper-2);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);border-left:3px solid var(--accent);padding:var(--space-5) var(--space-6)}
+.related .eh-card{background:transparent;border-radius:0;padding:0}
+.related .eh-card:hover{box-shadow:none}
+.related .eh-card__imgwrap{border-radius:var(--radius-sm)}
 .ib-inline-related__grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4)}
 .ib-inline-related .ib-inline-item{display:flex;flex-direction:column;gap:0;color:inherit;text-decoration:none;line-height:1.05}
 .ib-inline-item__img{position:relative;display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#ddd7cc}
