@@ -6,6 +6,14 @@ class RelatedPosts {
 		add_filter('the_content', [__CLASS__, 'display_related']);
 	}
 
+	public static function primary_cat($id) {
+		$cats = get_the_category($id);
+		foreach ($cats as $c) {
+			if ('uncategorized' !== strtolower($c->slug)) return $c;
+		}
+		return !empty($cats) ? $cats[0] : null;
+	}
+
 	public static function display_related($content) {
 		if (! is_single() || ! in_the_loop()) {
 			return $content;
@@ -38,27 +46,30 @@ class RelatedPosts {
 			return $content;
 		}
 
-		$html = '<div class="ib-related-section">';
-		$html .= '<div class="article-section-divider"></div>';
-		$html .= '<h2 class="ib-related-title">Artigos relacionados</h2>';
-		$html .= '<div class="ib-related-grid">';
+		$html = '<div class="eh-sec-head" style="margin-top:var(--space-8)"><h2>Artigos relacionados</h2></div>';
+		$html .= '<div class="eh-cards">';
 
 		while ($related->have_posts()) {
 			$related->the_post();
 			$tid = get_the_ID();
-			$html .= '<a class="ib-related-card" href="' . get_permalink() . '">';
-			if (has_post_thumbnail()) {
-				$html .= '<span class="ib-related-card__img">' . get_the_post_thumbnail($tid, 'ib-card') . '</span>';
+			$ob = get_post($tid);
+			$html .= '<article class="eh-card">';
+			$html .= '<a class="eh-card__imgwrap' . (has_post_thumbnail($tid) ? '' : ' is-empty') . '" href="' . get_permalink($tid) . '" aria-label="' . esc_attr(get_the_title($tid)) . '">';
+			if (has_post_thumbnail($tid)) {
+				$html .= get_the_post_thumbnail($tid, 'ib-card', ['loading' => 'lazy']);
 			}
-			$html .= '<span class="ib-related-card__body">';
-			$html .= '<span class="ib-related-card__t">' . get_the_title() . '</span>';
-			$html .= '<span class="ib-related-card__date">' . get_the_date('j F Y') . '</span>';
-			$html .= '</span></a>';
+			$cat = \IrenilsonBarbosa\Core\RelatedPosts::primary_cat($tid);
+			if ($cat) {
+				$html .= '<span class="en-tag en-tag--solid">' . esc_html($cat->name) . '</span>';
+			}
+			$html .= '</a>';
+			$html .= '<h3 class="eh-card__t"><a href="' . get_permalink($tid) . '">' . esc_html(get_the_title($tid)) . '</a></h3>';
+			$html .= '</article>';
 		}
 
 		wp_reset_postdata();
 
-		$html .= '</div></div>';
+		$html .= '</div>';
 
 		return $content . $html;
 	}
