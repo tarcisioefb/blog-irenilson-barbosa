@@ -2,23 +2,41 @@
 
 <!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
 <main class="wp-block-group">
-	<!-- wp:pattern {"slug":"irenilson-barbosa/hero"} /-->
-	<!-- wp:separator {"backgroundColor":"bege-300"} -->
-	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
-	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-posts"} /-->
-	<!-- wp:separator {"backgroundColor":"bege-300"} -->
-	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
-	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-publicacoes"} /-->
-	<!-- wp:separator {"backgroundColor":"bege-300"} -->
-	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
-	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-livros"} /-->
-	<!-- wp:separator {"backgroundColor":"bege-300"} -->
-	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
-	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-materiais"} /-->
+	<!-- wp:query-title {"type":"archive"} /-->
+
+	<!-- wp:query {"queryId":1,"query":{"perPage":10,"postsPerPage":10,"offset":0,"postType":"post","order":"desc","orderBy":"date","sticky":"","inherit":false},"metadata":{"name":"Lista de Artigos"}} -->
+	<div class="wp-block-query">
+		<!-- wp:post-template -->
+			<!-- wp:group {"style":{"spacing":{"padding":{"bottom":"var:preset|spacing|40"}},"border":{"bottom":{"color":"var:preset|color|bege-300","width":"1px","style":"solid"}}},"backgroundColor":"branco","border":{"radius":"8px"},"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}} -->
+			<div class="wp-block-group has-branco-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)">
+				<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|40"}}} -->
+				<div class="wp-block-columns">
+					<!-- wp:column {"width":"200px"} -->
+					<div class="wp-block-column" style="flex-basis:200px">
+						<!-- wp:post-featured-image {"width":"100%","height":"130px","style":{"border":{"radius":"6px"}},"size":"medium"} /-->
+					</div>
+					<!-- /wp:column -->
+					<!-- wp:column -->
+					<div class="wp-block-column">
+						<!-- wp:post-terms {"term":"category","style":{"typography":{"fontSize":"0.75rem","textTransform":"uppercase","letterSpacing":"0.05em"}},"textColor":"verde-700"} /-->
+						<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"x-large"} /-->
+						<!-- wp:post-excerpt {"moreText":null,"excerptLength":30} /-->
+						<!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap"},"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"typography":{"fontSize":"0.85rem"},"textColor":"marrom-400"} -->
+						<div class="wp-block-group has-marrom-400-color has-text-color" style="font-size:0.85rem">
+							<!-- wp:post-author {"showAvatar":false,"showBio":false} /-->
+							<!-- wp:post-date {"format":"j F Y"} /-->
+						</div>
+						<!-- /wp:group -->
+					</div>
+					<!-- /wp:column -->
+				</div>
+				<!-- /wp:columns -->
+			</div>
+			<!-- /wp:group -->
+		<!-- /wp:post-template -->
+		<!-- wp:query-pagination /-->
+	</div>
+	<!-- /wp:query -->
 </main>
 <!-- /wp:group -->
 
