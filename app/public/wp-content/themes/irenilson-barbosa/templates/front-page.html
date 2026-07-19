@@ -2,23 +2,186 @@
 
 <!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
 <main class="wp-block-group">
-	<!-- wp:pattern {"slug":"irenilson-barbosa/hero"} /-->
+	<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}}} -->
+	<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:query {"queryId":0,"query":{"perPage":1,"postsPerPage":1,"offset":0,"postType":"post","order":"desc","orderBy":"date","sticky":"","inherit":false},"metadata":{"name":"Hero"}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template -->
+				<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|40"}},"backgroundColor":"branco","border":{"radius":"12px"},"padding":{"top":"var:preset|spacing|50","right":"var:preset|spacing|50","bottom":"var:preset|spacing|50","left":"var:preset|spacing|50"}} -->
+				<div class="wp-block-group has-branco-background-color has-background" style="border-radius:12px;padding-top:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50)">
+					<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|50"}}} -->
+					<div class="wp-block-columns">
+						<!-- wp:column {"width":"55%"} -->
+						<div class="wp-block-column" style="flex-basis:55%">
+							<!-- wp:post-featured-image {"size":"large","style":{"border":{"radius":"8px"}},"height":"400px"} /-->
+						</div>
+						<!-- /wp:column -->
+						<!-- wp:column {"width":"45%","verticalAlignment":"center"} -->
+						<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:45%">
+							<!-- wp:post-terms {"term":"category","style":{"typography":{"fontSize":"0.75rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"verde-700"} /-->
+							<!-- wp:post-title {"level":1,"isLink":true,"fontSize":"xx-large","style":{"spacing":{"margin":{"top":"var:preset|spacing|20"}}}} /-->
+							<!-- wp:post-excerpt {"moreText":"Continuar lendo →","style":{"spacing":{"margin":{"top":"var:preset|spacing|20"}}}} /-->
+							<!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap"},"style":{"spacing":{"blockGap":"8px"}},"typography":{"fontSize":"0.85rem"},"textColor":"marrom-400"} -->
+							<div class="wp-block-group has-marrom-400-color has-text-color" style="font-size:0.85rem">
+								<!-- wp:post-author {"showAvatar":false,"showBio":false} /-->
+								<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.85rem"}}} -->
+								<p style="font-size:0.85rem">·</p>
+								<!-- /wp:paragraph -->
+								<!-- wp:post-date {"format":"j F Y"} /-->
+							</div>
+							<!-- /wp:group -->
+						</div>
+						<!-- /wp:column -->
+					</div>
+					<!-- /wp:columns -->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+
 	<!-- wp:separator {"backgroundColor":"bege-300"} -->
 	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
 	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-posts"} /-->
+
+	<!-- wp:group {"style":{"spacing":{"padding":{"bottom":"var:preset|spacing|60"}}}} -->
+	<div class="wp-block-group" style="padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between"},"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|40"}}}} -->
+		<div class="wp-block-group" style="margin-bottom:var(--wp--preset--spacing--40)">
+			<!-- wp:heading {"level":2,"style":{"typography":{"fontSize":"1rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"marrom-800"} -->
+			<h2 class="wp-block-heading has-marrom-800-color has-text-color" style="font-size:1rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Artigos recentes</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.85rem"}},"textColor":"verde-700"} -->
+			<p class="has-verde-700-color has-text-color" style="font-size:0.85rem"><a href="/artigos/">Ver todos →</a></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
+		<!-- wp:query {"queryId":1,"query":{"perPage":3,"postsPerPage":3,"offset":1,"postType":"post","order":"desc","orderBy":"date","sticky":"","inherit":false},"metadata":{"name":"Grid Artigos"}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+				<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"backgroundColor":"branco","border":{"radius":"10px"},"padding":{"top":"0","right":"0","bottom":"var:preset|spacing|40","left":"0"}} -->
+				<div class="wp-block-group has-branco-background-color has-background" style="border-radius:10px;padding-top:0;padding-right:0;padding-bottom:var(--wp--preset--spacing--40);padding-left:0">
+					<!-- wp:post-featured-image {"width":"100%","height":"200px","style":{"border":{"radius":"10px 10px 0 0"}}} /-->
+					<!-- wp:group {"style":{"spacing":{"padding":{"right":"var:preset|spacing|30","left":"var:preset|spacing|30","top":"var:preset|spacing|30"}}}} -->
+					<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)">
+						<!-- wp:post-terms {"term":"category","style":{"typography":{"fontSize":"0.7rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"verde-700"} /-->
+						<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"large","style":{"spacing":{"margin":{"top":"var:preset|spacing|10"}}}} /-->
+						<!-- wp:post-excerpt {"moreText":null,"excerptLength":18,"style":{"typography":{"fontSize":"0.9rem"}}} /-->
+						<!-- wp:post-date {"format":"j F Y","style":{"typography":{"fontSize":"0.8rem"}},"textColor":"marrom-400"} /-->
+					</div>
+					<!-- /wp:group -->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+
 	<!-- wp:separator {"backgroundColor":"bege-300"} -->
 	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
 	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-publicacoes"} /-->
+
+	<!-- wp:group {"style":{"spacing":{"padding":{"bottom":"var:preset|spacing|60"}}}} -->
+	<div class="wp-block-group" style="padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between"},"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|40"}}}} -->
+		<div class="wp-block-group" style="margin-bottom:var(--wp--preset--spacing--40)">
+			<!-- wp:heading {"level":2,"style":{"typography":{"fontSize":"1rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"marrom-800"} -->
+			<h2 class="wp-block-heading has-marrom-800-color has-text-color" style="font-size:1rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Publicações acadêmicas</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.85rem"}},"textColor":"verde-700"} -->
+			<p class="has-verde-700-color has-text-color" style="font-size:0.85rem"><a href="/publicacoes/">Ver todas →</a></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
+		<!-- wp:query {"queryId":3,"query":{"perPage":3,"postsPerPage":3,"offset":0,"postType":"publicacao","order":"desc","orderBy":"date","sticky":"","inherit":false},"metadata":{"name":"Grid Publicações"}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+				<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"backgroundColor":"branco","border":{"radius":"10px"},"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}} -->
+				<div class="wp-block-group has-branco-background-color has-background" style="border-radius:10px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)">
+					<!-- wp:post-featured-image {"width":"100%","height":"140px","style":{"border":{"radius":"6px"}}} /-->
+					<!-- wp:post-terms {"term":"tipo-de-publicacao","style":{"typography":{"fontSize":"0.7rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"verde-700"} /-->
+					<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"medium","style":{"spacing":{"margin":{"top":"var:preset|spacing|5"}}}} /-->
+					<!-- wp:post-excerpt {"moreText":null,"excerptLength":15,"style":{"typography":{"fontSize":"0.85rem"}}} /-->
+					<!-- wp:post-date {"format":"Y","style":{"typography":{"fontSize":"0.8rem"}},"textColor":"marrom-400"} /-->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+
 	<!-- wp:separator {"backgroundColor":"bege-300"} -->
 	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
 	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-livros"} /-->
+
+	<!-- wp:group {"style":{"spacing":{"padding":{"bottom":"var:preset|spacing|60"}}}} -->
+	<div class="wp-block-group" style="padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between"},"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|40"}}}} -->
+		<div class="wp-block-group" style="margin-bottom:var(--wp--preset--spacing--40)">
+			<!-- wp:heading {"level":2,"style":{"typography":{"fontSize":"1rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"marrom-800"} -->
+			<h2 class="wp-block-heading has-marrom-800-color has-text-color" style="font-size:1rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Livros</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.85rem"}},"textColor":"verde-700"} -->
+			<p class="has-verde-700-color has-text-color" style="font-size:0.85rem"><a href="/livros/">Ver todos →</a></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
+		<!-- wp:query {"queryId":4,"query":{"perPage":3,"postsPerPage":3,"offset":0,"postType":"livro","order":"desc","orderBy":"date","sticky":"","inherit":false},"metadata":{"name":"Grid Livros"}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+				<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"backgroundColor":"branco","border":{"radius":"10px"},"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}} -->
+				<div class="wp-block-group has-branco-background-color has-background" style="border-radius:10px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)">
+					<!-- wp:post-featured-image {"width":"100%","height":"220px","style":{"border":{"radius":"6px"}}} /-->
+					<!-- wp:post-terms {"term":"participacao","style":{"typography":{"fontSize":"0.7rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"verde-700"} /-->
+					<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"medium","style":{"spacing":{"margin":{"top":"var:preset|spacing|5"}}}} /-->
+					<!-- wp:post-excerpt {"moreText":null,"excerptLength":12,"style":{"typography":{"fontSize":"0.85rem"}}} /-->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+
 	<!-- wp:separator {"backgroundColor":"bege-300"} -->
 	<hr class="wp-block-separator has-text-color has-bege-300-color has-alpha-channel-opacity has-bege-300-background-color has-background"/>
 	<!-- /wp:separator -->
-	<!-- wp:pattern {"slug":"irenilson-barbosa/card-grid-materiais"} /-->
+
+	<!-- wp:group {"style":{"spacing":{"padding":{"bottom":"var:preset|spacing|60"}}}} -->
+	<div class="wp-block-group" style="padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between"},"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|40"}}}} -->
+		<div class="wp-block-group" style="margin-bottom:var(--wp--preset--spacing--40)">
+			<!-- wp:heading {"level":2,"style":{"typography":{"fontSize":"1rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"marrom-800"} -->
+			<h2 class="wp-block-heading has-marrom-800-color has-text-color" style="font-size:1rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Materiais didáticos</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.85rem"}},"textColor":"verde-700"} -->
+			<p class="has-verde-700-color has-text-color" style="font-size:0.85rem"><a href="/materiais/">Ver todos →</a></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
+		<!-- wp:query {"queryId":5,"query":{"perPage":3,"postsPerPage":3,"offset":0,"postType":"material","order":"desc","orderBy":"date","sticky":"","inherit":false},"metadata":{"name":"Grid Materiais"}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+				<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"backgroundColor":"branco","border":{"radius":"10px"},"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}} -->
+				<div class="wp-block-group has-branco-background-color has-background" style="border-radius:10px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)">
+					<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}},"border":{"radius":"6px"}},"backgroundColor":"bege-100","layout":{"type":"flex","justifyContent":"center"}} -->
+					<div class="wp-block-group has-bege-100-background-color has-background" style="border-radius:6px;padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">
+						<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"medium","textAlign":"center"} /-->
+					</div>
+					<!-- /wp:group -->
+					<!-- wp:post-terms {"term":"tipo-de-material","style":{"typography":{"fontSize":"0.7rem","textTransform":"uppercase","letterSpacing":"0.08em","fontWeight":"600"}},"textColor":"verde-700"} /-->
+					<!-- wp:post-excerpt {"moreText":null,"excerptLength":15,"style":{"typography":{"fontSize":"0.85rem"}}} /-->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
 </main>
 <!-- /wp:group -->
 
