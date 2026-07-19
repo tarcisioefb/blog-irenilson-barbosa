@@ -50,9 +50,15 @@ add_action('wp_enqueue_scripts', function () {
 add_action('wp_head', function () {
 	$heading = ib_opt('font_heading') ?: 'Literata';
 	$body    = ib_opt('font_body') ?: 'Inter';
-	$h_val = $heading !== 'System' ? '"' . str_replace('+', ' ', $heading) . '",Georgia,serif' : 'Georgia,"Iowan Old Style","Times New Roman",serif';
-	$b_val = $body !== 'System' ? '"' . str_replace('+', ' ', $body) . '",system-ui,sans-serif' : 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
-	echo '<style id="ib-fonts-css">:root{--serif:' . esc_attr($h_val) . ';--sans:' . esc_attr($b_val) . '}</style>';
+	$h_name  = $heading !== 'System' ? str_replace('+', ' ', $heading) : 'Georgia';
+	$b_name  = $body !== 'System' ? str_replace('+', ' ', $body) : 'system-ui';
+	$h_fallback = $heading !== 'System' ? ',Georgia,serif' : ',"Iowan Old Style","Times New Roman",serif';
+	$b_fallback = $body !== 'System' ? ',system-ui,sans-serif' : ',-apple-system,"Segoe UI",Roboto,sans-serif';
+	printf(
+		'<style id="ib-fonts-css">:root{--serif:\'%s\'%s;--sans:\'%s\'%s}</style>',
+		esc_html($h_name), esc_html($h_fallback),
+		esc_html($b_name), esc_html($b_fallback)
+	);
 });
 
 // CSS + JS
