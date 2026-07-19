@@ -21,7 +21,7 @@ class ReadingTime {
 	}
 
 	public static function display_reading_time($content) {
-		if (! is_single() || ! in_the_loop()) {
+		if (! is_single() || ! in_the_loop() || 'poiesis' === get_post_type()) {
 			return $content;
 		}
 
@@ -33,7 +33,7 @@ class ReadingTime {
 		$label = sprintf(_n('%d min de leitura', '%d min de leitura', $minutes, 'irenilson-barbosa-core'), $minutes);
 
 		$badge = sprintf(
-			'<p class="reading-time" style="font-size:0.875rem;color:var(--wp--preset--color--marrom-400);margin-bottom:var(--wp--preset--spacing--30)">%s</p>',
+			'<p class="reading-time" style="font-size:var(--text-sm);color:var(--tx-dim);margin-bottom:var(--space-3)">%s</p>',
 			esc_html($label)
 		);
 
