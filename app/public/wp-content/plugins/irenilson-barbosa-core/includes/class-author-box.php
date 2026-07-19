@@ -17,11 +17,14 @@ class AuthorBox {
 		$author_avatar = get_avatar($author_id, 80, '', $author_name, ['class' => 'avatar']);
 
 		$html = sprintf(
-			'<div class="author-box" style="display:flex;gap:var(--space-4);margin-top:var(--space-6);padding:var(--space-4);background:var(--paper-2);border-radius:var(--radius-md)">
-				<div style="flex-shrink:0">%s</div>
-				<div>
-					<strong style="color:var(--ink)">%s</strong>
-					<p style="margin:var(--space-1) 0 0;font-size:0.9rem;color:var(--tx-2)">%s</p>
+			'<div class="ib-author-box">
+				<div class="ib-author-box__inner">
+					<div class="ib-author-box__avatar">%s</div>
+					<div class="ib-author-box__body">
+						<span class="ib-author-box__label">Sobre o autor</span>
+						<strong class="ib-author-box__name">%s</strong>
+						<p class="ib-author-box__bio">%s</p>
+					</div>
 				</div>
 			</div>',
 			$author_avatar,

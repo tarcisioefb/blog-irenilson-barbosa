@@ -319,6 +319,17 @@ a{color:inherit;text-decoration:none}
 .article__body .wp-block-pullquote cite{display:block;margin-top:14px;font-size:.85em;font-style:normal;color:var(--tx-dim);text-transform:uppercase;letter-spacing:.04em}
 .article__body .wp-block-pullquote p:last-child{margin-bottom:0}
 .article__body .wp-block-separator{margin:var(--space-10) auto;border:0;height:1px;background:var(--line)}
+
+/* ==================== AUTHOR BOX ==================== */
+.ib-author-box{margin-top:var(--space-8);padding:var(--space-6);background:linear-gradient(135deg,var(--paper) 0%,var(--paper-2) 100%);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);border-left:3px solid var(--accent);transition:box-shadow .3s}
+.ib-author-box:hover{box-shadow:var(--shadow-card)}
+.ib-author-box__inner{display:flex;gap:var(--space-5);align-items:flex-start}
+.ib-author-box__avatar{flex-shrink:0}
+.ib-author-box__avatar img{width:72px;height:72px;border-radius:50%;object-fit:cover;display:block;border:2px solid var(--accent-2)}
+.ib-author-box__body{min-width:0}
+.ib-author-box__label{display:inline-block;font-size:var(--text-xxs);font-weight:700;letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--accent-2);margin-bottom:var(--space-1)}
+.ib-author-box__name{display:block;font-family:var(--font-heading);font-size:var(--text-lg);color:var(--ink);margin-bottom:var(--space-2)}
+.ib-author-box__bio{font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2);margin:0}
 .ib-meta-box{display:flex;flex-wrap:wrap;gap:var(--space-3) 24px;padding:var(--space-4) 20px;background:var(--paper-2);border:var(--border-w) solid var(--border-c);border-radius:var(--r);margin:0 0 22px;max-width:720px;font-size:var(--text-base)}
 .ib-meta-item strong{color:var(--tx)}
 .article__body .wp-block-separator.is-style-wide{max-width:none}
