@@ -20,11 +20,11 @@ class RelatedPosts {
 			'no_found_rows'  => true,
 		]);
 
-		if ($related->post_count < 3) {
+		if ($related->post_count < 4) {
 			wp_reset_postdata();
 			$related = new \WP_Query([
 				'post_type'      => 'post',
-				'posts_per_page' => 3,
+				'posts_per_page' => 4,
 				'post__not_in'   => [$post_id],
 				'orderby'        => 'date',
 				'order'          => 'DESC',
