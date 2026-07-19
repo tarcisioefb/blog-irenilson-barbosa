@@ -11,7 +11,7 @@ while (have_posts()) : the_post(); ?>
 			<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8)"><?php echo esc_html(get_the_excerpt()); ?></p>
 		<?php endif; ?>
 
-		<div class="article__body" style="max-width:none;font-size:var(--text-lg);line-height:2;color:var(--tx-2)">
+		<div class="ib-poem-body">
 			<?php the_content(); ?>
 		</div>
 
