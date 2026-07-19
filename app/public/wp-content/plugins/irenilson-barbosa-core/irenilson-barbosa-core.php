@@ -25,7 +25,8 @@ spl_autoload_register(function ($class) {
 	}
 
 	$relative_class = substr($class, strlen($prefix));
-	$file           = $base . 'class-' . strtolower(str_replace('_', '-', $relative_class)) . '.php';
+	$class_kebab    = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $relative_class));
+	$file           = $base . 'class-' . $class_kebab . '.php';
 
 	if (file_exists($file)) {
 		require_once $file;
