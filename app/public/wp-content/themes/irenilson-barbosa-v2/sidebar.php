@@ -10,6 +10,25 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 	</div>
 
+	<?php if ( is_singular( 'post' ) ) :
+		$cat = ib_primary_cat( get_the_ID() );
+		if ( $cat ) :
+			$rel = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'category' => $cat->term_id, 'post__not_in' => array( get_the_ID() ), 'fields' => 'ids', 'suppress_filters' => false ) );
+			if ( ! empty( $rel ) ) : ?>
+			<div class="eh-widget">
+				<span class="eh-widget__head">Leia também</span>
+				<div class="eh-rank">
+					<?php foreach ( $rel as $rid ) : ?>
+						<a href="<?php echo esc_url( get_permalink( $rid ) ); ?>">
+							<span class="eh-rank__t" style="font-weight:600"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
+						</a>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<?php endif;
+		endif;
+	endif; ?>
+
 	<div class="eh-widget">
 		<span class="eh-widget__head">Artigos recentes</span>
 		<div class="eh-rank">

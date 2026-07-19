@@ -43,20 +43,6 @@ while ( have_posts() ) : the_post();
 
 				<?php ib_share_buttons( $pid ); ?>
 
-				<?php
-				// Relacionados (mesma editoria)
-				if ( $cat ) :
-					$rel = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'category' => $cat->term_id, 'post__not_in' => array( $pid ), 'fields' => 'ids', 'suppress_filters' => false ) );
-					if ( ! empty( $rel ) ) : ?>
-						<div class="article-section-divider"></div>
-						<section class="related">
-							<h2>Leia também</h2>
-							<div class="related__grid"><?php foreach ( $rel as $rid ) { ib_card( $rid ); } ?></div>
-						</section>
-					<?php endif;
-				endif;
-				?>
-
 				<?php if ( ib_opt('facebook_app_id') ) : ?>
 			<div class="article-section-divider"></div>
 			<section class="related">
