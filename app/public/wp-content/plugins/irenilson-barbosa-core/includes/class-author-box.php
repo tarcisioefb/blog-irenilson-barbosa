@@ -17,11 +17,11 @@ class AuthorBox {
 		$author_avatar = get_avatar($author_id, 80, '', $author_name, ['class' => 'avatar']);
 
 		$html = sprintf(
-			'<div class="author-box" style="display:flex;gap:var(--wp--preset--spacing--40);margin-top:var(--wp--preset--spacing--60);padding:var(--wp--preset--spacing--40);background:var(--wp--preset--color--bege-50);border-radius:8px">
+			'<div class="author-box" style="display:flex;gap:var(--space-4);margin-top:var(--space-6);padding:var(--space-4);background:var(--paper-2);border-radius:var(--radius-md)">
 				<div style="flex-shrink:0">%s</div>
 				<div>
-					<strong style="color:var(--wp--preset--color--marrom-800)">%s</strong>
-					<p style="margin:var(--wp--preset--spacing--10) 0 0;font-size:0.9rem;color:var(--wp--preset--color--marrom-600)">%s</p>
+					<strong style="color:var(--ink)">%s</strong>
+					<p style="margin:var(--space-1) 0 0;font-size:0.9rem;color:var(--tx-2)">%s</p>
 				</div>
 			</div>',
 			$author_avatar,

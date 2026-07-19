@@ -336,6 +336,17 @@ a{color:inherit;text-decoration:none}
 .ib-inline-related .ib-inline-item:hover .ib-inline-item__t{background-size:var(--underline-hover)}
 .related__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6)}
 
+/* ==================== LIVROS ==================== */
+.ib-book-card{background:#fff;border-radius:var(--radius-lg);overflow:hidden;transition:transform .25s,box-shadow .25s;border:var(--border-w) solid var(--border-c)}
+.ib-book-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.ib-book-card img:hover{transform:scale(1.05)}
+
+/* ==================== BOTÕES DE COMPRA (LIVROS) ==================== */
+.ib-btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-7);color:#fff;border-radius:var(--radius-md);font-weight:var(--weight-semibold);text-decoration:none;transition:background .2s}
+.ib-btn--amazon{background:#3E2C1B}.ib-btn--amazon:hover{background:#2C1E11}
+.ib-btn--marinete{background:#4A5D3E}.ib-btn--marinete:hover{background:#3B4A30}
+.ib-btn svg{flex-shrink:0}
+
 /* ==================== MICRO-INTERAÇÕES ==================== */
 .reading-bar{position:fixed;top:0;left:0;width:0;height:3px;background:var(--ink);z-index:999;transition:width .1s linear;pointer-events:none}
 .admin-bar .reading-bar{top:32px}

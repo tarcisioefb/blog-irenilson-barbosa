@@ -36,47 +36,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ib_contact_nonce'])) 
 }
 
 get_header(); ?>
-<div class="wrap" style="padding-top:40px;padding-bottom:60px">
+<div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<div style="max-width:640px;margin:0 auto">
-		<h1 style="font-family:var(--serif);font-size:clamp(1.5rem,3vw,2rem);color:var(--ink);margin:0 0 8px">Contato</h1>
-		<p style="color:var(--tx-2);margin:0 0 32px">Envie uma mensagem. Responderei assim que possível.</p>
+		<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);color:var(--ink);margin:0 0 var(--space-2)">Contato</h1>
+		<p style="color:var(--tx-2);margin:0 0 var(--space-8)">Envie uma mensagem. Responderei assim que possível.</p>
 
 		<?php if ($msg_sent) : ?>
-			<div style="padding:16px 20px;background:#EDF2E8;border:1px solid #B5C6A2;border-radius:8px;color:#3B4A30;margin-bottom:24px">Mensagem enviada com sucesso! Obrigado pelo contato.</div>
+			<div style="padding:var(--space-4) var(--space-5);background:#EDF2E8;border:1px solid #B5C6A2;border-radius:var(--radius-md);color:#3B4A30;margin-bottom:var(--space-6)">Mensagem enviada com sucesso! Obrigado pelo contato.</div>
 		<?php elseif ($msg_error) : ?>
-			<div style="padding:16px 20px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;color:#991B1B;margin-bottom:24px"><?php echo esc_html($msg_error); ?></div>
+			<div style="padding:var(--space-4) var(--space-5);background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-md);color:#991B1B;margin-bottom:var(--space-6)"><?php echo esc_html($msg_error); ?></div>
 		<?php endif; ?>
 
-		<form method="post" style="display:flex;flex-direction:column;gap:20px">
+		<form method="post" style="display:flex;flex-direction:column;gap:var(--space-5)">
 			<?php wp_nonce_field('ib_contact', 'ib_contact_nonce'); ?>
 
 			<div>
-				<label for="ib_name" style="display:block;font-size:0.875rem;font-weight:600;color:var(--ink);margin-bottom:6px">Nome *</label>
-				<input type="text" id="ib_name" name="ib_name" required value="<?php echo esc_attr($_POST['ib_name'] ?? ''); ?>" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:1rem;background:#fff;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor=''">
+				<label for="ib_name" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Nome *</label>
+				<input type="text" id="ib_name" name="ib_name" required value="<?php echo esc_attr($_POST['ib_name'] ?? ''); ?>" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff">
 			</div>
 
 			<div>
-				<label for="ib_email" style="display:block;font-size:0.875rem;font-weight:600;color:var(--ink);margin-bottom:6px">E-mail *</label>
-				<input type="email" id="ib_email" name="ib_email" required value="<?php echo esc_attr($_POST['ib_email'] ?? ''); ?>" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:1rem;background:#fff;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor=''">
+				<label for="ib_email" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">E-mail *</label>
+				<input type="email" id="ib_email" name="ib_email" required value="<?php echo esc_attr($_POST['ib_email'] ?? ''); ?>" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff">
 			</div>
 
 			<div>
-				<label for="ib_subject" style="display:block;font-size:0.875rem;font-weight:600;color:var(--ink);margin-bottom:6px">Assunto</label>
-				<input type="text" id="ib_subject" name="ib_subject" value="<?php echo esc_attr($_POST['ib_subject'] ?? ''); ?>" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:1rem;background:#fff;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor=''">
+				<label for="ib_subject" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Assunto</label>
+				<input type="text" id="ib_subject" name="ib_subject" value="<?php echo esc_attr($_POST['ib_subject'] ?? ''); ?>" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff">
 			</div>
 
 			<div>
-				<label for="ib_message" style="display:block;font-size:0.875rem;font-weight:600;color:var(--ink);margin-bottom:6px">Mensagem *</label>
-				<textarea id="ib_message" name="ib_message" required rows="6" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:1rem;background:#fff;resize:vertical;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor=''"><?php echo esc_textarea($_POST['ib_message'] ?? ''); ?></textarea>
+				<label for="ib_message" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Mensagem *</label>
+				<textarea id="ib_message" name="ib_message" required rows="6" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff;resize:vertical"><?php echo esc_textarea($_POST['ib_message'] ?? ''); ?></textarea>
 			</div>
 
-			<button type="submit" style="align-self:flex-start;padding:14px 32px;background:var(--ink);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer;transition:background .2s" onmouseover="this.style.background='#2C1E11'" onmouseout="this.style.background='var(--ink)'">Enviar mensagem</button>
+			<button type="submit" style="align-self:flex-start;padding:var(--space-3) var(--space-8);background:var(--ink);color:#fff;border:none;border-radius:var(--radius-md);font-weight:var(--weight-semibold);font-size:var(--text-md);cursor:pointer">Enviar mensagem</button>
 		</form>
 	</div>
 
-	<div style="max-width:640px;margin:48px auto 0;padding-top:32px;border-top:1px solid var(--line)">
-		<h2 style="font-family:var(--serif);font-size:1.25rem;color:var(--ink);margin:0 0 6px">Newsletter</h2>
-		<p style="color:var(--tx-2);margin:0 0 16px">Receba os novos ensaios por e-mail.</p>
+	<div style="max-width:640px;margin:48px auto 0;padding-top:var(--space-8);border-top:var(--border-w) solid var(--border-c)">
+		<h2 style="font-family:var(--font-heading);font-size:var(--text-xl);color:var(--ink);margin:0 0 6px">Newsletter</h2>
+		<p style="color:var(--tx-2);margin:0 0 var(--space-4)">Receba os novos ensaios por e-mail.</p>
 		<?php ib_newsletter_form(); ?>
 	</div>
 </div>
