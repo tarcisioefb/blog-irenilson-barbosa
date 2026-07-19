@@ -53,6 +53,8 @@ while ( have_posts() ) : the_post();
 
 			</article>
 
+			<?php \IrenilsonBarbosa\Core\RelatedPosts::render(); ?>
+
 			<?php get_sidebar(); ?>
 		</div>
 	</div>

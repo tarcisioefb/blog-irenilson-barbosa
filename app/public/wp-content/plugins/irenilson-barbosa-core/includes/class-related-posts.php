@@ -2,19 +2,14 @@
 namespace IrenilsonBarbosa\Core;
 
 class RelatedPosts {
-	public static function init() {
-		add_filter('the_content', [__CLASS__, 'display_related']);
-	}
+	public static function init() {}
 
-	public static function display_related($content) {
-		if (! is_single() || ! in_the_loop() || ! function_exists('ib_card')) {
-			return $content;
-		}
+	public static function render() {
+		if (! is_single() || ! function_exists('ib_card')) return;
 
 		$post_id = get_the_ID();
 		$cats    = wp_get_post_categories($post_id, ['fields' => 'ids']);
-
-		if (empty($cats)) return $content;
+		if (empty($cats)) return;
 
 		$related = new \WP_Query([
 			'post_type'      => 'post',
@@ -25,8 +20,8 @@ class RelatedPosts {
 			'no_found_rows'  => true,
 		]);
 
-		// Se não tem 3 na mesma categoria, busca dos mais recentes
 		if ($related->post_count < 3) {
+			wp_reset_postdata();
 			$related = new \WP_Query([
 				'post_type'      => 'post',
 				'posts_per_page' => 3,
@@ -37,21 +32,17 @@ class RelatedPosts {
 			]);
 		}
 
-		if (! $related->have_posts()) return $content;
+		if (! $related->have_posts()) { wp_reset_postdata(); return; }
 
-		$html = '<div class="eh-sec-head" style="margin-top:var(--space-8)"><h2>Artigos relacionados</h2></div>';
-		$html .= '<div class="eh-cards eh-cards--3col">';
+		echo '<div class="eh-sec-head" style="margin-top:var(--space-8)"><h2>Artigos relacionados</h2></div>';
+		echo '<div class="eh-cards eh-cards--3col">';
 
 		while ($related->have_posts()) {
 			$related->the_post();
-			ob_start();
 			ib_card(get_the_ID());
-			$html .= ob_get_clean();
 		}
 
 		wp_reset_postdata();
-		$html .= '</div>';
-
-		return $content . $html;
+		echo '</div>';
 	}
 }
