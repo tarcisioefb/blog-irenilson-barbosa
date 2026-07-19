@@ -21,13 +21,13 @@ defined( 'ABSPATH' ) || exit;
 				<span class="eh-widget__head">Leia também</span>
 				<div style="display:flex;flex-direction:column;gap:var(--space-4)">
 					<?php foreach ( $rel as $rid ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $rid ) ); ?>" style="display:flex;gap:var(--space-3);text-decoration:none;color:inherit">
+						<a href="<?php echo esc_url( get_permalink( $rid ) ); ?>" style="display:flex;gap:var(--space-4);text-decoration:none;color:inherit;align-items:flex-start">
 							<?php if ( has_post_thumbnail( $rid ) ) : ?>
-								<span style="flex-shrink:0;width:80px;height:60px;border-radius:var(--radius-sm);overflow:hidden;background:var(--paper-2)">
+								<span style="flex-shrink:0;width:100px;height:70px;border-radius:var(--radius-sm);overflow:hidden;background:var(--paper-2)">
 									<?php echo get_the_post_thumbnail( $rid, 'ib-thumb', array( 'style' => 'width:100%;height:100%;object-fit:cover', 'loading' => 'lazy' ) ); ?>
 								</span>
 							<?php endif; ?>
-							<span style="font-size:var(--text-13);line-height:var(--leading-snug);color:var(--tx-2);align-self:center;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
+							<span style="font-size:var(--text-base);font-weight:var(--weight-semibold);line-height:var(--leading-snug);color:var(--ink);transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
 						</a>
 					<?php endforeach; ?>
 				</div>
