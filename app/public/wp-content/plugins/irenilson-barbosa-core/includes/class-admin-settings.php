@@ -145,18 +145,25 @@ class AdminSettings {
 						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🖼️ Banner (Home)</h2>
 						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Banner responsivo exibido abaixo de "Mais recentes" na home. Imagens diferentes para desktop, tablet e mobile — a ideal é landscape 1200x300, tablet 800x250, mobile 600x250.</p>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
+							<?php foreach ([
+								'banner_image' => 'Desktop',
+								'banner_image_tablet' => 'Tablet',
+								'banner_image_mobile' => 'Mobile',
+							] as $fk => $flbl) : $fval = self::opt($fk); ?>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image" style="color:#3E2C1B;font-weight:600">Desktop</label></th>
-								<td style="padding:8px 0"><input type="url" id="banner_image" name="ib_opts[banner_image]" value="<?php echo esc_attr(self::opt('banner_image')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="<?php echo esc_attr($fk); ?>" style="color:#3E2C1B;font-weight:600"><?php echo esc_html($flbl); ?></label></th>
+								<td style="padding:8px 0">
+									<input type="url" id="<?php echo esc_attr($fk); ?>" name="ib_opts[<?php echo esc_attr($fk); ?>]" value="<?php echo esc_attr($fval); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px">
+									<button type="button" class="button" data-media-pick="<?php echo esc_attr($fk); ?>" style="margin-top:4px">Selecionar</button>
+									<button type="button" class="button" data-media-clear="<?php echo esc_attr($fk); ?>" style="margin-top:4px">Remover</button>
+									<?php if ($fval) : ?>
+										<br><img id="preview-<?php echo esc_attr($fk); ?>" src="<?php echo esc_url($fval); ?>" alt="" style="max-width:300px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
+									<?php else : ?>
+										<br><img id="preview-<?php echo esc_attr($fk); ?>" alt="" style="display:none;max-width:300px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
+									<?php endif; ?>
+								</td>
 							</tr>
-							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image_tablet" style="color:#3E2C1B;font-weight:600">Tablet</label></th>
-								<td style="padding:8px 0"><input type="url" id="banner_image_tablet" name="ib_opts[banner_image_tablet]" value="<?php echo esc_attr(self::opt('banner_image_tablet')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
-							</tr>
-							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_image_mobile" style="color:#3E2C1B;font-weight:600">Mobile</label></th>
-								<td style="padding:8px 0"><input type="url" id="banner_image_mobile" name="ib_opts[banner_image_mobile]" value="<?php echo esc_attr(self::opt('banner_image_mobile')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
-							</tr>
+							<?php endforeach; ?>
 							<tr>
 								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_link" style="color:#3E2C1B;font-weight:600">Link</label></th>
 								<td style="padding:8px 0"><input type="url" id="banner_link" name="ib_opts[banner_link]" value="<?php echo esc_attr(self::opt('banner_link')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
