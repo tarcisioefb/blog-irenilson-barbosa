@@ -1,0 +1,5 @@
+logs/
+app/.envrc
+app/public/wp-config.php
+*.log
+.DS_Store
