@@ -72,3 +72,50 @@ add_action('wp_enqueue_scripts', function () {
 
 // Data padrão Brasil
 add_filter('option_date_format', function () { return 'j \d\e F \d\e Y'; });
+
+// ─── Newsletter ─────────────────────────────────────────────
+
+add_action('wp_ajax_ib_newsletter', 'ib_newsletter_handler');
+add_action('wp_ajax_nopriv_ib_newsletter', 'ib_newsletter_handler');
+
+function ib_newsletter_handler() {
+	$email = sanitize_email($_POST['email'] ?? '');
+	if (!is_email($email)) {
+		wp_send_json_error('E-mail inválido.');
+	}
+
+	$subs = (array) get_option('ib_newsletter_subscribers', []);
+	if (in_array($email, $subs, true)) {
+		wp_send_json_error('Este e-mail já está cadastrado.');
+	}
+
+	$subs[] = $email;
+	update_option('ib_newsletter_subscribers', $subs);
+	wp_send_json_success('Cadastro realizado com sucesso!');
+}
+
+function ib_newsletter_form() {
+	?>
+	<form class="ib-newsletter" method="post" style="display:flex;gap:8px;width:100%" onsubmit="return ibNewsletter(this)">
+		<input type="email" name="email" required placeholder="seu@email.com" aria-label="E-mail"
+			style="flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:0.875rem;background:#fff">
+		<button type="submit" style="flex-shrink:0;padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-weight:600;font-size:0.8rem;cursor:pointer;transition:background .2s;white-space:nowrap"
+			onmouseover="this.style.background='#3B4A30'" onmouseout="this.style.background='var(--accent)'">Assinar</button>
+	</form>
+	<div class="ib-newsletter-msg" style="font-size:0.85rem;margin-top:8px"></div>
+	<script>
+	function ibNewsletter(f) {
+		var btn = f.querySelector('button'), msg = f.parentNode.querySelector('.ib-newsletter-msg');
+		btn.disabled = true; btn.textContent = 'Enviando…';
+		var fd = new FormData(); fd.append('action','ib_newsletter'); fd.append('email',f.email.value);
+		fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>',{method:'POST',body:fd})
+		.then(function(r){return r.json()}).then(function(d){
+			msg.textContent = d.data; msg.style.color = d.success ? 'var(--accent)' : '#991B1B';
+			if(d.success) f.email.value = '';
+			btn.disabled = false; btn.textContent = 'Assinar';
+		});
+		return false;
+	}
+	</script>
+	<?php
+}

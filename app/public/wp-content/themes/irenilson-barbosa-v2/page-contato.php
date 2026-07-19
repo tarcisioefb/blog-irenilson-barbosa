@@ -73,5 +73,11 @@ get_header(); ?>
 			<button type="submit" style="align-self:flex-start;padding:14px 32px;background:var(--ink);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer;transition:background .2s" onmouseover="this.style.background='#2C1E11'" onmouseout="this.style.background='var(--ink)'">Enviar mensagem</button>
 		</form>
 	</div>
+
+	<div style="max-width:640px;margin:48px auto 0;padding-top:32px;border-top:1px solid var(--line)">
+		<h2 style="font-family:var(--serif);font-size:1.25rem;color:var(--ink);margin:0 0 6px">Newsletter</h2>
+		<p style="color:var(--tx-2);margin:0 0 16px">Receba os novos ensaios por e-mail.</p>
+		<?php ib_newsletter_form(); ?>
+	</div>
 </div>
 <?php get_footer(); ?>
