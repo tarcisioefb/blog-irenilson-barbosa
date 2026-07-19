@@ -26,10 +26,6 @@ while (have_posts()) : the_post();
 		<?php endif; ?>
 
 		<?php \IrenilsonBarbosa\Core\AuthorBox::render(); ?>
-
-		<div style="margin-top:var(--space-10);padding-top:var(--space-6);border-top:var(--border-w) solid var(--border-c)">
-			<span style="font-size:var(--text-xs);color:var(--tx-dim)"><?php echo esc_html(get_the_date('j F Y')); ?></span>
-		</div>
 	</article>
 </div>
 <?php
