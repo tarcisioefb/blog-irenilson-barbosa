@@ -16,6 +16,7 @@ class AdminSettings {
 			'footer_tagline'   => 'Professor universitário, escritor e pesquisador.',
 			'footer_about'     => 'Doutor em Educação pela UFBA. Autor de ensaios sobre filosofia, educação, política e cultura.',
 			'sidebar_bio'      => 'Professor universitário, escritor e pesquisador. Doutor em Educação, autor de ensaios sobre filosofia, política, educação e cultura.',
+			'site_logo'        => '',
 			'font_heading'     => 'Literata',
 			'font_body'        => 'Inter',
 			'facebook_app_id'  => '',
@@ -78,6 +79,7 @@ class AdminSettings {
 		$out['footer_about']   = isset($in['footer_about']) ? sanitize_textarea_field($in['footer_about']) : '';
 		$out['sidebar_bio']    = isset($in['sidebar_bio']) ? sanitize_textarea_field($in['sidebar_bio']) : '';
 		$allowed_heading = ['Literata', 'Merriweather', 'Playfair+Display', 'Lora', 'PT+Serif', 'Source+Serif+4', 'Cormorant', 'Cormorant+Upright', 'Red+Hat+Display', 'Fraunces', 'Epilogue', 'Georgia', 'System'];
+		$out['site_logo'] = isset($in['site_logo']) ? esc_url_raw(trim($in['site_logo'])) : '';
 		$out['font_heading'] = in_array($in['font_heading'] ?? '', $allowed_heading, true) ? $in['font_heading'] : 'Literata';
 		$allowed_body = ['Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System'];
 		$out['font_body'] = in_array($in['font_body'] ?? '', $allowed_body, true) ? $in['font_body'] : 'Inter';
@@ -128,6 +130,27 @@ class AdminSettings {
 									<td style="padding:8px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
 								</tr>
 							<?php endforeach; ?>
+						</tbody></table>
+					</div>
+
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🖼️ Logo</h2>
+						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Logo do site, usado no cabeçalho e rodapé. Recomendado: PNG ou SVG, largura máxima 240px.</p>
+						<table class="form-table" role="presentation" style="margin:0"><tbody>
+							<?php $logo_val = self::opt('site_logo'); ?>
+							<tr>
+								<th scope="row" style="width:120px;padding:8px 0"><label for="site_logo" style="color:#3E2C1B;font-weight:600">Logo</label></th>
+								<td style="padding:8px 0">
+									<input type="url" id="site_logo" name="ib_opts[site_logo]" value="<?php echo esc_attr($logo_val); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px">
+									<button type="button" class="button" data-media-pick="site_logo" style="margin-top:4px">Selecionar</button>
+									<button type="button" class="button" data-media-clear="site_logo" style="margin-top:4px">Remover</button>
+									<?php if ($logo_val) : ?>
+										<br><img id="preview-site_logo" src="<?php echo esc_url($logo_val); ?>" alt="" style="max-width:200px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
+									<?php else : ?>
+										<br><img id="preview-site_logo" alt="" style="display:none;max-width:200px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
+									<?php endif; ?>
+								</td>
+							</tr>
 						</tbody></table>
 					</div>
 

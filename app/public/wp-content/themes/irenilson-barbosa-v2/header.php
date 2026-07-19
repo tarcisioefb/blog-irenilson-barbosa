@@ -36,7 +36,11 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 		<div class="wrap masthead__row">
 			<button class="burger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer" data-elite-burger><span></span><span></span><span></span></button>
 			<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-				<?php if ( has_custom_logo() ) :
+				<?php
+				$logo_url = ib_opt('site_logo');
+				if ( $logo_url ) : ?>
+					<img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="height:50px;width:auto">
+				<?php elseif ( has_custom_logo() ) :
 					the_custom_logo();
 				else : ?>
 					<span class="brand__text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
