@@ -1,13 +1,5 @@
 <?php
-// Helpers globais (tema depende destas)
-if (! function_exists('ib_opt')) {
-	function ib_opt($key) { return \IrenilsonBarbosa\Core\AdminSettings::opt($key); }
-}
-if (! function_exists('ib_opts')) {
-	function ib_opts() { return \IrenilsonBarbosa\Core\AdminSettings::opts(); }
-}
-
-namespace IrenilsonBarbosa\Core;
+namespace IrenilsonBarbosa\Core {
 
 class AdminSettings {
 	public static function init() {
@@ -248,5 +240,15 @@ class AdminSettings {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+}
+}
+
+namespace {
+	if (! function_exists('ib_opt')) {
+		function ib_opt($key) { return \IrenilsonBarbosa\Core\AdminSettings::opt($key); }
+	}
+	if (! function_exists('ib_opts')) {
+		function ib_opts() { return \IrenilsonBarbosa\Core\AdminSettings::opts(); }
 	}
 }
