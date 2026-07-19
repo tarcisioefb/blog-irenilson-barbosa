@@ -232,7 +232,7 @@ a{color:inherit;text-decoration:none}
 .eh-rank a{display:grid;grid-template-columns:28px 1fr;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:var(--border-w) solid var(--border-c);transition:opacity .2s}
 .eh-rank a:first-child{padding-top:0}.eh-rank a:last-child{border-bottom:0}
 .eh-rank a:hover{opacity:1}
-.eh-rank__n{font-size:var(--text-md);font-weight:700;color:var(--accent);line-height:var(--leading-snug);font-variant-numeric:tabular-nums}
+.eh-rank__n{font-size:var(--text-lg);font-weight:800;color:var(--accent-2);line-height:1;min-width:28px;font-variant-numeric:tabular-nums;opacity:.7;align-self:start;margin-top:1px}
 .eh-rank__t{font-size:var(--text-base);line-height:var(--leading-snug);color:var(--tx-2);font-weight:500;transition:color .2s}
 .eh-rank a:hover .eh-rank__t{color:var(--accent)}
 .eh-promo{display:block;border-radius:var(--r);overflow:hidden;box-shadow:0 6px 20px -12px rgba(0,0,0,.4)}
