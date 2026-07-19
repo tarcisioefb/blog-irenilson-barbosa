@@ -47,6 +47,25 @@ class Setup {
 			'show_in_rest' => true,
 		]);
 
+		// Poiésis (poemas, criações literárias)
+		register_post_type('poiesis', [
+			'labels' => [
+				'name'          => 'Poiésis',
+				'singular_name' => 'Poema',
+				'menu_name'     => 'Poiésis',
+				'add_new_item'  => 'Adicionar Poema',
+				'edit_item'     => 'Editar Poema',
+				'view_item'     => 'Ver Poema',
+				'search_items'  => 'Buscar Poemas',
+			],
+			'public'       => true,
+			'menu_icon'    => 'dashicons-format-quote',
+			'supports'     => ['title', 'editor', 'thumbnail', 'excerpt'],
+			'rewrite'      => ['slug' => 'poiesis'],
+			'has_archive'  => true,
+			'show_in_rest' => true,
+		]);
+
 		// Materiais
 		register_post_type('material', [
 			'labels' => [
