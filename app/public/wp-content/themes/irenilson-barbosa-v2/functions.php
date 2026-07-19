@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
 define('IRENILSON_VER', '2.0.0');
 
 require get_template_directory() . '/inc/template-tags.php';
-if ( is_admin() ) { require get_template_directory() . '/inc/admin-settings.php'; }
+require get_template_directory() . '/inc/admin-settings.php';
 
 add_action('after_setup_theme', function () {
 	add_theme_support('title-tag');
@@ -26,14 +26,31 @@ add_action('after_setup_theme', function () {
 	add_image_size('ib-thumb', 220, 150, true);
 });
 
-// Fontes do Google
+// Fontes (configuráveis via Central do Site)
 add_action('wp_enqueue_scripts', function () {
-	wp_enqueue_style(
-		'irenilson-fonts',
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400;1,7..72,500&display=swap',
-		[],
-		IRENILSON_VER
-	);
+	$heading = ib_opt('font_heading') ?: 'Literata';
+	$body    = ib_opt('font_body') ?: 'Inter';
+	$families = [];
+	if ($heading !== 'System') {
+		$h = str_replace('+', ' ', $heading);
+		$families[] = $h . ':wght@300;400;500;600;700';
+	}
+	if ($body !== 'System') {
+		$b = str_replace('+', ' ', $body);
+		$families[] = $b . ':wght@400;500;600';
+	}
+	if ($families) {
+		wp_enqueue_style('ib-fonts', 'https://fonts.googleapis.com/css2?family=' . implode('&family=', $families) . '&display=swap', [], IRENILSON_VER);
+	}
+});
+
+// Injeta variáveis CSS das fontes escolhidas
+add_action('wp_head', function () {
+	$heading = ib_opt('font_heading') ?: 'Literata';
+	$body    = ib_opt('font_body') ?: 'Inter';
+	$h_val = $heading !== 'System' ? '"' . str_replace('+', ' ', $heading) . '",Georgia,serif' : 'Georgia,"Iowan Old Style","Times New Roman",serif';
+	$b_val = $body !== 'System' ? '"' . str_replace('+', ' ', $body) . '",system-ui,sans-serif' : 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+	echo '<style id="ib-fonts-css">:root{--serif:' . esc_attr($h_val) . ';--sans:' . esc_attr($b_val) . '}</style>';
 });
 
 // CSS + JS

@@ -10,6 +10,8 @@ function ib_opts_defaults() {
 		'footer_tagline'   => 'Professor universitário, escritor e pesquisador.',
 		'footer_about'     => 'Doutor em Educação pela UFBA. Autor de ensaios sobre filosofia, educação, política e cultura.',
 		'sidebar_bio'      => 'Professor universitário, escritor e pesquisador. Doutor em Educação, autor de ensaios sobre filosofia, política, educação e cultura.',
+		'font_heading'     => 'Literata',
+		'font_body'        => 'Inter',
 	];
 }
 
@@ -52,9 +54,13 @@ function ib_opts_sanitize( $in ) {
 	foreach ( [ 'social_facebook', 'social_instagram', 'social_youtube' ] as $k ) {
 		$out[ $k ] = isset( $in[ $k ] ) ? esc_url_raw( trim( $in[ $k ] ) ) : '';
 	}
-	$out['footer_tagline'] = isset( $in['footer_tagline'] ) ? sanitize_text_field( $in['footer_tagline'] ) : '';
-	$out['footer_about']   = isset( $in['footer_about'] ) ? sanitize_textarea_field( $in['footer_about'] ) : '';
-	$out['sidebar_bio']    = isset( $in['sidebar_bio'] ) ? sanitize_textarea_field( $in['sidebar_bio'] ) : '';
+	$out['footer_tagline']  = isset( $in['footer_tagline'] ) ? sanitize_text_field( $in['footer_tagline'] ) : '';
+	$out['footer_about']    = isset( $in['footer_about'] ) ? sanitize_textarea_field( $in['footer_about'] ) : '';
+	$out['sidebar_bio']     = isset( $in['sidebar_bio'] ) ? sanitize_textarea_field( $in['sidebar_bio'] ) : '';
+	$allowed_heading = [ 'Literata', 'Merriweather', 'Playfair+Display', 'Lora', 'PT+Serif', 'Source+Serif+4', 'Cormorant', 'Cormorant+Upright', 'Georgia', 'System' ];
+	$out['font_heading'] = in_array( $in['font_heading'] ?? '', $allowed_heading, true ) ? $in['font_heading'] : 'Literata';
+	$allowed_body = [ 'Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System' ];
+	$out['font_body'] = in_array( $in['font_body'] ?? '', $allowed_body, true ) ? $in['font_body'] : 'Inter';
 	return $out;
 }
 
@@ -124,6 +130,44 @@ function ib_settings_page() {
 						<tr>
 							<th scope="row" style="width:120px;padding:8px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
 							<td style="padding:8px 0"><textarea id="footer_about" name="ib_opts[footer_about]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea( ib_opt( 'footer_about' ) ); ?></textarea></td>
+						</tr>
+					</tbody></table>
+				</div>
+
+				<!-- Fontes -->
+				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
+					<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🔤 Fontes</h2>
+					<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Escolha as fontes para títulos (serifada) e corpo do texto (sans-serif). Carregadas do Google Fonts.</p>
+					<table class="form-table" role="presentation" style="margin:0"><tbody>
+						<tr>
+							<th scope="row" style="width:120px;padding:8px 0"><label for="font_heading" style="color:#3E2C1B;font-weight:600">Títulos</label></th>
+							<td style="padding:8px 0">
+								<select id="font_heading" name="ib_opts[font_heading]" style="min-width:240px;border-color:#e0d5c3;border-radius:4px">
+									<?php $h = ib_opt('font_heading'); $serif_opts = [
+										'Literata' => 'Literata', 'Merriweather' => 'Merriweather',
+										'Playfair+Display' => 'Playfair Display', 'Lora' => 'Lora',
+										'PT+Serif' => 'PT Serif', 'Source+Serif+4' => 'Source Serif 4',
+										'Cormorant' => 'Cormorant', 'Cormorant+Upright' => 'Cormorant Upright',
+										'Georgia' => 'Georgia (nativa)', 'System' => 'Sistema (sem Google Fonts)',
+									]; foreach ($serif_opts as $v => $l) : ?>
+										<option value="<?php echo esc_attr($v); ?>" <?php selected($h, $v); ?>><?php echo esc_html($l); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" style="width:120px;padding:8px 0"><label for="font_body" style="color:#3E2C1B;font-weight:600">Corpo</label></th>
+							<td style="padding:8px 0">
+								<select id="font_body" name="ib_opts[font_body]" style="min-width:240px;border-color:#e0d5c3;border-radius:4px">
+									<?php $b = ib_opt('font_body'); $sans_opts = [
+										'Inter' => 'Inter', 'Source+Sans+3' => 'Source Sans 3',
+										'Nunito' => 'Nunito', 'Work+Sans' => 'Work Sans',
+										'DM+Sans' => 'DM Sans', 'System' => 'Sistema (nativa)',
+									]; foreach ($sans_opts as $v => $l) : ?>
+										<option value="<?php echo esc_attr($v); ?>" <?php selected($b, $v); ?>><?php echo esc_html($l); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
 						</tr>
 					</tbody></table>
 				</div>

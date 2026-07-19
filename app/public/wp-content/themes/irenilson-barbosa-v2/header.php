@@ -6,7 +6,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 	<?php wp_head(); ?>
-	<style id="ib-fonts">:root{--serif:"Literata",Georgia,"Iowan Old Style","Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}</style>
 </head>
 </head>
 <body <?php body_class(); ?>>
