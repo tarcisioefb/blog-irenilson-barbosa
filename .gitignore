@@ -1,5 +1,9 @@
 logs/
 app/.envrc
 app/public/wp-config.php
+app/public/wp-content/uploads/
 *.log
 .DS_Store
+*.pyc
+__pycache__/
+
