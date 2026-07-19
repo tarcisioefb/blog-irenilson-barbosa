@@ -26,6 +26,8 @@
 	--text-19:1.1875rem;   /* 19px */
 	--text-xl:1.25rem;     /* 20px */
 	--text-2xl:1.5rem;     /* 24px */
+	--text-3xl:clamp(1.5rem,3vw,2rem);   /* 24-32px */
+	--text-4xl:clamp(1.75rem,4vw,2.5rem);/* 28-40px */
 	--text-26:1.625rem;    /* 26px */
 	--text-34:2.125rem;    /* 34px */
 	--text-40:2.5rem;      /* 40px */
