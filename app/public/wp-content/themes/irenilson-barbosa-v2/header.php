@@ -10,7 +10,6 @@
 <meta property="fb:app_id" content="<?php echo esc_attr($fb_app_id); ?>">
 <?php endif; ?>
 </head>
-</head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 <?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) : ?>

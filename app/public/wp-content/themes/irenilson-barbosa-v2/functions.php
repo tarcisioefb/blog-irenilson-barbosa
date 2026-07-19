@@ -8,7 +8,6 @@ defined('ABSPATH') || exit;
 define('IRENILSON_VER', '2.0.0');
 
 require get_template_directory() . '/inc/template-tags.php';
-require get_template_directory() . '/inc/admin-settings.php';
 
 add_action('after_setup_theme', function () {
 	add_theme_support('title-tag');
