@@ -1,60 +1,51 @@
-# Tema — `irenilson-barbosa`
+# Tema — `irenilson-barbosa-v2`
 
-Block Theme (Full Site Editing) — WordPress 7.0+
+Classic PHP Theme. Baseado no layout do Elite Notícias.
 
 ## Estrutura
 
 ```
-irenilson-barbosa/
+irenilson-barbosa-v2/
 ├── assets/
-│   └── css/
-│       └── editor.css         ← Estilos do editor de blocos
-├── parts/
-│   ├── header.html            ← Cabeçalho (logo + nav)
-│   └── footer.html            ← Rodapé (créditos + links)
-├── patterns/                  ← Padrões de bloco do tema
-├── styles/                    ← Variações de estilo (opcional)
-├── templates/
-│   ├── home.html              ← Home magazine
-│   ├── single.html            ← Post de leitura
-│   ├── page.html              ← Página estática
-│   ├── archive.html           ← Listagem de posts
-│   ├── search.html            ← Resultados de busca
-│   ├── 404.html               ← Página não encontrada
-│   └── index.html             ← Fallback geral
-├── functions.php              ← Setup do tema
-├── style.css                  ← Header do tema
-├── theme.json                 ← Config de design system
-└── screenshot.png             ← Preview (1200x900px)
+│   ├── ib.css              ← Estilos completos do tema
+│   ├── ib.js               ← Comportamento (menu, busca, scroll)
+│   └── ib-admin.js         ← Admin (seletor de mídia)
+├── inc/
+│   ├── template-tags.php   ← Helpers (cards, share, breadcrumb)
+│   └── admin-settings.php  ← Central do Site (admin page)
+├── template-parts/
+├── front-page.php          ← Home (hero + seções por categoria)
+├── single.php              ← Post (leitura + Facebook Comments)
+├── archive.php             ← Listagens
+├── page.php                ← Páginas estáticas
+├── search.php              ← Busca
+├── 404.php                 ← Página não encontrada
+├── header.php              ← Topbar + nav + Facebook SDK
+├── footer.php              ← Rodapé
+├── sidebar.php             ← Sidebar (sobre + recentes)
+├── functions.php           ← Setup do tema
+└── style.css               ← Metadados do tema
 ```
 
-## Templates
+## Templates principais
 
-### home.html — Revista
+### front-page.php — Home (revista)
+1. Hero: lead (imagem full + overlay) + 3 cards secundários (grid 2fr 1fr 1fr)
+2. Strip "Mais recentes" com 3 links numerados
+3. Seções por categoria (Filosofia, Educação, Política, Cultura, Cotidiano)
+4. Seções de Publicações e Livros
+5. Sidebar
 
-Layout em seções:
-1. **Hero** — Post em destaque (imagem larga + título + resumo)
-2. **Grid Destaques** — 3 cards lado a lado
-3. **Lista de Últimos Artigos** — Timeline vertical com imagem à esquerda
-4. **Grid Secundário** — 3 cards no final
+### single.php — Leitura
+- Breadcrumb, categoria, título, meta (autor, data, tempo de leitura)
+- Imagem de destaque, share buttons, conteúdo
+- Tags, Leia também (mesma categoria), Facebook Comments (se configurado)
 
-### single.html — Leitura
+## Central do Site
 
-Layout otimizado:
-- Largura de conteúdo: ~700px (`contentSize` no `theme.json`)
-- Breadcrumb com categoria + metadados
-- Citações com borda verde
-- Author box ao final
-- Artigos relacionados
-
-## Design Tokens (theme.json)
-
-Ver `docs/COLORS.md` para a paleta completa. Os tokens são definidos no `theme.json` sob `settings.color.palette` e reutilizados nos templates via `var:preset|color|{slug}`.
-
-## Funcionalidades do functions.php
-
-- Registrar menus de navegação (`primary`, `social`)
-- Suporte a logo personalizado
-- Carregar Google Fonts (Literata + Inter)
-- Carregar `editor.css`
-- Remover estilos core não utilizados
+Admin page em `/wp-admin/admin.php?page=ib-ajustes`:
+- Redes sociais
+- Biografia da sidebar
+- Textos do rodapé
+- Fontes (títulos + corpo)
+- Facebook App ID

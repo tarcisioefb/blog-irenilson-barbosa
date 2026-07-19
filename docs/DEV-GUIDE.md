@@ -2,54 +2,37 @@
 
 ## Convenções
 
-### Geral
-- Idioma: português (código, comentários, commits)
-- Commits atômicos: uma funcionalidade por commit
-- Prefixo de commit: `feat:`, `fix:`, `docs:`, `refactor:`, `style:`
+- Prefixo de funções no tema: `ib_`
+- Prefixo de funções no plugin: `irenilson_barbosa_`
+- Namespace do plugin: `IrenilsonBarbosa\Core`
+- Classes no formato `class-{nome}.php`
+- Commits atômicos, prefixo `feat:`, `fix:`, `refactor:`, `docs:`
 
-### PHP
-- Namespace: `IrenilsonBarbosa\Core` no plugin
-- Classes no padrão `class-{nome}.php`
-- Prefixo de funções: `irenilson_barbosa_`
-- Evitar funções no global namespace; usar classes e métodos estáticos
+## CSS
 
-### CSS / theme.json
-- Cores sempre via CSS custom properties do WP (`var:preset|color|{slug}`)
-- Espaçamento via presets do `theme.json` (`var:preset|spacing|{size}`)
-- Tipografia via `theme.json` presets de font-size e font-family
-- Não usar unidades fixas (px) para font-size; usar `clamp()` ou presets
+- Variáveis CSS em `:root` no `ib.css`
+- Fontes injetadas dinamicamente via `wp_head` (configuráveis no admin)
+- Classes com prefixo `eh-` (herdado do Elite Notícias)
+- Cards sem fundo/borda — hover só com translateY
 
-### Templates HTML (FSE)
-- Blocos core do WordPress sempre que possível
-- Comentários HTML `<!-- wp:... -->` para estrutura
-- Patterns para seções reutilizáveis
+## Imagens
 
-## Check-list antes de commitar
-
-- [ ] Templates válidos (sem erro de bloco)
-- [ ] Cores seguem a paleta de `docs/COLORS.md`
-- [ ] Responsivo testado (mobile 375px, tablet 768px, desktop 1440px)
-- [ ] Acessibilidade: contraste, foco visível, `alt` em imagens
-- [ ] Sem quebra de layout no editor de blocos
+- Thumbnails contextuais via Pexels API (scripts na raiz)
+- Placeholders JPG gerados com GD quando não há imagem
+- API key da Pexels configurada no script (não no admin)
 
 ## Comandos úteis
 
 ```bash
-# Ativar tema via WP-CLI
-wp theme activate irenilson-barbosa
+# Ativar tema
+wp theme activate irenilson-barbosa-v2
 
-# Listar CPTs registrados
-wp post-type list
+# Ativar plugin
+wp plugin activate irenilson-barbosa-core
 
-# Listar taxonomias
-wp taxonomy list
+# Executar script PHP no contexto WP
+wp eval-file ../pexels-images.php
+
+# Listar posts por tipo
+wp post list --post_type=post,publicacao,livro,material --format=table
 ```
-
-## Fluxo de Trabalho
-
-1. Editar `theme.json` para ajustes de design system
-2. Editar templates HTML para estrutura
-3. Adicionar CSS via `editor.css` ou style variations
-4. Adicionar lógica PHP no plugin `irenilson-barbosa-core`
-5. Verificar no frontend e no editor de blocos
-6. Documentar em `docs/` qualquer decisão relevante
