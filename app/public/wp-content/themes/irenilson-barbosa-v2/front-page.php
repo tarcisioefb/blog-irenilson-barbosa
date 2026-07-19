@@ -31,8 +31,25 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 			$s = array_values( $secondary );
 			if ( isset( $s[0] ) ) { ib_feat_card( $s[0], 'wide' ); }
 			if ( isset( $s[1] ) ) { ib_feat_card( $s[1] ); }
-			if ( isset( $s[2] ) ) { ib_feat_card( $s[2] ); }
+
+			// Último card do hero: livro em destaque (se houver)
+			$hero_book = get_posts( array( 'numberposts' => 1, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
+			if ( ! empty( $hero_book ) ) :
+				$bid = $hero_book[0];
+				$bthumb = get_the_post_thumbnail_url( $bid, 'ib-card' );
+				$blink = get_permalink( $bid );
+				$bamazon = get_post_meta( $bid, 'link_amazon', true );
 			?>
+				<a class="eh-feat<?php echo $bthumb ? '' : ' is-empty'; ?>" href="<?php echo esc_url( $blink ); ?>" aria-label="<?php echo esc_attr( get_the_title( $bid ) ); ?>">
+					<?php if ( $bthumb ) : ?><img src="<?php echo esc_url( $bthumb ); ?>" alt="" class="eh-feat__img"><?php endif; ?>
+					<span class="eh-feat__body">
+						<span class="en-tag en-tag--solid" style="background:var(--accent)">📖 Livro</span><br>
+						<span class="eh-feat__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>
+					</span>
+				</a>
+			<?php elseif ( isset( $s[2] ) ) : ib_feat_card( $s[2] );
+			endif; ?>
+
 		</div>
 
 		<?php if ( ! empty( $strip ) ) : ?>
@@ -82,10 +99,12 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 					</div>
 				<?php endif; ?>
 
+
+			</div>
+
 				<?php
-				// Livros
-				$livro_ids = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
-				if ( $livro_ids ) : ?>
+				$livro_ids = get_posts( array( 'numberposts' => 2, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
+				if ( ! empty( $livro_ids ) ) : ?>
 					<div class="eh-sec-head">
 						<h2>Livros</h2>
 						<a href="/livros/">Ver todos →</a>
@@ -94,7 +113,6 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 						<?php foreach ( $livro_ids as $pid ) { ib_card( $pid ); } ?>
 					</div>
 				<?php endif; ?>
-			</div>
 
 			<?php get_sidebar(); ?>
 		</div>
