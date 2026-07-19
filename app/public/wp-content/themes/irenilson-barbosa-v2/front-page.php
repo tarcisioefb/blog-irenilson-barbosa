@@ -96,14 +96,22 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		</div>
 
 		<?php if ( ! empty( $strip ) ) : ?>
-		<div class="wrap">
-			<div class="eh-strip">
-				<div class="eh-strip__label"><span>▲</span>Mais recentes</div>
-				<div class="eh-strip__items">
-					<?php $n = 1; foreach ( $strip as $sid ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $sid ) ); ?>"><span class="eh-strip__n"><?php echo (int) $n++; ?></span><?php echo esc_html( get_the_title( $sid ) ); ?></a>
-					<?php endforeach; ?>
-				</div>
+		<div class="wrap" style="margin-top:var(--space-6)">
+			<div class="eh-sec-head"><h2>Mais recentes</h2></div>
+			<div class="eh-strip-grid">
+				<?php foreach ( $strip as $sid ) : ?>
+					<a class="ib-rel-item" href="<?php echo esc_url( get_permalink( $sid ) ); ?>">
+						<?php if ( has_post_thumbnail( $sid ) ) : ?>
+							<span class="ib-rel-item__img">
+								<?php echo get_the_post_thumbnail( $sid, 'ib-thumb', array( 'loading' => 'lazy' ) ); ?>
+							</span>
+						<?php endif; ?>
+						<span class="ib-rel-item__body">
+							<span class="ib-rel-item__t"><?php echo esc_html( get_the_title( $sid ) ); ?></span>
+							<span class="ib-rel-item__date"><?php echo esc_html( get_the_date( 'j F Y', $sid ) ); ?></span>
+						</span>
+					</a>
+				<?php endforeach; ?>
 			</div>
 		</div>
 		<?php endif; ?>
