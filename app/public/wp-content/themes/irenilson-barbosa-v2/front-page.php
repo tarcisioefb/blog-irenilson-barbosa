@@ -117,7 +117,7 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		<?php endif; ?>
 
 		<?php
-		$poems = get_posts( array( 'numberposts' => 2, 'post_status' => 'publish', 'post_type' => 'poiesis', 'fields' => 'ids' ) );
+		$poems = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post_type' => 'poiesis', 'fields' => 'ids' ) );
 		if ( ! empty( $poems ) ) : ?>
 		<div class="wrap" style="margin-top:var(--space-8)">
 			<div class="eh-sec-head"><h2>Poiésis</h2><a href="/poiesis/">Ver todas →</a></div>
