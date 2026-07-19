@@ -3,12 +3,14 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <aside class="eh-aside">
+	<?php if ( ! is_singular( 'post' ) ) : ?>
 	<div class="eh-widget">
 		<span class="eh-widget__head">Sobre</span>
 		<div style="font-size:0.9rem;color:var(--tx-2);line-height:1.7">
 			<p><strong style="color:var(--ink)">Irenilson Barbosa</strong> <?php echo esc_html( ib_opt( 'sidebar_bio' ) ?: 'Professor universitário, escritor e pesquisador.' ); ?></p>
 		</div>
 	</div>
+	<?php endif; ?>
 
 	<?php if ( is_singular( 'post' ) ) :
 		$cat = ib_primary_cat( get_the_ID() );
@@ -18,8 +20,9 @@ defined( 'ABSPATH' ) || exit;
 			<div class="eh-widget">
 				<span class="eh-widget__head">Leia também</span>
 				<div class="eh-rank">
-					<?php foreach ( $rel as $rid ) : ?>
+					<?php $n = 1; foreach ( $rel as $rid ) : ?>
 						<a href="<?php echo esc_url( get_permalink( $rid ) ); ?>">
+							<span class="eh-rank__n"><?php echo (int) $n++; ?></span>
 							<span class="eh-rank__t" style="font-weight:600"><?php echo esc_html( get_the_title( $rid ) ); ?></span>
 						</a>
 					<?php endforeach; ?>
