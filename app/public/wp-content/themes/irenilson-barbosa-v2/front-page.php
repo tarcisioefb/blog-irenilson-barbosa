@@ -8,7 +8,7 @@ $featured = array();
 $featured = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
 $lead      = isset( $featured[0] ) ? $featured[0] : 0;
 $secondary = array_slice( $featured, 1, 3 );
-$strip     = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post__not_in' => $featured, 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
+$strip     = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post__not_in' => $featured, 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
 $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano' );
 ?>
 
