@@ -57,11 +57,13 @@ while ( have_posts() ) : the_post();
 				endif;
 				?>
 
-				<div class="article-section-divider"></div>
+				<?php if ( ib_opt('facebook_app_id') ) : ?>
+			<div class="article-section-divider"></div>
 			<section class="related">
 				<h2>Comentários</h2>
 				<div id="fb-comments" class="fb-comments" data-href="<?php echo esc_url( get_permalink( $pid ) ); ?>" data-width="100%" data-numposts="10" data-order-by="social"></div>
 			</section>
+			<?php endif; ?>
 
 			</article>
 

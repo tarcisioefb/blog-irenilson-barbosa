@@ -13,8 +13,10 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) : ?>
 <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v18.0<?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) echo '&appId=' . esc_attr($fb_app_id); ?>"></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v18.0&appId=<?php echo esc_attr($fb_app_id); ?>"></script>
+<?php endif; ?>
 
 <?php
 $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_class' => 'menu', 'depth' => 2, 'fallback_cb' => false );
