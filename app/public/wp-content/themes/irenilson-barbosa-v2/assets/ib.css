@@ -6,8 +6,8 @@
 	--ink:#3E2C1B; --ink-2:#584632; --ink-3:#6D5940;
 	--paper:#FFFFFF; --paper-2:#FAFAFA; --page:#FFFFFF; --line:#E5E5E5;
 	--line-dark:rgba(62,44,27,.12);
-	--tx:#3E2C1B; --tx-2:#6D5940; --tx-dim:#9E8A68; --tx-inv:#F5F0E8; --tx-inv-dim:#D0C0A6;
-	--accent:#4A5D3E; --accent-2:#6B7F5E;
+	--tx:#3E2C1B; --tx-2:#6D5940; --tx-dim:#7D6D50; --tx-inv:#F5F0E8; --tx-inv-dim:#D0C0A6;
+	--accent:#4A5D3E; --accent-2:#5D704F;
 	--serif:"Literata",Georgia,"Iowan Old Style","Times New Roman",serif;
 	--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 	--wrap:1300px;
