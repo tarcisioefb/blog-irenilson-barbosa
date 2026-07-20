@@ -591,8 +591,10 @@ a{color:inherit;text-decoration:none}
 	.article__meta>span{display:inline}
 	.article__meta>span:not(:last-child)::after{content:" | ";color:var(--tx-2);opacity:.4}
 	.article__meta>span:last-child::after{content:""}
-	.ib-author-box__inner{flex-direction:column;align-items:center;text-align:center}
-	.ib-author-box__avatar img{width:64px;height:64px}
+	.ib-author-box{padding:var(--space-4)}
+	.ib-author-box__inner{gap:var(--space-3)}
+	.ib-author-box__avatar img{width:48px;height:48px}
+	.ib-author-box__name{font-size:var(--text-base);margin-bottom:0}
 	.eh-meta,.ib-rel-item__date,.eh-h-item__meta,.eh-poem-card__meta{font-size:var(--text-xs)}
 	.eh-card__t{font-size:var(--text-15)}
 	.eh-sec-head h2{font-size:var(--text-13)}
