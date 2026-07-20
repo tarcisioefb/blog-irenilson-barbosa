@@ -12,7 +12,11 @@ class TTS {
 		$post_id = get_queried_object_id();
 		$post_type_obj = get_post_type_object(get_post_type());
 		$type_name = $post_type_obj ? mb_strtolower($post_type_obj->labels->singular_name) : 'artigo';
-		$author_name = get_the_author_meta('display_name', get_post($post_id)->post_author) ?: 'Irenilson Barbosa';
+		if ('poiesis' === get_post_type()) {
+			$author_name = get_post_meta($post_id, 'poiesis_author', true) ?: 'Irenilson Barbosa';
+		} else {
+			$author_name = get_the_author_meta('display_name', get_post($post_id)->post_author) ?: 'Irenilson Barbosa';
+		}
 		$bio = get_the_author_meta('description', get_post($post_id)->post_author);
 		if (!$bio) {
 			$bio = \IrenilsonBarbosa\Core\AdminSettings::opt('sidebar_bio') ?: 'Professor universitário, escritor e pesquisador.';
