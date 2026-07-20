@@ -9,7 +9,7 @@ class SEO {
 	}
 
 	public static function add_meta_box() {
-		$types = array_merge(['post', 'page'], array_values(get_post_types(['_builtin' => false, 'public' => true])));
+		$types = ['post', 'page', 'publicacao', 'livro', 'poiesis', 'material'];
 		foreach ($types as $t) {
 			add_meta_box('ib-seo', 'SEO', [__CLASS__, 'render_meta_box'], $t, 'side', 'default');
 		}

@@ -125,6 +125,7 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 
 	public static function render_page() {
 		if (!current_user_can('manage_options')) return;
+		$tab = $_GET['tab'] ?? 'geral';
 		?>
 		<div class="wrap">
 			<h1 style="display:flex;align-items:center;gap:12px">
@@ -133,210 +134,226 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 			</h1>
 
 			<?php if (isset($_GET['settings-updated'])) : ?>
-				<div class="notice notice-success is-dismissible"><p>Alterações salvas.</p></div>
+				<div class="notice notice-success is-dismissible"><p>Alteracoes salvas.</p></div>
 			<?php endif; ?>
 
-			<div style="margin:24px 0;padding:20px 24px;background:#FAF7F2;border-left:4px solid #4A5D3E;border-radius:4px;font-size:14px;line-height:1.6">
-				<strong style="color:#3E2C1B">💡 Ajuste rápido</strong><br>
-				As alterações aparecem no site na hora. Campos em branco usam o valor padrão do tema.
-			</div>
+			<nav class="nav-tab-wrapper" style="margin-bottom:20px">
+				<a href="?page=ib-ajustes&amp;tab=geral" class="nav-tab <?php echo $tab === 'geral' ? 'nav-tab-active' : ''; ?>">Geral</a>
+				<a href="?page=ib-ajustes&amp;tab=home" class="nav-tab <?php echo $tab === 'home' ? 'nav-tab-active' : ''; ?>">Home</a>
+				<a href="?page=ib-ajustes&amp;tab=conteudo" class="nav-tab <?php echo $tab === 'conteudo' ? 'nav-tab-active' : ''; ?>">Conteudo</a>
+				<a href="?page=ib-ajustes&amp;tab=aparencia" class="nav-tab <?php echo $tab === 'aparencia' ? 'nav-tab-active' : ''; ?>">Aparencia</a>
+			</nav>
 
 			<form method="post" action="options.php">
 				<?php settings_fields('ib_group'); ?>
 
 				<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-					<div>
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🔗 Redes sociais</h2>
-						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Aparecem no topo do site.</p>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<?php foreach (['social_facebook' => 'Facebook', 'social_instagram' => 'Instagram', 'social_youtube' => 'YouTube'] as $k => $lbl) : ?>
-								<tr>
-									<th scope="row" style="width:80px;padding:6px 0"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600;font-size:12px"><?php echo esc_html($lbl); ?></label></th>
-									<td style="padding:6px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
-								</tr>
-							<?php endforeach; ?>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🖼️ Logo</h2>
-						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Usado no cabeçalho e rodapé. PNG ou SVG, largura máx. 240px.</p>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<?php $logo_val = self::opt('site_logo'); ?>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0"><label for="site_logo" style="color:#3E2C1B;font-weight:600;font-size:12px">Logo</label></th>
-								<td style="padding:6px 0">
-									<div style="display:flex;gap:6px;flex-wrap:wrap">
-										<input type="url" id="site_logo" name="ib_opts[site_logo]" value="<?php echo esc_attr($logo_val); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px;flex:1;min-width:140px">
-										<button type="button" class="button" data-media-pick="site_logo">Selecionar</button>
-										<button type="button" class="button" data-media-clear="site_logo">Remover</button>
-									</div>
-									<?php if ($logo_val) : ?>
-										<br><img id="preview-site_logo" src="<?php echo esc_url($logo_val); ?>" alt="" style="max-width:160px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
-									<?php else : ?>
-										<br><img id="preview-site_logo" alt="" style="display:none;max-width:160px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
-									<?php endif; ?>
-								</td>
-							</tr>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🏠 Home — Categorias</h2>
-						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Arraste para reordenar. Desmarque para ocultar.</p>
-						<ul id="ib-home-cats" style="margin:0;padding:0;list-style:none">
-							<?php
-							$saved = self::opt('home_cats');
-							$saved = is_array($saved) ? $saved : [];
-							$all_terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false, 'fields' => 'all']);
-							$all_terms = array_filter($all_terms, fn($t) => 'uncategorized' !== $t->slug);
-							$ordered = [];
-							if (!empty($saved)) {
-								$term_by_slug = [];
-								foreach ($all_terms as $t) { $term_by_slug[$t->slug] = $t; }
-								foreach ($saved as $slug) { if (isset($term_by_slug[$slug])) $ordered[] = $term_by_slug[$slug]; }
-								foreach ($all_terms as $t) { if (!in_array($t->slug, $saved, true)) $ordered[] = $t; }
-							} else { $ordered = array_values($all_terms); }
-							foreach ($ordered as $t) : $checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : ''; ?>
-							<li style="display:flex;align-items:center;gap:10px;padding:7px 10px;margin:0 0 3px;background:#fff;border:1px solid #e0d5c3;border-radius:5px;cursor:grab">
-								<span style="color:#bbb;font-size:16px;cursor:grab;user-select:none">⠿</span>
-								<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
-								<label style="display:flex;align-items:center;gap:6px;flex:1;cursor:pointer">
-									<input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" <?php echo $checked; ?>>
-									<span style="color:#3E2C1B;font-size:13px"><?php echo esc_html($t->name); ?></span>
-								</label>
-							</li>
-							<?php endforeach; ?>
-						</ul>
-						<script>jQuery(function($){$('#ib-home-cats').sortable({axis:'y',handle:'span',placeholder:'ui-state-highlight'});$('#ib-home-cats').disableSelection();});</script>
-					</div>
-					</div>
-
-					<div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">📌 Sidebar — Sobre</h2>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
-								<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
-							</tr>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🖼️ Banner (Home)</h2>
-						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Banner responsivo exibido abaixo de "Mais recentes" na home. Imagens diferentes para desktop, tablet e mobile — a ideal é landscape 1200x300, tablet 800x250, mobile 600x250.</p>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<?php foreach ([
-								'banner_image' => 'Desktop',
-								'banner_image_tablet' => 'Tablet',
-								'banner_image_mobile' => 'Mobile',
-							] as $fk => $flbl) : $fval = self::opt($fk); ?>
-							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="<?php echo esc_attr($fk); ?>" style="color:#3E2C1B;font-weight:600"><?php echo esc_html($flbl); ?></label></th>
-								<td style="padding:8px 0">
-									<input type="url" id="<?php echo esc_attr($fk); ?>" name="ib_opts[<?php echo esc_attr($fk); ?>]" value="<?php echo esc_attr($fval); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px">
-									<button type="button" class="button" data-media-pick="<?php echo esc_attr($fk); ?>" style="margin-top:4px">Selecionar</button>
-									<button type="button" class="button" data-media-clear="<?php echo esc_attr($fk); ?>" style="margin-top:4px">Remover</button>
-									<?php if ($fval) : ?>
-										<br><img id="preview-<?php echo esc_attr($fk); ?>" src="<?php echo esc_url($fval); ?>" alt="" style="max-width:300px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
-									<?php else : ?>
-										<br><img id="preview-<?php echo esc_attr($fk); ?>" alt="" style="display:none;max-width:300px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
-									<?php endif; ?>
-								</td>
-							</tr>
-							<?php endforeach; ?>
-							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="banner_link" style="color:#3E2C1B;font-weight:600">Link</label></th>
-								<td style="padding:8px 0"><input type="url" id="banner_link" name="ib_opts[banner_link]" value="<?php echo esc_attr(self::opt('banner_link')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
-							</tr>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">📝 Rodapé</h2>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0"><label for="footer_tagline" style="color:#3E2C1B;font-weight:600">Frase</label></th>
-								<td style="padding:8px 0"><input type="text" id="footer_tagline" name="ib_opts[footer_tagline]" value="<?php echo esc_attr(self::opt('footer_tagline')); ?>" class="large-text" style="border-color:#e0d5c3;border-radius:4px"></td>
-							</tr>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
-								<td style="padding:8px 0"><textarea id="footer_about" name="ib_opts[footer_about]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('footer_about')); ?></textarea></td>
-							</tr>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">💬 Comentários do Facebook</h2>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600">App ID</label></th>
-								<td style="padding:8px 0"><input type="text" id="facebook_app_id" name="ib_opts[facebook_app_id]" value="<?php echo esc_attr(self::opt('facebook_app_id')); ?>" class="regular-text" placeholder="1234567890" style="border-color:#e0d5c3;border-radius:4px"></td>
-							</tr>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">📊 Google Analytics</h2>
-						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Insira o ID de medição (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.</p>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
-								<td style="padding:6px 0"><input type="text" id="google_analytics_id" name="ib_opts[google_analytics_id]" value="<?php echo esc_attr(self::opt('google_analytics_id')); ?>" class="regular-text" placeholder="G-XXXXXXXXXX" style="border-color:#e0d5c3;border-radius:4px"></td>
-							</tr>
-						</tbody></table>
-					</div>
-
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🔤 Fontes</h2>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0"><label for="font_heading" style="color:#3E2C1B;font-weight:600">Títulos</label></th>
-								<td style="padding:8px 0">
-									<select id="font_heading" name="ib_opts[font_heading]" style="min-width:240px;border-color:#e0d5c3;border-radius:4px">
-										<?php $h = self::opt('font_heading'); $serif_opts = [
-											'Literata' => 'Literata', 'Merriweather' => 'Merriweather',
-											'Playfair+Display' => 'Playfair Display', 'Lora' => 'Lora',
-											'PT+Serif' => 'PT Serif', 'Source+Serif+4' => 'Source Serif 4',
-											'Cormorant' => 'Cormorant', 'Cormorant+Upright' => 'Cormorant Upright',
-											'Red+Hat+Display' => 'Red Hat Display', 'Fraunces' => 'Fraunces',
-											'Epilogue' => 'Epilogue',
-											'Georgia' => 'Georgia (nativa)', 'System' => 'Sistema (sem Google Fonts)',
-										]; foreach ($serif_opts as $v => $l) : ?>
-											<option value="<?php echo esc_attr($v); ?>" <?php selected($h, $v); ?>><?php echo esc_html($l); ?></option>
-										<?php endforeach; ?>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width:80px;padding:6px 0"><label for="font_body" style="color:#3E2C1B;font-weight:600">Corpo</label></th>
-								<td style="padding:8px 0">
-									<select id="font_body" name="ib_opts[font_body]" style="min-width:240px;border-color:#e0d5c3;border-radius:4px">
-										<?php $b = self::opt('font_body'); $sans_opts = [
-											'Inter' => 'Inter', 'Source+Sans+3' => 'Source Sans 3',
-											'Nunito' => 'Nunito', 'Work+Sans' => 'Work Sans',
-											'DM+Sans' => 'DM Sans', 'System' => 'Sistema (nativa)',
-										]; foreach ($sans_opts as $v => $l) : ?>
-											<option value="<?php echo esc_attr($v); ?>" <?php selected($b, $v); ?>><?php echo esc_html($l); ?></option>
-										<?php endforeach; ?>
-									</select>
-								</td>
-							</tr>
-						</tbody></table>
-					</div>
+				<?php if ($tab === 'geral') : ?>
+					<?php self::render_tab_geral(); ?>
+				<?php elseif ($tab === 'home') : ?>
+					<?php self::render_tab_home(); ?>
+				<?php elseif ($tab === 'conteudo') : ?>
+					<?php self::render_tab_conteudo(); ?>
+				<?php elseif ($tab === 'aparencia') : ?>
+					<?php self::render_tab_aparencia(); ?>
+				<?php endif; ?>
 				</div>
 
-				</div>
-				</div>
 				<div style="margin-top:4px">
-				<?php submit_button('Salvar alterações', 'primary', 'submit', true, ['style' => 'background:#3E2C1B;border-color:#3E2C1B;border-radius:4px;padding:8px 28px;height:auto;font-size:14px']); ?>
+				<?php submit_button('Salvar alteracoes', 'primary', 'submit', true, ['style' => 'background:#3E2C1B;border-color:#3E2C1B;border-radius:4px;padding:8px 28px;height:auto;font-size:14px']); ?>
 				</div>
-		</form>
-	</div>
-	<?php
+			</form>
+		</div>
+		<?php
+	}
+
+	private static function card_open($icon, $title, $desc = '') {
+		?>
+		<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+			<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B"><?php echo $icon; ?> <?php echo esc_html($title); ?></h2>
+			<?php if ($desc) : ?><p style="margin:0 0 16px;color:#6D5940;font-size:12px"><?php echo esc_html($desc); ?></p><?php endif; ?>
+			<table class="form-table" role="presentation" style="margin:0"><tbody>
+		<?php
+	}
+
+	private static function card_close() {
+		?></tbody></table></div><?php
+	}
+
+	private static function render_tab_geral() {
+		?>
+		<div>
+		<?php self::card_open('🔗', 'Redes sociais', 'Aparecem no topo do site.'); ?>
+			<?php foreach (['social_facebook' => 'Facebook', 'social_instagram' => 'Instagram', 'social_youtube' => 'YouTube'] as $k => $lbl) : ?>
+				<tr>
+					<th scope="row" style="width:80px;padding:6px 0"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600;font-size:12px"><?php echo esc_html($lbl); ?></label></th>
+					<td style="padding:6px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+				</tr>
+			<?php endforeach; ?>
+		<?php self::card_close(); ?>
+
+		<?php self::card_open('🖼️', 'Logo', 'Usado no cabecalho e rodape. PNG ou SVG, largura max. 240px.'); ?>
+			<?php $logo_val = self::opt('site_logo'); ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0"><label for="site_logo" style="color:#3E2C1B;font-weight:600;font-size:12px">Logo</label></th>
+				<td style="padding:6px 0">
+					<div style="display:flex;gap:6px;flex-wrap:wrap">
+						<input type="url" id="site_logo" name="ib_opts[site_logo]" value="<?php echo esc_attr($logo_val); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px;flex:1;min-width:140px">
+						<button type="button" class="button" data-media-pick="site_logo">Selecionar</button>
+						<button type="button" class="button" data-media-clear="site_logo">Remover</button>
+					</div>
+					<?php if ($logo_val) : ?>
+						<br><img id="preview-site_logo" src="<?php echo esc_url($logo_val); ?>" alt="" style="max-width:160px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
+					<?php else : ?>
+						<br><img id="preview-site_logo" alt="" style="display:none;max-width:160px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
+					<?php endif; ?>
+				</td>
+			</tr>
+		<?php self::card_close(); ?>
+		</div>
+		<div>
+		<?php self::card_open('📊', 'Google Analytics', 'Insira o ID de medicao (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.'); ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
+				<td style="padding:6px 0"><input type="text" id="google_analytics_id" name="ib_opts[google_analytics_id]" value="<?php echo esc_attr(self::opt('google_analytics_id')); ?>" class="regular-text" placeholder="G-XXXXXXXXXX" style="border-color:#e0d5c3;border-radius:4px"></td>
+			</tr>
+		<?php self::card_close(); ?>
+
+		<?php self::card_open('💬', 'Comentarios do Facebook'); ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600;font-size:12px">App ID</label></th>
+				<td style="padding:6px 0"><input type="text" id="facebook_app_id" name="ib_opts[facebook_app_id]" value="<?php echo esc_attr(self::opt('facebook_app_id')); ?>" class="regular-text" placeholder="1234567890" style="border-color:#e0d5c3;border-radius:4px"></td>
+			</tr>
+		<?php self::card_close(); ?>
+		</div>
+		<?php
+	}
+
+	private static function render_tab_home() {
+		?>
+		<div>
+		<?php self::card_open('🏠', 'Categorias em destaque', 'Arraste para reordenar. Desmarque para ocultar da home.'); ?>
+		<?php self::card_close(); ?>
+			<ul id="ib-home-cats" style="margin:0;padding:0;list-style:none">
+				<?php
+				$saved = self::opt('home_cats');
+				$saved = is_array($saved) ? $saved : [];
+				$all_terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false, 'fields' => 'all']);
+				$all_terms = array_filter($all_terms, fn($t) => 'uncategorized' !== $t->slug);
+				$ordered = [];
+				if (!empty($saved)) {
+					$term_by_slug = [];
+					foreach ($all_terms as $t) { $term_by_slug[$t->slug] = $t; }
+					foreach ($saved as $slug) { if (isset($term_by_slug[$slug])) $ordered[] = $term_by_slug[$slug]; }
+					foreach ($all_terms as $t) { if (!in_array($t->slug, $saved, true)) $ordered[] = $t; }
+				} else { $ordered = array_values($all_terms); }
+				foreach ($ordered as $t) : $checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : ''; ?>
+				<li style="display:flex;align-items:center;gap:10px;padding:7px 10px;margin:0 0 3px;background:#fff;border:1px solid #e0d5c3;border-radius:5px;cursor:grab">
+					<span style="color:#bbb;font-size:16px;cursor:grab;user-select:none">⠿</span>
+					<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
+					<label style="display:flex;align-items:center;gap:6px;flex:1;cursor:pointer">
+						<input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" <?php echo $checked; ?>>
+						<span style="color:#3E2C1B;font-size:13px"><?php echo esc_html($t->name); ?></span>
+					</label>
+				</li>
+				<?php endforeach; ?>
+			</ul>
+			<script>jQuery(function($){$('#ib-home-cats').sortable({axis:'y',handle:'span',placeholder:'ui-state-highlight'});$('#ib-home-cats').disableSelection();});</script>
+		<?php self::card_close(); ?>
+		</div>
+		<div>
+		<?php self::card_open('🖼️', 'Banner responsivo', 'Exibido abaixo de "Mais recentes" na home. Desktop 1200x300, tablet 800x250, mobile 600x250.'); ?>
+		</td></tr></tbody></table>
+			<?php foreach ([
+				'banner_image' => 'Desktop',
+				'banner_image_tablet' => 'Tablet',
+				'banner_image_mobile' => 'Mobile',
+			] as $fk => $flbl) : $fval = self::opt($fk); ?>
+			<p>
+				<label for="<?php echo esc_attr($fk); ?>" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px;color:#3E2C1B"><?php echo esc_html($flbl); ?></label>
+				<span style="display:flex;gap:6px;flex-wrap:wrap">
+					<input type="url" id="<?php echo esc_attr($fk); ?>" name="ib_opts[<?php echo esc_attr($fk); ?>]" value="<?php echo esc_attr($fval); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px;flex:1;min-width:140px">
+					<button type="button" class="button" data-media-pick="<?php echo esc_attr($fk); ?>">Selecionar</button>
+					<button type="button" class="button" data-media-clear="<?php echo esc_attr($fk); ?>">Remover</button>
+				</span>
+				<?php if ($fval) : ?>
+					<br><img id="preview-<?php echo esc_attr($fk); ?>" src="<?php echo esc_url($fval); ?>" alt="" style="max-width:100%;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
+				<?php else : ?>
+					<br><img id="preview-<?php echo esc_attr($fk); ?>" alt="" style="display:none;max-width:100%;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
+				<?php endif; ?>
+			</p>
+			<?php endforeach; ?>
+			<p>
+				<label for="banner_link" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px;color:#3E2C1B">Link do banner</label>
+				<input type="url" id="banner_link" name="ib_opts[banner_link]" value="<?php echo esc_attr(self::opt('banner_link')); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px">
+			</p>
+		<?php self::card_close(); ?>
+		</div>
+		<?php
+	}
+
+	private static function render_tab_conteudo() {
+		?>
+		<div>
+		<?php self::card_open('📌', 'Sidebar — Sobre', 'Biografia exibida na barra lateral do site.'); ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
+				<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
+			</tr>
+		<?php self::card_close(); ?>
+		</div>
+		<div>
+		<?php self::card_open('📝', 'Rodape'); ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0"><label for="footer_tagline" style="color:#3E2C1B;font-weight:600">Frase</label></th>
+				<td style="padding:8px 0"><input type="text" id="footer_tagline" name="ib_opts[footer_tagline]" value="<?php echo esc_attr(self::opt('footer_tagline')); ?>" class="large-text" style="border-color:#e0d5c3;border-radius:4px"></td>
+			</tr>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
+				<td style="padding:8px 0"><textarea id="footer_about" name="ib_opts[footer_about]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('footer_about')); ?></textarea></td>
+			</tr>
+		<?php self::card_close(); ?>
+		</div>
+		<?php
+	}
+
+	private static function render_tab_aparencia() {
+		?>
+		<div>
+		<?php self::card_open('🔤', 'Fontes', 'Defina as fontes usadas no site. As alteracoes aparecem na hora.'); ?>
+		</td></tr></tbody></table>
+			<p>
+				<label for="font_heading" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px;color:#3E2C1B">Titulos</label>
+				<select id="font_heading" name="ib_opts[font_heading]" style="width:100%;border-color:#e0d5c3;border-radius:4px;padding:4px 6px">
+					<?php $h = self::opt('font_heading'); $serif_opts = [
+						'Literata' => 'Literata', 'Merriweather' => 'Merriweather',
+						'Playfair+Display' => 'Playfair Display', 'Lora' => 'Lora',
+						'PT+Serif' => 'PT Serif', 'Source+Serif+4' => 'Source Serif 4',
+						'Cormorant' => 'Cormorant', 'Cormorant+Upright' => 'Cormorant Upright',
+						'Red+Hat+Display' => 'Red Hat Display', 'Fraunces' => 'Fraunces',
+						'Epilogue' => 'Epilogue',
+						'Georgia' => 'Georgia (nativa)', 'System' => 'Sistema (sem Google Fonts)',
+					]; foreach ($serif_opts as $v => $l) : ?>
+						<option value="<?php echo esc_attr($v); ?>" <?php selected($h, $v); ?>><?php echo esc_html($l); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</p>
+			<p>
+				<label for="font_body" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px;color:#3E2C1B">Corpo</label>
+				<select id="font_body" name="ib_opts[font_body]" style="width:100%;border-color:#e0d5c3;border-radius:4px;padding:4px 6px">
+					<?php $b = self::opt('font_body'); $sans_opts = [
+						'Inter' => 'Inter', 'Source+Sans+3' => 'Source Sans 3',
+						'Nunito' => 'Nunito', 'Work+Sans' => 'Work Sans',
+						'DM+Sans' => 'DM Sans', 'System' => 'Sistema (nativa)',
+					]; foreach ($sans_opts as $v => $l) : ?>
+						<option value="<?php echo esc_attr($v); ?>" <?php selected($b, $v); ?>><?php echo esc_html($l); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</p>
+		<?php self::card_close(); ?>
+		</div>
+		<div></div>
+		<?php
 	}
 
 	public static function render_newsletter() {
