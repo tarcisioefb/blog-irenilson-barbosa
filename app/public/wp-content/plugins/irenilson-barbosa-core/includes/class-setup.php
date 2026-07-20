@@ -130,6 +130,41 @@ class Setup {
 		]);
 	}
 
+	public static function init_metaboxes() {
+		add_action('add_meta_boxes', [__CLASS__, 'add_poiesis_metabox']);
+		add_action('save_post', [__CLASS__, 'save_poiesis_metabox']);
+	}
+
+	public static function add_poiesis_metabox() {
+		add_meta_box(
+			'poiesis_notas_box',
+			'Notas do poema',
+			[__CLASS__, 'render_poiesis_metabox'],
+			'poiesis',
+			'normal',
+			'default'
+		);
+	}
+
+	public static function render_poiesis_metabox($post) {
+		wp_nonce_field('poiesis_notas', 'poiesis_notas_nonce');
+		$value = get_post_meta($post->ID, 'poiesis_notas', true);
+		echo '<textarea name="poiesis_notas" style="width:100%;min-height:120px;padding:10px;font-size:13px" placeholder="Texto explicativo, dedicatória, notas do autor...">';
+		echo esc_textarea($value);
+		echo '</textarea>';
+		echo '<p style="color:#6D5940;font-size:12px;margin:4px 0 0">Este texto aparece abaixo do poema, em uma caixa de destaque separada.</p>';
+	}
+
+	public static function save_poiesis_metabox($post_id) {
+		if (!isset($_POST['poiesis_notas_nonce']) || !wp_verify_nonce($_POST['poiesis_notas_nonce'], 'poiesis_notas')) return;
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+		if (!current_user_can('edit_post', $post_id)) return;
+
+		if (isset($_POST['poiesis_notas'])) {
+			update_post_meta($post_id, 'poiesis_notas', sanitize_textarea_field($_POST['poiesis_notas']));
+		}
+	}
+
 	public static function register_meta() {
 		$meta_fields = [
 			'subtitulo'        => ['type' => 'string', 'post_types' => ['post']],

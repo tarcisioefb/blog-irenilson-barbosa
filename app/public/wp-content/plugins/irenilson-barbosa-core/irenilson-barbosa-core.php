@@ -38,6 +38,7 @@ spl_autoload_register(function ($class) {
  */
 add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\Setup::init();
+	\IrenilsonBarbosa\Core\Setup::init_metaboxes();
 	\IrenilsonBarbosa\Core\Magazine::init();
 	\IrenilsonBarbosa\Core\ReadingTime::init();
 	\IrenilsonBarbosa\Core\RelatedPosts::init();
