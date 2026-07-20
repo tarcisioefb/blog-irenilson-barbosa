@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ib_contact_nonce'])) 
 			$msg_error = 'E-mail inválido.';
 		} else {
 			$to = 'contato@irenilsonbarbosa.com';
-			$headers = ['Content-Type: text/html; charset=UTF-8', "Reply-To: $email"];
+			$headers = ['Content-Type: text/html; charset=UTF-8', "From: Irenilson Barbosa <contato@irenilsonbarbosa.com>", "Reply-To: $name <$email>"];
 			$body = "<p><strong>Nome:</strong> $name</p>
 					<p><strong>E-mail:</strong> $email</p>
 					<p><strong>Assunto:</strong> " . ($subject ?: '(sem assunto)') . "</p>
