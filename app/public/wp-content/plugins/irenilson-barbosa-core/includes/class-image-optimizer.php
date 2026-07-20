@@ -5,6 +5,7 @@ class ImageOptimizer {
 	public static function init() {
 		add_filter('wp_generate_attachment_metadata', [__CLASS__, 'generate_on_upload'], 10, 3);
 		add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'add_format_hint'], 10, 3);
+		add_filter('litespeed_media_excludes', [__CLASS__, 'litespeed_nolazy']);
 	}
 
 	public static function generate_on_upload($metadata, $attachment_id, $context) {
@@ -58,8 +59,15 @@ class ImageOptimizer {
 	}
 
 	public static function add_format_hint($attr, $attachment, $size) {
-		$attr['loading'] = 'lazy';
+		if (empty($attr['fetchpriority']) || $attr['fetchpriority'] !== 'high') {
+			$attr['loading'] = 'lazy';
+		}
 		return $attr;
+	}
+
+	public static function litespeed_nolazy($excludes) {
+		$excludes[] = 'fetchpriority=high';
+		return $excludes;
 	}
 
 	public static function cli_convert($args, $assoc) {
