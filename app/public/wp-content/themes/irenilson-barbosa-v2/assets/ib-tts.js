@@ -54,6 +54,13 @@
 				if (txt) body += txt + (isPoem ? '…\n' : '.\n');
 			}
 		});
+		if (isPoem) {
+			var notes = document.querySelector('.ib-poem-notes');
+			if (notes) {
+				body += '… … Notas do autor: … … ';
+				body += notes.textContent.trim() + '.\n';
+			}
+		}
 
 		var intro = title + '. ';
 		if (author) intro += 'Por ' + author + '. ' + '… … ';
