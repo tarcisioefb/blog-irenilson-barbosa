@@ -20,7 +20,7 @@ while (have_posts()) : the_post(); ?>
 				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)">Professor, escritor e pesquisador</p>
 
 				<div style="padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);margin-bottom:var(--space-8);border-left:3px solid var(--accent)">
-					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)">Professor Adjunto da UFRB, atuando nas disciplinas Educação Inclusiva, Educação Especial, Organização da Educação Brasileira e Políticas Educacionais e Orientação do Trabalho Monográfico. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI). Graduado em Teologia, Pedagogo, Mestre e Doutor em Educação pela UFBA. Pós-doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra.</p>
+					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)">Professor Adjunto da UFRB. Pós-Doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra. Doutor e Mestre em Educação pela UFBA. Licenciado em Pedagogia (UFBA) e Bacharel em Teologia. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI).</p>
 				</div>
 
 				<!-- Formação -->
@@ -68,6 +68,7 @@ while (have_posts()) : the_post(); ?>
 					<span>✉️ <a href="mailto:irenilsonjb@ufrb.edu.br" style="color:var(--ink);text-decoration:none">irenilsonjb@ufrb.edu.br</a></span>
 					<span>📄 <a href="http://lattes.cnpq.br/1666550999462374" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Currículo Lattes</a></span>
 					<span>🎓 <a href="https://scholar.google.com/citations?user=YKHWTRsAAAAJ" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Google Scholar</a></span>
+					<span>🆔 <a href="https://orcid.org/0000-0001-6638-3620" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">ORCID: 0000-0001-6638-3620</a></span>
 				</div>
 
 				<p style="font-size:var(--text-xs);color:var(--tx-dim);margin:0;padding-top:var(--space-4);border-top:var(--border-w) solid var(--border-c)">Informações compiladas do Currículo Lattes.</p>
