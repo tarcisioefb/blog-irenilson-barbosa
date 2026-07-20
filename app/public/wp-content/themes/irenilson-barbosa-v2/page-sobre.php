@@ -3,10 +3,14 @@
 defined('ABSPATH') || exit;
 get_header();
 while (have_posts()) : the_post(); ?>
+<style>
+@media(max-width:1024px){.ib-sobre-grid{grid-template-columns:1fr!important}.ib-sobre-foto{position:static!important;max-width:240px;margin:0 auto var(--space-6)}.ib-sobre-sticky{position:static!important}}
+@media(max-width:640px){.ib-sobre-formacao{grid-template-columns:1fr!important}.ib-sobre-foto{max-width:180px}}
+</style>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<article style="max-width:1280px;margin:0 auto">
-		<div style="display:grid;grid-template-columns:320px 1fr;gap:var(--space-10);align-items:start;margin-bottom:var(--space-10)">
-			<div style="position:sticky;top:140px">
+		<div class="ib-sobre-grid" style="display:grid;grid-template-columns:320px 1fr;gap:var(--space-10);align-items:start;margin-bottom:var(--space-10)">
+			<div class="ib-sobre-sticky" style="position:sticky;top:140px">
 				<div style="aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card);background:var(--paper-2)">
 					<img src="http://irenilson-barbosa.local/wp-content/uploads/2026/07/Irenilson-Barbosa-Retrato.avif" alt="Irenilson Barbosa" style="width:100%;height:100%;object-fit:cover;display:block">
 				</div>
@@ -21,7 +25,7 @@ while (have_posts()) : the_post(); ?>
 
 				<!-- Formação -->
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Formação acadêmica</h2>
-				<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-8)">
+				<div class="ib-sobre-formacao" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-8)">
 					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
 						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">2023–2024</span>
 						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Pós-Doutorado</strong> — Ciências da Educação, FPCEUP/Universidade do Porto</p>
