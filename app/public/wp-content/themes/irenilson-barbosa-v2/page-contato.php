@@ -45,7 +45,8 @@ get_header(); ?>
 		<div role="alert" style="padding:var(--space-4) var(--space-5);background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-md);color:#991B1B;margin-bottom:var(--space-6)">✗ <?php echo esc_html($msg_error); ?></div>
 	<?php endif; ?>
 
-	<div style="display:grid;grid-template-columns:1fr 340px;gap:var(--space-10);align-items:start">
+	<div class="ib-contact-grid" style="display:grid;grid-template-columns:1fr 340px;gap:var(--space-10);align-items:start">
+<style>@media(max-width:900px){.ib-contact-grid{grid-template-columns:1fr!important}.ib-contact-grid>div:last-child{position:static!important}}</style>
 		<div>
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);color:var(--ink);margin:0 0 var(--space-2)">Contato</h1>
 			<p style="color:var(--tx-2);margin:0 0 var(--space-8)">Envie uma mensagem. Responderei assim que possível.</p>
