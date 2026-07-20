@@ -11,7 +11,7 @@
 
 defined('ABSPATH') || exit;
 
-define('IRENILSON_CORE_VERSION', '0.1.0');
+define('IRENILSON_CORE_VERSION', '1.0.1');
 define('IRENILSON_CORE_PATH', plugin_dir_path(__FILE__));
 
 /**
