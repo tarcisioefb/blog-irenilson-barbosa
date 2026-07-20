@@ -1,6 +1,7 @@
 <?php
 /**
  * Blog do Irenilson — setup do tema.
+ * Desenvolvido por Zucatech (zucatech.com)
  */
 
 defined('ABSPATH') || exit;

@@ -14,7 +14,7 @@
 			</div>
 		</div>
 
-		<p class="footer__cr">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> Irenilson Barbosa. Todos os direitos reservados.</p>
+		<p class="footer__cr">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> Irenilson Barbosa. Todos os direitos reservados. <span style="font-size:0.8rem;color:var(--tx-dim)">Desenvolvido por <a href="https://zucatech.com" target="_blank" rel="noopener" style="color:inherit">Zucatech</a>.</span></p>
 	</div>
 </footer>
 

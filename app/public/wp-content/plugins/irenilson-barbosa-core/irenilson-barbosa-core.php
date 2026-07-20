@@ -2,9 +2,10 @@
 /**
  * Plugin Name: Irenilson Barbosa Core
  * Plugin URI:  https://irenilsonbarbosa.com.br
- * Description: Funcionalidades do portal editorial — CPTs, taxonomias, metadados e componentes.
- * Version:     0.1.0
+ * Description: Funcionalidades do portal editorial — CPTs, taxonomias, metadados e componentes. Desenvolvido por Zucatech (zucatech.com).
+ * Version:     1.0.0
  * Author:      Irenilson Barbosa
+ * Author URI:  https://zucatech.com
  * Text Domain: irenilson-barbosa-core
  */
 
