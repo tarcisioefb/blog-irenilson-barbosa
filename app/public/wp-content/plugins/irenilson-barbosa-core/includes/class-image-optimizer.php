@@ -18,6 +18,9 @@ class ImageOptimizer {
 
 	public static function generate_on_upload($metadata, $attachment_id, $context) {
 		if (!is_array($metadata) || empty($metadata['file'])) return $metadata;
+		static $processing = [];
+		if (isset($processing[$attachment_id])) return $metadata;
+		$processing[$attachment_id] = true;
 
 		$uploads = wp_upload_dir();
 		$base = $uploads['basedir'] . '/' . dirname($metadata['file']);
