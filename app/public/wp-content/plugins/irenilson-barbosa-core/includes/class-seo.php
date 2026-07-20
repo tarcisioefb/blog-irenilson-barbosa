@@ -109,15 +109,17 @@ class SEO {
 
 	private static function get_image() {
 		if (is_singular()) {
-			$thumb_id = get_post_thumbnail_id(get_queried_object_id());
-			if ($thumb_id) {
-				$src = wp_get_attachment_image_url($thumb_id, 'large');
-				if ($src) return $src;
+			$post_type = get_post_type();
+			if (in_array($post_type, ['post', 'publicacao', 'livro', 'poiesis', 'material'], true)) {
+				$thumb_id = get_post_thumbnail_id(get_queried_object_id());
+				if ($thumb_id) {
+					$src = wp_get_attachment_image_url($thumb_id, 'large');
+					if ($src) return $src;
+				}
 			}
 		}
-		$logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo');
-		if ($logo) return $logo;
-		return '';
+		$retrato = home_url('/wp-content/uploads/2026/07/Irenilson-Barbosa-Retrato.avif');
+		return $retrato;
 	}
 
 	private static function output_singular() {
