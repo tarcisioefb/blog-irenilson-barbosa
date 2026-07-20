@@ -8,7 +8,7 @@ while (have_posts()) : the_post();
 	$other = get_posts(array('post_type' => 'poiesis', 'posts_per_page' => 5, 'post__not_in' => array(get_the_ID()), 'orderby' => 'rand'));
 ?>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
-	<div class="article-layout">
+	<div class="article-layout" style="grid-template-columns:minmax(0,1fr) 400px">
 		<article style="max-width:680px">
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
 
