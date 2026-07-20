@@ -157,103 +157,19 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		<div class="wrap eh-layout">
 			<div class="eh-content">
 				<?php
-				$sec_i = 0;
-				$layouts = array( 'mosaic', 'grid3', 'list', 'inverted' );
 				foreach ( $editorias as $slug ) :
 					$term = get_term_by( 'slug', $slug, 'category' );
 					if ( ! $term || is_wp_error( $term ) ) { continue; }
-					$ids = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'category' => $term->term_id, 'fields' => 'ids', 'suppress_filters' => false ) );
+					$ids = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'category' => $term->term_id, 'fields' => 'ids', 'suppress_filters' => false ) );
 					if ( empty( $ids ) ) { continue; }
-					$layout = $layouts[ $sec_i % count( $layouts ) ];
-					$sec_i++;
 					?>
 					<div class="eh-sec-head">
 						<h2><?php echo esc_html( $term->name ); ?></h2>
 						<a href="<?php echo esc_url( get_category_link( $term->term_id ) ); ?>">Ver tudo →</a>
 					</div>
-
-					<?php if ( 'mosaic' === $layout ) : ?>
-					<!-- MOSAICO: 1 card 2fr + 2 cards empilhados 1fr -->
-					<div class="ib-mosaic">
-						<div class="ib-mosaic__lead">
-							<article class="eh-card eh-card--lead">
-								<a class="eh-card__imgwrap eh-card__imgwrap--lead" href="<?php echo esc_url( get_permalink( $ids[0] ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $ids[0] ) ); ?>">
-									<?php if ( has_post_thumbnail( $ids[0] ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $ids[0], 'large' ) ); ?>" alt="" loading="lazy"><?php endif; ?>
-									<?php $lc = ib_primary_cat( $ids[0] ); if ( $lc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $lc->name ); ?></span><?php endif; ?>
-								</a>
-								<h3 class="eh-card__t"><a href="<?php echo esc_url( get_permalink( $ids[0] ) ); ?>"><?php echo esc_html( get_the_title( $ids[0] ) ); ?></a></h3>
-							</article>
-						</div>
-						<div class="ib-mosaic__side">
-							<?php for ( $i = 1; $i < min( 3, count( $ids ) ); $i++ ) : ?>
-								<article class="eh-card eh-card--side">
-									<a class="eh-card__imgwrap" href="<?php echo esc_url( get_permalink( $ids[ $i ] ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $ids[ $i ] ) ); ?>">
-										<?php if ( has_post_thumbnail( $ids[ $i ] ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $ids[ $i ], 'ib-card' ) ); ?>" alt="" loading="lazy"><?php endif; ?>
-										<?php $sc = ib_primary_cat( $ids[ $i ] ); if ( $sc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $sc->name ); ?></span><?php endif; ?>
-									</a>
-									<h3 class="eh-card__t"><a href="<?php echo esc_url( get_permalink( $ids[ $i ] ) ); ?>"><?php echo esc_html( get_the_title( $ids[ $i ] ) ); ?></a></h3>
-								</article>
-							<?php endfor; ?>
-						</div>
+					<div class="ib-section-grid">
+						<?php foreach ( $ids as $pid ) { ib_card( $pid ); } ?>
 					</div>
-
-					<?php elseif ( 'grid3' === $layout ) : ?>
-					<!-- GRID 3 COLUNAS: cards compactos -->
-					<div class="ib-grid3">
-						<?php foreach ( $ids as $pid ) : ?>
-							<article class="eh-card eh-card--compact">
-								<a class="eh-card__imgwrap eh-card__imgwrap--compact" href="<?php echo esc_url( get_permalink( $pid ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $pid ) ); ?>">
-									<?php if ( has_post_thumbnail( $pid ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $pid, 'ib-card' ) ); ?>" alt="" loading="lazy"><?php endif; ?>
-									<?php $gc = ib_primary_cat( $pid ); if ( $gc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $gc->name ); ?></span><?php endif; ?>
-								</a>
-								<h3 class="eh-card__t"><?php echo esc_html( get_the_title( $pid ) ); ?></h3>
-							</article>
-						<?php endforeach; ?>
-					</div>
-
-					<?php elseif ( 'list' === $layout ) : ?>
-					<!-- LISTA TEXTUAL: thumbnail + título + excerpt, sem badge -->
-					<div class="ib-text-list">
-						<?php foreach ( $ids as $pid ) : ?>
-						<a class="ib-text-item" href="<?php echo esc_url( get_permalink( $pid ) ); ?>">
-							<?php if ( has_post_thumbnail( $pid ) ) : ?>
-								<span class="ib-text-item__img"><?php echo get_the_post_thumbnail( $pid, 'ib-thumb', array( 'loading' => 'lazy' ) ); ?></span>
-							<?php endif; ?>
-							<span class="ib-text-item__body">
-								<span class="ib-text-item__t"><?php echo esc_html( get_the_title( $pid ) ); ?></span>
-								<span class="ib-text-item__ex"><?php echo esc_html( wp_trim_words( get_the_excerpt( $pid ), 18, '…' ) ); ?></span>
-								<span class="ib-text-item__date"><?php echo esc_html( get_the_date( 'j F Y', $pid ) ); ?></span>
-							</span>
-						</a>
-						<?php endforeach; ?>
-					</div>
-
-					<?php else : ?>
-					<!-- MOSAICO INVERTIDO: 1 card retrato + 2 cards horizontais -->
-					<div class="ib-inverted">
-						<div class="ib-inverted__portrait">
-							<article class="eh-card eh-card--portrait">
-								<a class="eh-card__imgwrap eh-card__imgwrap--portrait" href="<?php echo esc_url( get_permalink( $ids[0] ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $ids[0] ) ); ?>">
-									<?php if ( has_post_thumbnail( $ids[0] ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $ids[0], 'medium' ) ); ?>" alt="" loading="lazy"><?php endif; ?>
-									<?php $ic = ib_primary_cat( $ids[0] ); if ( $ic ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $ic->name ); ?></span><?php endif; ?>
-								</a>
-								<h3 class="eh-card__t"><a href="<?php echo esc_url( get_permalink( $ids[0] ) ); ?>"><?php echo esc_html( get_the_title( $ids[0] ) ); ?></a></h3>
-							</article>
-						</div>
-						<div class="ib-inverted__stack">
-							<?php for ( $i = 1; $i < min( 3, count( $ids ) ); $i++ ) : ?>
-								<article class="eh-card eh-card--side">
-									<a class="eh-card__imgwrap" href="<?php echo esc_url( get_permalink( $ids[ $i ] ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $ids[ $i ] ) ); ?>">
-										<?php if ( has_post_thumbnail( $ids[ $i ] ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $ids[ $i ], 'ib-card' ) ); ?>" alt="" loading="lazy"><?php endif; ?>
-										<?php $kc = ib_primary_cat( $ids[ $i ] ); if ( $kc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $kc->name ); ?></span><?php endif; ?>
-									</a>
-									<h3 class="eh-card__t"><a href="<?php echo esc_url( get_permalink( $ids[ $i ] ) ); ?>"><?php echo esc_html( get_the_title( $ids[ $i ] ) ); ?></a></h3>
-								</article>
-							<?php endfor; ?>
-						</div>
-					</div>
-					<?php endif; ?>
-
 				<?php endforeach; ?>
 
 			</div>
