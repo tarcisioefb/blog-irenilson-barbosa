@@ -66,7 +66,7 @@ while (have_posts()) : the_post(); ?>
 				<div style="display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-8);font-size:var(--text-13);color:var(--tx-2)">
 					<span>✉️ <a href="mailto:irenilsonjb@yahoo.com.br" style="color:var(--ink);text-decoration:none">irenilsonjb@yahoo.com.br</a></span>
 					<span>✉️ <a href="mailto:irenilsonjb@ufrb.edu.br" style="color:var(--ink);text-decoration:none">irenilsonjb@ufrb.edu.br</a></span>
-					<span>📄 <a href="https://www2.ufrb.edu.br/posedinter/corpo-docente" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Currículo Lattes</a></span>
+					<span>📄 <a href="http://lattes.cnpq.br/1666550999462374" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Currículo Lattes</a></span>
 					<span>🎓 <a href="https://scholar.google.com/citations?user=YKHWTRsAAAAJ" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Google Scholar</a></span>
 				</div>
 
