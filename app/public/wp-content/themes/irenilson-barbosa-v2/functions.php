@@ -138,13 +138,11 @@ add_action('admin_head', function () {
 
 function ib_newsletter_form() {
 	?>
-	<form class="ib-newsletter" method="post" style="display:flex;gap:8px;width:100%" onsubmit="return ibNewsletter(this)">
-		<input type="email" name="email" required placeholder="seu@email.com" aria-label="E-mail"
-			style="flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:0.875rem;background:#fff">
-		<button type="submit" style="flex-shrink:0;padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-weight:600;font-size:0.8rem;cursor:pointer;transition:background .2s;white-space:nowrap"
-			onmouseover="this.style.background='#3B4A30'" onmouseout="this.style.background='var(--accent)'">Assinar</button>
+	<form class="ib-newsletter" method="post" onsubmit="return ibNewsletter(this)">
+		<input type="email" name="email" required placeholder="seu@email.com" aria-label="E-mail" class="ib-newsletter__input">
+		<button type="submit" class="ib-newsletter__btn">Assinar</button>
 	</form>
-	<div class="ib-newsletter-msg" style="font-size:0.85rem;margin-top:8px"></div>
+	<div class="ib-newsletter-msg"></div>
 	<script>
 	function ibNewsletter(f) {
 		var btn = f.querySelector('button'), msg = f.parentNode.querySelector('.ib-newsletter-msg');

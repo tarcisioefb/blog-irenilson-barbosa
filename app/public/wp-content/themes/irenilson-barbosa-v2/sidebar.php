@@ -45,9 +45,9 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 	</div>
 
-	<div class="eh-widget" style="background:var(--paper-2);padding:20px;border-radius:8px">
-		<span class="eh-widget__head" style="display:block">Newsletter</span>
-		<p style="font-size:0.85rem;color:var(--tx-2);margin:0 0 12px;line-height:1.5">Receba os novos ensaios por e-mail.</p>
+	<div class="eh-widget ib-newsletter-card">
+		<span class="eh-widget__head">Newsletter</span>
+		<p class="ib-newsletter-card__desc">Receba os novos ensaios por e-mail.</p>
 		<?php ib_newsletter_form(); ?>
 	</div>
 </aside>
