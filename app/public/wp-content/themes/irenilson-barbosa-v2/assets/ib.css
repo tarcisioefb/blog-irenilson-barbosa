@@ -495,6 +495,38 @@ a{color:inherit;text-decoration:none}
 
 /* ---- lg ≤1024: some a coluna lateral, header vira mobile, hero em mosaico compacto ---- */
 @media(max-width:1024px){
+	.masthead-placeholder.is-visible{height:64px!important}
+	.admin-bar .masthead.is-fixed{top:46px}
+	.ib-book-archive-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:640px){
+	.ib-book-archive-grid{grid-template-columns:1fr!important}
+}
+@media(max-width:768px){
+	.ib-book-detail-grid{grid-template-columns:1fr!important}
+	.ib-book-detail-grid>div:first-child{position:static!important;max-width:280px;margin:0 auto}
+}
+@media(max-width:640px){.ib-poem-body{padding-left:var(--space-4)}}
+@media(max-width:480px){
+	.ib-poem-body{padding-left:var(--space-3)}
+	.eh-feat-stack{flex-direction:column}
+	.eh-hero-lists{flex-direction:column}
+}
+.search-close,.drawer__close{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.search-btn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.share a,.share button{width:44px;height:44px}
+@media(max-width:480px){
+	.ib-newsletter{flex-direction:column}
+	.ib-newsletter__btn{width:100%;text-align:center}
+}
+.menu .sub-menu a{padding:12px 20px}
+.drawer .menu>li>a{padding:14px 22px}
+@media(max-width:640px){.article__title{line-height:1.25}}
+.scroll-top{bottom:max(28px,env(safe-area-inset-bottom))}
+.masthead.is-fixed{will-change:transform}
+
+/* ---- lg ≤1024: some a coluna lateral, header vira mobile, hero em mosaico compacto ---- */
+@media(max-width:1024px){
 	.nav{display:none}
 	.burger{display:flex}
 	.search-btn{width:44px;height:44px;margin-left:0}

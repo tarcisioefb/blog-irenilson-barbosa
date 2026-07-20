@@ -64,7 +64,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 		<button class="drawer__close" type="button" aria-label="Fechar menu" data-elite-close>&times;</button>
 	</div>
 	<nav aria-label="Menu principal (mobile)"><?php wp_nav_menu( $ib_menu ); ?></nav>
-	<div class="drawer__social"></div>
+	<div class="drawer__social"><?php ib_render_social('soc'); ?></div>
 </div>
 <div class="scrim" data-elite-scrim hidden></div>
 
