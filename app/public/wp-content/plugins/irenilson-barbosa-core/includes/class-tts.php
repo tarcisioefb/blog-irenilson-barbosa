@@ -9,9 +9,22 @@ class TTS {
 
 	public static function enqueue() {
 		if (!is_singular(['post', 'publicacao', 'livro', 'poiesis', 'material'])) return;
+		$post_id = get_queried_object_id();
+		$post_type_obj = get_post_type_object(get_post_type());
+		$type_name = $post_type_obj ? mb_strtolower($post_type_obj->labels->singular_name) : 'artigo';
+		$author_name = get_the_author_meta('display_name', get_post($post_id)->post_author) ?: 'Irenilson Barbosa';
+		$bio = get_the_author_meta('description', get_post($post_id)->post_author);
+		if (!$bio) {
+			$bio = \IrenilsonBarbosa\Core\AdminSettings::opt('sidebar_bio') ?: 'Professor universitário, escritor e pesquisador.';
+		}
+
 		$theme_uri = get_template_directory_uri();
 		wp_enqueue_script('ib-tts', $theme_uri . '/assets/ib-tts.js', [], IRENILSON_CORE_VERSION, true);
 		wp_localize_script('ib-tts', 'ibTTS', [
+			'title'       => get_the_title($post_id),
+			'author'      => $author_name,
+			'typeName'    => $type_name,
+			'bio'         => wp_trim_words($bio, 20),
 			'pauseLabel'  => 'Pausar',
 			'resumeLabel' => 'Continuar',
 			'stopLabel'   => 'Parar',

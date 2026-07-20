@@ -2,10 +2,10 @@
 (function () {
 	'use strict';
 
-	if (!window.speechSynthesis) return;
+	if (!window.speechSynthesis || !window.ibTTS) return;
 
 	var article, utterance, voices = [], isPT = false;
-	var wrap = document.querySelector('.article__body, .article');
+	var wrap = document.querySelector('.article__body') || document.querySelector('.article');
 	var playBtn, ctrls, pauseBtn, stopBtn, statusEl;
 
 	function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
@@ -32,22 +32,31 @@
 		return parseFloat(localStorage.getItem('ib-tts-rate')) || 1.1;
 	}
 
-	function getText() {
-		if (!article) return '';
-		var text = '';
+	function getFullText() {
+		var title = ibTTS.title || '';
+		var author = ibTTS.author || '';
+		var typeName = ibTTS.typeName || 'artigo';
+		var bio = ibTTS.bio || '';
+		var body = '';
+
 		var paragraphs = article.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
 		paragraphs.forEach(function (el) {
 			var txt = el.textContent.trim();
-			if (txt) text += txt + '.\n';
+			if (txt && !el.closest('.ib-tts')) body += txt + '.\n';
 		});
-		return text;
+
+		var intro = title + '. ';
+		if (author) intro += 'Por ' + author + '. ';
+		var outro = ' Este ' + typeName + ' foi escrito por ' + author + '. ' + bio + '.';
+
+		return intro + body + outro;
 	}
 
 	function speak() {
 		if (speechSynthesis.speaking && !speechSynthesis.paused) {
 			speechSynthesis.cancel();
 		}
-		var text = getText();
+		var text = getFullText();
 		if (!text) return;
 
 		utterance = new SpeechSynthesisUtterance(text);
@@ -61,42 +70,30 @@
 			statusEl.textContent = isPT ? 'Reproduzindo…' : 'Reproduzindo… (voz PT pode nao estar disponivel)';
 		};
 
-		utterance.onend = function () {
-			resetUI();
-		};
-
-		utterance.onerror = function () {
-			resetUI();
-			statusEl.textContent = isPT ? 'Erro ao reproduzir.' : 'Erro ao reproduzir.';
-		};
+		utterance.onend = function () { resetUI(); };
+		utterance.onerror = function () { resetUI(); statusEl.textContent = 'Erro ao reproduzir.'; };
 
 		utterance.onpause = function () {
 			pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
 			pauseBtn.setAttribute('aria-label', 'Continuar');
-			statusEl.textContent = isPT ? 'Pausado.' : 'Pausado.';
+			statusEl.textContent = 'Pausado.';
 		};
 
 		utterance.onresume = function () {
 			pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
 			pauseBtn.setAttribute('aria-label', 'Pausar');
-			statusEl.textContent = isPT ? 'Reproduzindo…' : 'Reproduzindo…';
+			statusEl.textContent = 'Reproduzindo…';
 		};
 
 		speechSynthesis.speak(utterance);
 	}
 
 	function togglePause() {
-		if (speechSynthesis.paused) {
-			speechSynthesis.resume();
-		} else if (speechSynthesis.speaking) {
-			speechSynthesis.pause();
-		}
+		if (speechSynthesis.paused) speechSynthesis.resume();
+		else if (speechSynthesis.speaking) speechSynthesis.pause();
 	}
 
-	function stop() {
-		speechSynthesis.cancel();
-		resetUI();
-	}
+	function stop() { speechSynthesis.cancel(); resetUI(); }
 
 	function resetUI() {
 		playBtn.hidden = false;
