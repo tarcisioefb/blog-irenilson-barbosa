@@ -90,9 +90,9 @@ a{color:inherit;text-decoration:none}
 .topbar__place b{color:#D7D3C9;font-weight:600}
 .topbar__social{display:flex;gap:var(--space-2)}
 .soc{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line-dark);transition:.18s;flex-shrink:0}
-.soc svg{width:14px;height:14px;fill:#D7D3C9;transition:.18s}
+.soc svg{width:14px;height:14px;color:var(--line-dark);transition:.18s}
 .soc:hover{background:var(--ink-3);border-color:var(--ink-3)}
-.soc:hover svg{fill:#fff}
+.soc:hover svg{color:#fff}
 
 .masthead{position:relative;z-index:60;background:var(--paper);border-bottom:var(--border-w) solid var(--border-c);transition:box-shadow .2s}
 .masthead.is-fixed{position:fixed;top:0;left:0;right:0;box-shadow:0 8px 24px -14px rgba(20,20,20,.5)}
