@@ -182,8 +182,7 @@ class Setup {
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Editora</label><input type="text" name="editora" value="<?php echo esc_attr(get_post_meta($post->ID, 'editora', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">ISBN</label><input type="text" name="isbn" value="<?php echo esc_attr(get_post_meta($post->ID, 'isbn', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Páginas</label><input type="number" name="numero_paginas" value="<?php echo esc_attr(get_post_meta($post->ID, 'numero_paginas', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
-			<p style="margin:0;grid-column:1/-1"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Link Amazon</label><input type="url" name="link_amazon" value="<?php echo esc_attr(get_post_meta($post->ID, 'link_amazon', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px" placeholder="https://..."></p>
-			<p style="margin:0;grid-column:1/-1"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Link Marinete</label><input type="url" name="link_marinete" value="<?php echo esc_attr(get_post_meta($post->ID, 'link_marinete', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px" placeholder="https://..."></p>
+			<p style="margin:0;grid-column:1/-1"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Links de compra</label><textarea name="comprar_links" style="width:100%;min-height:80px;padding:7px 8px;font-size:13px;font-family:monospace" placeholder="Texto do botão | https://...&#10;Outra loja | https://..."><?php echo esc_textarea(get_post_meta($post->ID, 'comprar_links', true)); ?></textarea><span style="font-size:11px;color:#6D5940">Um link por linha: <strong>Texto do botão | https://...</strong></span></p>
 		</div>
 		<?php
 	}
@@ -230,7 +229,7 @@ class Setup {
 		if (!current_user_can('edit_post', $post_id)) return;
 
 		$fields = [
-			'ano', 'editora', 'isbn', 'numero_paginas', 'link_amazon', 'link_marinete',
+			'ano', 'editora', 'isbn', 'numero_paginas', 'comprar_links',
 			'ano_publicacao', 'periodico', 'doi', 'link_externo', 'citacao_abnt',
 			'descricao', 'arquivo_url', 'poiesis_author', 'poiesis_notas',
 		];
@@ -258,8 +257,7 @@ class Setup {
 			'editora'          => ['type' => 'string', 'post_types' => ['livro']],
 			'sinopse'          => ['type' => 'string', 'post_types' => ['livro']],
 			'numero_paginas'   => ['type' => 'integer', 'post_types' => ['livro']],
-			'link_amazon'      => ['type' => 'string', 'post_types' => ['livro']],
-			'link_marinete'    => ['type' => 'string', 'post_types' => ['livro']],
+			'comprar_links'    => ['type' => 'string', 'post_types' => ['livro']],
 			'descricao'        => ['type' => 'string', 'post_types' => ['material']],
 			'arquivo_url'      => ['type' => 'string', 'post_types' => ['material']],
 			'poiesis_notas'    => ['type' => 'string', 'post_types' => ['poiesis']],

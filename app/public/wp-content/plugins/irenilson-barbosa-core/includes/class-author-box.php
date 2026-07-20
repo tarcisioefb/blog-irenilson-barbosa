@@ -7,7 +7,7 @@ class AuthorBox {
 	}
 
 	public static function auto_append($content) {
-		if (! is_single() || ! in_the_loop() || 'poiesis' === get_post_type()) {
+		if (! is_single() || ! in_the_loop() || in_array(get_post_type(), ['poiesis', 'livro'], true)) {
 			return $content;
 		}
 		return $content . self::render_html();
@@ -19,7 +19,7 @@ class AuthorBox {
 		}
 	}
 
-	private static function render_html() {
+	public static function render_html() {
 		$author_id   = get_the_author_meta('ID');
 		$author_name = get_the_author();
 		$author_bio  = get_the_author_meta('description');

@@ -8,8 +8,18 @@ while (have_posts()) : the_post();
 	$ano = get_post_meta($pid, 'ano', true);
 	$editora = get_post_meta($pid, 'editora', true);
 	$paginas = get_post_meta($pid, 'numero_paginas', true);
-	$link_amazon = get_post_meta($pid, 'link_amazon', true);
-	$link_marinete = get_post_meta($pid, 'link_marinete', true);
+	$comprar = get_post_meta($pid, 'comprar_links', true);
+	$links = [];
+	if ($comprar) {
+		foreach (explode("\n", $comprar) as $linha) {
+			$linha = trim($linha);
+			if (!$linha) continue;
+			$parts = explode('|', $linha, 2);
+			if (count($parts) === 2) {
+				$links[] = ['texto' => trim($parts[0]), 'url' => trim($parts[1])];
+			}
+		}
+	}
 	$participacao = wp_get_post_terms($pid, 'participacao', ['fields' => 'names']);
 	$part_label = !empty($participacao) ? $participacao[0] : 'Autor';
 ?>
@@ -36,6 +46,17 @@ while (have_posts()) : the_post();
 
 			<div class="article__body" style="max-width:none"><?php the_content(); ?></div>
 
+			<?php if ($links) : ?>
+			<div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin:var(--space-6) 0">
+				<?php foreach ($links as $lk) : ?>
+				<a href="<?php echo esc_url($lk['url']); ?>" target="_blank" rel="noopener noreferrer" class="ib-btn ib-btn--amazon" style="flex:1;min-width:180px">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+					<?php echo esc_html($lk['texto']); ?>
+				</a>
+				<?php endforeach; ?>
+			</div>
+			<?php endif; ?>
+
 			<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin:var(--space-6) 0;padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);font-size:var(--text-15)">
 				<?php if ($editora) : ?><div><strong style="color:var(--ink)">Editora</strong><br><span style="color:var(--tx-2)"><?php echo esc_html($editora); ?></span></div><?php endif; ?>
 				<?php if ($ano) : ?><div><strong style="color:var(--ink)">Ano</strong><br><span style="color:var(--tx-2)"><?php echo esc_html($ano); ?></span></div><?php endif; ?>
@@ -43,22 +64,7 @@ while (have_posts()) : the_post();
 				<?php if ($paginas) : ?><div><strong style="color:var(--ink)">Páginas</strong><br><span style="color:var(--tx-2)"><?php echo (int) $paginas; ?></span></div><?php endif; ?>
 			</div>
 
-			<?php if ($link_amazon || $link_marinete) : ?>
-			<div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
-				<?php if ($link_amazon) : ?>
-					<a href="<?php echo esc_url($link_amazon); ?>" target="_blank" rel="noopener noreferrer" class="ib-btn ib-btn--amazon" style="flex:1">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-						Comprar na Amazon
-					</a>
-				<?php endif; ?>
-				<?php if ($link_marinete) : ?>
-					<a href="<?php echo esc_url($link_marinete); ?>" target="_blank" rel="noopener noreferrer" class="ib-btn ib-btn--marinete" style="flex:1">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-						Comprar na Marinete
-					</a>
-				<?php endif; ?>
-			</div>
-			<?php endif; ?>
+			<?php echo \IrenilsonBarbosa\Core\AuthorBox::render_html(); ?>
 
 	<?php if (has_post_thumbnail()) : ?>
 		</div>
