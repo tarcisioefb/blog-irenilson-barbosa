@@ -52,7 +52,8 @@ get_header(); ?>
 
 			<form method="post" style="display:flex;flex-direction:column;gap:var(--space-5)">
 				<?php wp_nonce_field('ib_contact', 'ib_contact_nonce'); ?>
-				<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4)">
+				<div class="ib-contact-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4)">
+				<style>@media(max-width:768px){.ib-contact-row{grid-template-columns:1fr!important}}</style>
 
 				<div>
 					<label for="ib_name" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Nome *</label>
