@@ -13,7 +13,9 @@ while (have_posts()) : the_post();
 		<article style="max-width:680px">
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
 
-			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-8)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
+			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-3)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
+
+			<?php \IrenilsonBarbosa\Core\TTS::render_button(); ?>
 
 			<?php if (has_excerpt()) : ?>
 				<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8)"><?php echo esc_html(get_the_excerpt()); ?></p>
