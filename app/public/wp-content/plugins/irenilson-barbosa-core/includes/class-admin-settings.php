@@ -298,9 +298,9 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 					<button type="button" class="button" data-media-clear="<?php echo esc_attr($fk); ?>">Remover</button>
 				</span>
 				<?php if ($fval) : ?>
-					<br><img id="preview-<?php echo esc_attr($fk); ?>" src="<?php echo esc_url($fval); ?>" alt="" style="max-width:100%;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
+					<br><img id="preview-<?php echo esc_attr($fk); ?>" src="<?php echo esc_url($fval); ?>" alt="" style="max-width:240px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
 				<?php else : ?>
-					<br><img id="preview-<?php echo esc_attr($fk); ?>" alt="" style="display:none;max-width:100%;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
+					<br><img id="preview-<?php echo esc_attr($fk); ?>" alt="" style="display:none;max-width:240px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
 				<?php endif; ?>
 			</p>
 			<?php endforeach; ?>
