@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WordPress - 7.0.x - Development package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-18 12:08:09+0000\n"
+"PO-Revision-Date: 2026-07-20 11:08:15+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -442,6 +442,12 @@ msgstr "Adicionado"
 msgid "Removed"
 msgstr "Removido"
 
+#: wp-includes/js/dist/edit-site.js:42129
+#: wp-admin/includes/class-wp-posts-list-table.php:1685
+#: wp-admin/includes/class-wp-terms-list-table.php:691
+msgid "Quick Edit"
+msgstr "Edição rápida"
+
 #: wp-includes/js/dist/edit-site.js:28462
 #: wp-includes/js/dist/media-utils.js:6162 wp-admin/includes/dashboard.php:82
 msgid "Activity"
@@ -466,9 +472,17 @@ msgstr "Não foi possível ler a chave \"%1$s\" com o valor \"%2$s\" para a folh
 msgid "Unable to set inline script data."
 msgstr "Não foi possível definir os dados do script inline."
 
+#: wp-includes/rest-api/endpoints/class-wp-rest-icons-controller.php:221
+msgid "The icon label."
+msgstr "O rótulo do ícone."
+
 #: wp-includes/rest-api/endpoints/class-wp-rest-icons-controller.php:215
 msgid "The icon name."
 msgstr "O nome do ícone."
+
+#: wp-includes/rest-api/endpoints/class-wp-rest-icons-controller.php:55
+msgid "Icon name."
+msgstr "Nome do ícone."
 
 #: wp-includes/rest-api/endpoints/class-wp-rest-attachments-controller.php:1232
 msgid "Attachment file size in bytes."
@@ -489,6 +503,14 @@ msgstr "Chave de API do %s"
 #: wp-includes/connectors.php:485
 msgid "The provider \"%s\" is not registered in the AI client registry."
 msgstr "O provedor \"%s\" não consta no registro do cliente da IA."
+
+#: wp-includes/connectors.php:300
+msgid "Text and image generation with Gemini and Imagen."
+msgstr "Geração de texto e imagem com Gemini e Imagen."
+
+#: wp-includes/connectors.php:288
+msgid "Text generation with Claude."
+msgstr "Geração de texto com Claude."
 
 #. translators: 1: Script handle, 2: 'module_dependencies'
 #: wp-includes/class-wp-scripts.php:969
@@ -511,9 +533,20 @@ msgstr "O script com o identificador \"%1$s\" foi enfileirado com dependências 
 msgid "User has blocked requests through HTTP to the URL: %s."
 msgstr "O usuário bloqueou solicitações via HTTP para o URL: %s."
 
+#. translators: %s: Connector ID.
+#: wp-includes/class-wp-connector-registry.php:321
+#: wp-includes/class-wp-connector-registry.php:387
+msgid "Connector \"%s\" not found."
+msgstr "Conector \"%s\" não encontrado."
+
 #: wp-includes/class-wp-connector-registry.php:146
 msgid "Connector ID must contain only lowercase alphanumeric characters, hyphens, and underscores."
 msgstr "O ID do conector deve conter apenas caracteres alfanuméricos minúsculos, hífens e sublinhados."
+
+#. translators: %s is the post type name.
+#: wp-includes/blocks/query-title.php:69
+msgid "Post Type: &#8220;%s&#8221;"
+msgstr "Tipo de post: &#8220;%s&#8221;"
 
 #. translators: 1: Number of comments, 2: Post title.
 #: wp-includes/blocks/comments-title.php:46
@@ -535,9 +568,37 @@ msgstr "Caminho de navegação"
 msgid "The Navigation Overlay template defines an overlay area that typically contains navigation links and can be toggled open and closed."
 msgstr "O modelo de sobreposição de navegação define uma área sobreposta na página que normalmente contém links de navegação e pode ser aberta e fechada."
 
+#: wp-includes/block-template-utils.php:104
+msgctxt "template part area"
+msgid "Navigation Overlay"
+msgstr "Sobreposição de navegação"
+
+#: wp-includes/block-patterns/navigation-overlay.php:9
+msgctxt "Block pattern title"
+msgid "Navigation Overlay"
+msgstr "Sobreposição de navegação"
+
+#: wp-includes/block-patterns/navigation-overlay-centered-with-extras.php:35
+msgid "Get started today!"
+msgstr "Comece hoje mesmo!"
+
+#: wp-includes/block-patterns/navigation-overlay-accent-bg.php:12
+#: wp-includes/block-patterns/navigation-overlay-black-bg.php:12
+#: wp-includes/block-patterns/navigation-overlay-centered-with-extras.php:12
+#: wp-includes/block-patterns/navigation-overlay-centered.php:12
+#: wp-includes/block-patterns/navigation-overlay.php:12
+#: wp-includes/js/dist/block-library.js:39099
+msgid "Navigation Overlay"
+msgstr "Sobreposição de navegação"
+
 #: wp-includes/block-patterns.php:240
 msgid "A variety of designs displaying site navigation."
 msgstr "Uma variedade de designs exibindo a navegação do site."
+
+#: wp-includes/block-patterns.php:239
+msgctxt "Block pattern category"
+msgid "Navigation"
+msgstr "Navegação"
 
 #: wp-includes/assets/icon-library-manifest.php:357
 msgctxt "icon label"
@@ -553,6 +614,11 @@ msgstr "Enviar"
 msgctxt "icon label"
 msgid "Tip"
 msgstr "Dica"
+
+#: wp-includes/assets/icon-library-manifest.php:341
+msgctxt "icon label"
+msgid "Tablet"
+msgstr "Tablet"
 
 #: wp-includes/assets/icon-library-manifest.php:337
 msgctxt "icon label"
@@ -628,6 +694,11 @@ msgstr "Procurar"
 msgctxt "icon label"
 msgid "Scheduled"
 msgstr "Agendado"
+
+#: wp-includes/assets/icon-library-manifest.php:277
+msgctxt "icon label"
+msgid "RSS"
+msgstr "RSS"
 
 #: wp-includes/assets/icon-library-manifest.php:273
 msgctxt "icon label"

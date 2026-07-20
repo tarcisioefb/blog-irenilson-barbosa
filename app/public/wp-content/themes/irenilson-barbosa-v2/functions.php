@@ -79,6 +79,22 @@ add_action('pre_get_posts', function ($query) {
 	}
 });
 
+// Avatar local para o usuário Irenilson (ID 2)
+add_filter('get_avatar_url', function ($url, $id_or_email, $args) {
+	$user_id = 0;
+	if (is_numeric($id_or_email)) $user_id = (int) $id_or_email;
+	elseif (is_object($id_or_email) && isset($id_or_email->user_id)) $user_id = (int) $id_or_email->user_id;
+	elseif (is_email($id_or_email)) {
+		$user = get_user_by('email', $id_or_email);
+		$user_id = $user ? $user->ID : 0;
+	}
+	if (2 === $user_id) {
+		$uploads = wp_upload_dir();
+		return $uploads['baseurl'] . '/2026/07/Irenilson-Barbosa-Retrato.avif';
+	}
+	return $url;
+}, 10, 3);
+
 // ─── SVG ──────────────────────────────────────────────────
 
 add_filter('upload_mimes', function ($mimes) {
