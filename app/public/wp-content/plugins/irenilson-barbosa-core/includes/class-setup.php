@@ -10,7 +10,7 @@ class Setup {
 	}
 
 	public static function disable_block_editor($enabled, $post_type) {
-		if ('poiesis' === $post_type) return false;
+		if (in_array($post_type, ['poiesis', 'livro', 'publicacao', 'material'], true)) return false;
 		return $enabled;
 	}
 
