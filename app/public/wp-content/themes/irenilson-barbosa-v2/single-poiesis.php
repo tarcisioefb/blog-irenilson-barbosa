@@ -15,18 +15,16 @@ while (have_posts()) : the_post();
 			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-6)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
 
 			<?php if (has_post_thumbnail()) : ?>
-				<div style="max-width:300px;margin:0 auto var(--space-8)">
-					<div style="aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card)">
+				<div style="float:right;width:140px;margin:0 0 var(--space-5) var(--space-6);shape-outside:circle(50%)">
+					<div style="aspect-ratio:1/1;border-radius:50%;overflow:hidden;box-shadow:var(--shadow-card);border:3px solid var(--accent-2)">
 						<?php the_post_thumbnail('medium', array('style' => 'width:100%;height:100%;object-fit:cover;display:block')); ?>
 					</div>
 				</div>
 			<?php endif; ?>
 
 			<?php if (has_excerpt()) : ?>
-				<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8);text-align:center"><?php echo esc_html(get_the_excerpt()); ?></p>
+				<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8)"><?php echo esc_html(get_the_excerpt()); ?></p>
 			<?php endif; ?>
-
-			<div class="ib-poem-body">
 				<?php the_content(); ?>
 			</div>
 
