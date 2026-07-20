@@ -20,7 +20,7 @@ while (have_posts()) : the_post(); ?>
 				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)">Professor, escritor e pesquisador</p>
 
 				<div style="padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);margin-bottom:var(--space-8);border-left:3px solid var(--accent)">
-					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)">Professor Adjunto da UFRB, atuando nas disciplinas Educação Inclusiva, Educação Especial, Organização da Educação Brasileira e Políticas Educacionais e Orientação do Trabalho Monográfico. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI). Pós-doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra.</p>
+					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)">Professor Adjunto da UFRB, atuando nas disciplinas Educação Inclusiva, Educação Especial, Organização da Educação Brasileira e Políticas Educacionais e Orientação do Trabalho Monográfico. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI). Graduado em Teologia, Pedagogo, Mestre e Doutor em Educação pela UFBA. Pós-doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra.</p>
 				</div>
 
 				<!-- Formação -->
@@ -52,9 +52,14 @@ while (have_posts()) : the_post(); ?>
 					</div>
 				</div>
 
+				<!-- Grupos -->
+				<div style="padding:var(--space-4) var(--space-5);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);margin-bottom:var(--space-8);font-size:var(--text-13);line-height:var(--leading-relax);color:var(--tx-2)">
+					<strong style="color:var(--ink)">Grupos de pesquisa:</strong> Educação, Sociedade e Diversidade (UFRB); Educação Especial, Diversidade e Contemporaneidade (UFRB); Currículo, Avaliação, Formação e Tecnologias em Educação (CAFTe) — CIIE/FPCEUP (Portugal).
+				</div>
+
 				<!-- Pesquisa -->
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Pesquisa e publicações</h2>
-				<p style="font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2);margin:0 0 var(--space-8)">Autor de livros, capítulos e artigos sobre educação inclusiva, direitos humanos, teologia e interseccionalidades raciais, poemas e reflexões. <strong style="color:var(--ink)">"O Homem que Não Sabia Ser Santo"</strong> marca sua estreia na ficção, mesclando realismo mágico sertanejo com reflexões filosóficas e psicanalíticas sobre identidade, fé e humanidade.</p>
+				<p style="font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2);margin:0 0 var(--space-8)">Autor de livros, capítulos de livros e artigos sobre educação inclusiva, educação especial, direitos humanos, teologia e interseccionalidades raciais, poemas e reflexões. <strong style="color:var(--ink)">"O Homem que Não Sabia Ser Santo"</strong> marca sua estreia na ficção, mesclando realismo mágico sertanejo com reflexões filosóficas e psicanalíticas sobre identidade, fé e humanidade — temperadas na filosofia de cozinha que brota do chão rachado da Bahia. Também autor de <strong style="color:var(--ink)">"Um Negro no Gólgota"</strong> (2015) e <strong style="color:var(--ink)">"A Vida em Poesia"</strong> (2015).</p>
 
 				<!-- Contato -->
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Contato</h2>
