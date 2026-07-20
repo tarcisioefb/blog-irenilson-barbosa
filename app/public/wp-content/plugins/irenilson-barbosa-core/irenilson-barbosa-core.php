@@ -45,4 +45,5 @@ add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\RelatedPosts::init();
 	\IrenilsonBarbosa\Core\AuthorBox::init();
 	\IrenilsonBarbosa\Core\AdminSettings::init();
+	\IrenilsonBarbosa\Core\SEO::init();
 });

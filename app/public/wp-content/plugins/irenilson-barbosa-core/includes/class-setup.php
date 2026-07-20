@@ -242,7 +242,10 @@ class Setup {
 	}
 
 	public static function register_meta() {
+		$all_public = array_merge(['post', 'page'], array_values(get_post_types(['_builtin' => false, 'public' => true])));
 		$meta_fields = [
+			'_ib_title'        => ['type' => 'string', 'post_types' => $all_public],
+			'_ib_description'  => ['type' => 'string', 'post_types' => $all_public],
 			'subtitulo'        => ['type' => 'string', 'post_types' => ['post']],
 			'tempo_leitura'    => ['type' => 'integer', 'post_types' => ['post']],
 			'destaque_tipo'    => ['type' => 'string', 'post_types' => ['post']],
