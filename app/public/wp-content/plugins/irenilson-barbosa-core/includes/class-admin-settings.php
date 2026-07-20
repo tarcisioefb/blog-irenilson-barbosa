@@ -161,11 +161,12 @@ class AdminSettings {
 		$ga_id = self::opt('google_analytics_id');
 		if (!$ga_id) return;
 		?>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga_id); ?>"></script>
 <script>
-window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
+window.ibGID = '<?php echo esc_js($ga_id); ?>';
+var accepted = localStorage.getItem('ib-cookies-accepted');
+if (accepted === '1') {
+	(function(){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=<?php echo esc_js($ga_id); ?>';s.async=true;document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?php echo esc_js($ga_id); ?>',{'anonymize_ip':true});})();
+}
 </script>
 		<?php
 	}

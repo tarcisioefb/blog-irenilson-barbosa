@@ -161,6 +161,7 @@ function ib_newsletter_form() {
 		<button type="submit" class="ib-newsletter__btn">Assinar</button>
 	</form>
 	<div class="ib-newsletter-msg" aria-live="polite"></div>
+	<p style="font-size:var(--text-xs);color:var(--tx-2);margin:var(--space-2) 0 0;line-height:1.4">Ao assinar, você concorda com a <a href="/privacidade/" target="_blank" style="color:var(--accent);text-decoration:underline">Política de Privacidade</a>. Seus dados não serão compartilhados.</p>
 	<script>
 	function ibNewsletter(f) {
 		var btn = f.querySelector('button'), msg = f.parentNode.querySelector('.ib-newsletter-msg');

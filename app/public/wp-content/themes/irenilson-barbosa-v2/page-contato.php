@@ -77,12 +77,17 @@ get_header(); ?>
 				</div>
 				</div>
 
-				<div>
-					<label for="ib_message" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Mensagem *</label>
-					<textarea id="ib_message" name="ib_message" required rows="6" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff;resize:vertical"><?php echo esc_textarea($_POST['ib_message'] ?? ''); ?></textarea>
-				</div>
+			<div>
+				<label for="ib_message" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Mensagem *</label>
+				<textarea id="ib_message" name="ib_message" required rows="6" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff;resize:vertical"><?php echo esc_textarea($_POST['ib_message'] ?? ''); ?></textarea>
+			</div>
 
-				<button type="submit" style="align-self:flex-start;padding:var(--space-3) var(--space-8);background:var(--ink);color:#fff;border:none;border-radius:var(--radius-md);font-weight:var(--weight-semibold);font-size:var(--text-md);cursor:pointer">Enviar mensagem</button>
+			<label style="display:flex;align-items:flex-start;gap:var(--space-2);font-size:var(--text-13);color:var(--tx-2);cursor:pointer">
+				<input type="checkbox" name="ib_consent" required style="margin-top:3px">
+				<span>Li e concordo com a <a href="/privacidade/" target="_blank" style="color:var(--accent);text-decoration:underline">Política de Privacidade</a>. Ao enviar, autorizo o tratamento dos meus dados para responder minha mensagem.</span>
+			</label>
+
+			<button type="submit" style="align-self:flex-start;padding:var(--space-3) var(--space-8);background:var(--ink);color:#fff;border:none;border-radius:var(--radius-md);font-weight:var(--weight-semibold);font-size:var(--text-md);cursor:pointer">Enviar mensagem</button>
 			</form>
 		</div>
 
