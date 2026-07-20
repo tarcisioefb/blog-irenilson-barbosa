@@ -2,6 +2,8 @@ logs/
 app/.envrc
 app/public/wp-config.php
 app/public/wp-content/uploads/
+app/public/wp-content/ai1wm-backups/
+app/public/wp-content/plugins/all-in-one-wp-migration/
 *.log
 .DS_Store
 *.pyc
