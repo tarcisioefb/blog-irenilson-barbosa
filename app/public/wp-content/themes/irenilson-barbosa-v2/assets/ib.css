@@ -306,7 +306,7 @@ a{color:inherit;text-decoration:none}
 
 /* ==================== SINGLE / PÁGINA ==================== */
 .single-wrap{padding-top:30px;padding-bottom:10px}
-.breadcrumb{font-size:var(--text-13);color:var(--tx-2);margin-bottom:16px}
+.breadcrumb{font-size:var(--text-13);color:var(--tx-2);margin-bottom:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .breadcrumb a:hover{color:var(--ink)}.breadcrumb .sep{margin:0 7px;color:var(--line);user-select:none}
 .ib-poem-card:hover,.ib-poem-card:focus-within{box-shadow:var(--shadow-card)}
 .article-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:var(--section-gap);align-items:start}
