@@ -10,10 +10,6 @@ while (have_posts()) : the_post();
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<div class="article-layout">
 		<article style="max-width:680px">
-			<?php if (has_post_thumbnail()) : ?>
-				<figure class="article__hero" style="margin-bottom:var(--space-8)"><?php the_post_thumbnail('full'); ?></figure>
-			<?php endif; ?>
-
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
 
 			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-8)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
@@ -34,6 +30,12 @@ while (have_posts()) : the_post();
 		</article>
 
 		<aside class="eh-aside">
+			<?php if (has_post_thumbnail()) : ?>
+				<div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card)">
+					<?php the_post_thumbnail('large', array('style' => 'width:100%;height:auto;display:block')); ?>
+				</div>
+			<?php endif; ?>
+
 			<?php if (!empty($other)) : ?>
 			<div class="eh-widget">
 				<span class="eh-widget__head">Outros poemas</span>
