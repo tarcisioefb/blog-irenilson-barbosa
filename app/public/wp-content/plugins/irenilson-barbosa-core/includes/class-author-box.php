@@ -32,7 +32,7 @@ class AuthorBox {
 					<div class="ib-author-box__avatar"><a href="%s">%s</a></div>
 					<div class="ib-author-box__body">
 						<span class="ib-author-box__label">Sobre o autor</span>
-						<strong class="ib-author-box__name"><a href="%s" style="color:inherit;text-decoration:none">%s</a></strong>
+						<strong class="ib-author-box__name"><a href="%s" style="color:var(--accent);text-decoration:underline">%s</a></strong>
 						<p class="ib-author-box__bio">%s</p>
 					</div>
 				</div>

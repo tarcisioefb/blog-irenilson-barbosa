@@ -144,7 +144,7 @@ function ib_newsletter_form() {
 		<input type="email" name="email" required placeholder="seu@email.com" aria-label="E-mail" class="ib-newsletter__input">
 		<button type="submit" class="ib-newsletter__btn">Assinar</button>
 	</form>
-	<div class="ib-newsletter-msg"></div>
+	<div class="ib-newsletter-msg" aria-live="polite"></div>
 	<script>
 	function ibNewsletter(f) {
 		var btn = f.querySelector('button'), msg = f.parentNode.querySelector('.ib-newsletter-msg');

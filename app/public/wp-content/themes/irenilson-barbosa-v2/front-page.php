@@ -28,7 +28,7 @@ if ( empty( $editorias ) ) {
 				<?php if ( $lt ) : ?><img src="<?php echo esc_url( $lt ); ?>" alt="" class="eh-lead__img"><?php endif; ?>
 				<span class="eh-lead__body">
 					<?php if ( $lc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $lc->name ); ?></span><br><?php endif; ?>
-					<span class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></span>
+					<h1 class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></h1>
 				</span>
 			</a>
 
@@ -65,7 +65,7 @@ if ( empty( $editorias ) ) {
 								</span>
 							</a>
 						<?php endforeach; ?>
-							<a class="eh-h-item eh-h-item--all" href="/livros/">Ver todos →</a>
+							<a class="eh-h-item eh-h-item--all" href="/livros/">Ver todos<span aria-hidden="true"> →</span></a>
 						<?php else : ?>
 							<p style="color:var(--tx-dim);font-size:var(--text-xs);padding:var(--space-3)">Nenhum livro cadastrado.</p>
 						<?php endif; ?>
@@ -89,7 +89,7 @@ if ( empty( $editorias ) ) {
 								</span>
 							</a>
 						<?php endforeach; ?>
-							<a class="eh-h-item eh-h-item--all" href="/publicacoes/">Ver todas →</a>
+							<a class="eh-h-item eh-h-item--all" href="/publicacoes/">Ver todas<span aria-hidden="true"> →</span></a>
 						<?php else : ?>
 							<p style="color:var(--tx-dim);font-size:var(--text-xs);padding:var(--space-3)">Nenhuma publicação cadastrada.</p>
 						<?php endif; ?>
@@ -123,7 +123,7 @@ if ( empty( $editorias ) ) {
 		$poems = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post_type' => 'poiesis', 'fields' => 'ids' ) );
 		if ( ! empty( $poems ) ) : ?>
 		<div class="wrap" style="margin-top:var(--space-8)">
-			<div class="eh-sec-head"><h2>Poiésis</h2><a href="/poiesis/">Ver todas →</a></div>
+			<div class="eh-sec-head"><h2>Poiésis</h2><a href="/poiesis/">Ver todas<span aria-hidden="true"> →</span></a></div>
 			<div class="eh-poem-grid">
 				<?php foreach ( $poems as $pid ) : ?>
 					<a class="eh-poem-card" href="<?php echo esc_url( get_permalink( $pid ) ); ?>">
@@ -168,7 +168,7 @@ if ( empty( $editorias ) ) {
 					?>
 					<div class="eh-sec-head">
 						<h2><?php echo esc_html( $term->name ); ?></h2>
-						<a href="<?php echo esc_url( get_category_link( $term->term_id ) ); ?>">Ver tudo →</a>
+						<a href="<?php echo esc_url( get_category_link( $term->term_id ) ); ?>">Ver tudo<span aria-hidden="true"> →</span></a>
 					</div>
 					<div class="ib-section-grid">
 						<?php foreach ( $ids as $pid ) { ib_card( $pid ); } ?>

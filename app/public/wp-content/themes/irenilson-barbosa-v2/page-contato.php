@@ -43,9 +43,9 @@ get_header(); ?>
 		<p style="color:var(--tx-2);margin:0 0 var(--space-8)">Envie uma mensagem. Responderei assim que possível.</p>
 
 		<?php if ($msg_sent) : ?>
-			<div style="padding:var(--space-4) var(--space-5);background:#EDF2E8;border:1px solid #B5C6A2;border-radius:var(--radius-md);color:#3B4A30;margin-bottom:var(--space-6)">Mensagem enviada com sucesso! Obrigado pelo contato.</div>
+			<div role="status" style="padding:var(--space-4) var(--space-5);background:#EDF2E8;border:1px solid #B5C6A2;border-radius:var(--radius-md);color:#3B4A30;margin-bottom:var(--space-6)">✓ Mensagem enviada com sucesso! Obrigado pelo contato.</div>
 		<?php elseif ($msg_error) : ?>
-			<div style="padding:var(--space-4) var(--space-5);background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-md);color:#991B1B;margin-bottom:var(--space-6)"><?php echo esc_html($msg_error); ?></div>
+			<div role="alert" style="padding:var(--space-4) var(--space-5);background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-md);color:#991B1B;margin-bottom:var(--space-6)">✗ <?php echo esc_html($msg_error); ?></div>
 		<?php endif; ?>
 
 		<form method="post" style="display:flex;flex-direction:column;gap:var(--space-5)">

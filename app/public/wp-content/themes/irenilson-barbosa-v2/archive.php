@@ -23,7 +23,7 @@ get_header();
 			<div class="arch-grid">
 				<?php while ( have_posts() ) : the_post(); ib_card( get_the_ID() ); endwhile; ?>
 			</div>
-			<?php echo '<div class="pagination">' . paginate_links( array( 'mid_size' => 2, 'prev_text' => '‹', 'next_text' => '›' ) ) . '</div>'; ?>
+			<?php echo '<div class="pagination">' . paginate_links( array( 'mid_size' => 2, 'prev_text' => '<span aria-hidden="true">‹</span><span class="screen-reader-text">Anterior</span>', 'next_text' => '<span class="screen-reader-text">Próximo</span><span aria-hidden="true">›</span>' ) ) . '</div>'; ?>
 		<?php else : ?>
 			<p>Nenhuma matéria encontrada nesta seção.</p>
 		<?php endif; ?>

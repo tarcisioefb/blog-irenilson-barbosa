@@ -18,6 +18,7 @@
 			if(scrim){scrim.hidden=false; requestAnimationFrame(function(){scrim.classList.add('is-open');});}
 			if(burger){burger.classList.add('is-open'); burger.setAttribute('aria-expanded','true');}
 			document.body.style.overflow='hidden';
+			setTimeout(function(){var f=drawer.querySelector('a,button,input,[tabindex]:not([tabindex="-1"])'); if(f)f.focus();},80);
 		}
 		function closeDrawer(){
 			if(!drawer)return;
@@ -27,6 +28,7 @@
 			if(scrim){scrim.classList.remove('is-open'); setTimeout(function(){scrim.hidden=true;},260);}
 			if(burger){burger.classList.remove('is-open'); burger.setAttribute('aria-expanded','false');}
 			document.body.style.overflow='';
+			if(burger)burger.focus();
 		}
 		if(burger){burger.addEventListener('click',openDrawer);}
 		if(closeEl){closeEl.addEventListener('click',closeDrawer);}
@@ -37,10 +39,27 @@
 		var sOpen = document.querySelector('[data-elite-search-open]');
 		var sClose= document.querySelector('[data-elite-search-close]');
 		function openSearch(){ if(!so)return; so.classList.add('is-open'); so.setAttribute('aria-hidden','false'); var i=so.querySelector('input'); if(i){setTimeout(function(){i.focus();},60);} }
-		function closeSearch(){ if(!so)return; so.classList.remove('is-open'); so.setAttribute('aria-hidden','true'); }
+		function closeSearch(){ if(!so)return; so.classList.remove('is-open'); so.setAttribute('aria-hidden','true'); if(sOpen)sOpen.focus(); }
 		if(sOpen){sOpen.addEventListener('click',openSearch);}
 		if(sClose){sClose.addEventListener('click',closeSearch);}
-		document.addEventListener('keydown',function(e){ if(e.key==='Escape'){closeDrawer();closeSearch();} });
+		document.addEventListener('keydown',function(e){
+			if(e.key==='Escape'){closeDrawer();closeSearch();}
+			if(e.key==='Tab'){
+				var focusable='a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
+				if(drawer&&drawer.classList.contains('is-open')){
+					var els=drawer.querySelectorAll(focusable); if(!els.length)return;
+					var first=els[0],last=els[els.length-1];
+					if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+					else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+				}
+				if(so&&so.classList.contains('is-open')){
+					var els2=so.querySelectorAll(focusable); if(!els2.length)return;
+					var f2=els2[0],l2=els2[els2.length-1];
+					if(e.shiftKey&&document.activeElement===f2){e.preventDefault();l2.focus();}
+					else if(!e.shiftKey&&document.activeElement===l2){e.preventDefault();f2.focus();}
+				}
+			}
+		});
 
 		// === STICKY HEADER ===
 		if(mast){
@@ -68,6 +87,7 @@
 			rbar = document.createElement('div');
 			rbar.id = 'reading-bar';
 			rbar.className = 'reading-bar';
+			rbar.setAttribute('aria-hidden','true');
 			document.body.prepend(rbar);
 		}
 		function updateReadingBar(){
