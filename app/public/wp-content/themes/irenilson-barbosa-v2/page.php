@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 get_header();
 while ( have_posts() ) : the_post(); ?>
-	<div class="wrap single-wrap">
+	<div class="wrap single-wrap" id="main">
 		<?php ib_breadcrumb(); ?>
 		<article class="article" style="max-width:820px;margin:0 auto">
 			<h1 class="article__title"><?php the_title(); ?></h1>

@@ -15,7 +15,7 @@ if ( empty( $editorias ) ) {
 }
 ?>
 
-<main class="eh-home">
+<main class="eh-home" id="main">
 
 	<?php if ( $lead ) :
 		$lc = ib_primary_cat( $lead );

@@ -12,6 +12,8 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<a class="skip-link" href="#main" style="position:absolute;top:-9999px;left:6px;background:var(--ink,#3E2C1B);color:#fff;padding:10px 16px;border-radius:0 0 6px 6px;font-size:14px;z-index:99999;text-decoration:none">Ir para o conteúdo</a>
+<style>.skip-link:focus{top:6px;outline:2px solid var(--accent,#4A5D3E);outline-offset:2px;position:fixed}</style>
 <?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) : ?>
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v18.0&appId=<?php echo esc_attr($fb_app_id); ?>"></script>

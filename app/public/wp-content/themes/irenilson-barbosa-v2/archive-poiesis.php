@@ -2,7 +2,7 @@
 /** IRENILSON BARBOSA — Arquivo Poiésis. */
 defined('ABSPATH') || exit;
 get_header(); ?>
-<div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
+<div class="wrap" id="main" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<?php ib_breadcrumb(); ?>
 	<!-- Hero -->
 	<div style="padding:var(--space-10) var(--space-8);background:linear-gradient(135deg,var(--paper-2) 0%,var(--paper) 100%);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-lg);margin-bottom:var(--space-10);text-align:center">
@@ -14,7 +14,7 @@ get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--space-6)">
 			<?php while (have_posts()) : the_post(); ?>
-				<article style="text-align:center;padding:var(--space-6);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);transition:box-shadow .25s" onmouseover="this.style.boxShadow='var(--shadow-card)'" onmouseout="this.style.boxShadow=''">
+				<article class="ib-poem-card" style="text-align:center;padding:var(--space-6);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);transition:box-shadow .25s">
 					<a href="<?php the_permalink(); ?>" style="text-decoration:none;color:inherit">
 						<h2 style="font-family:var(--font-heading);font-size:var(--text-lg);font-weight:500;color:var(--ink);margin:0 0 var(--space-2);line-height:var(--leading-tight)"><?php the_title(); ?></h2>
 						<?php if (has_excerpt()) : ?>

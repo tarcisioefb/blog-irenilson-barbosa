@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ib_contact_nonce'])) 
 }
 
 get_header(); ?>
-<div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
+<div class="wrap" id="main" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<?php ib_breadcrumb(); ?>
 	<div style="max-width:640px;margin:0 auto">
 		<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);color:var(--ink);margin:0 0 var(--space-2)">Contato</h1>

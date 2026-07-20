@@ -8,7 +8,7 @@ while ( have_posts() ) : the_post();
 	$words = str_word_count( wp_strip_all_tags( get_the_content() ) );
 	$mins  = max( 1, (int) round( $words / 200 ) );
 	?>
-	<div class="wrap single-wrap">
+	<div class="wrap single-wrap" id="main">
 		<?php ib_breadcrumb(); ?>
 
 		<div class="article-layout">
@@ -20,7 +20,7 @@ while ( have_posts() ) : the_post();
 				<h1 class="article__title"><?php the_title(); ?></h1>
 
 				<div class="article__meta">
-					<span>por <b>Irenilson Barbosa</b></span>
+					<span>por <b><?php echo esc_html( get_the_author() ); ?></b></span>
 					<span><?php echo esc_html( get_the_date() ); ?></span>
 					<?php if ( $cat ) : ?><span>em <b><?php echo esc_html( $cat->name ); ?></b></span><?php endif; ?>
 					<span><?php echo (int) $mins; ?> min de leitura</span>

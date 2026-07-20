@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 get_header();
 ?>
-<div class="wrap single-wrap" style="text-align:center;padding:var(--space-10) 0">
+<div class="wrap single-wrap" id="main" style="text-align:center;padding:var(--space-10) 0">
 	<?php ib_breadcrumb(); ?>
 	<h1 class="article__title" style="margin-top:var(--space-1)">Página não encontrada</h1>
 	<p>O conteúdo que você procura não está disponível. Tente usar a busca.</p>

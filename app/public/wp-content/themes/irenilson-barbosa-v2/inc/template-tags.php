@@ -2,18 +2,28 @@
 /** IRENILSON BARBOSA — helpers de template. */
 defined( 'ABSPATH' ) || exit;
 
-/** Redes sociais (placeholder - configurar futuramente). */
+/** Redes sociais — lê da Central do Site. */
 function ib_social() {
-	return array(
-		'facebook'  => 'https://facebook.com/',
-		'instagram' => 'https://instagram.com/',
-	);
+	$fb  = \IrenilsonBarbosa\Core\AdminSettings::opt('social_facebook');
+	$ig  = \IrenilsonBarbosa\Core\AdminSettings::opt('social_instagram');
+	$yt  = \IrenilsonBarbosa\Core\AdminSettings::opt('social_youtube');
+	return array_filter([
+		'facebook'  => $fb,
+		'instagram' => $ig,
+		'youtube'   => $yt,
+	]);
 }
 function ib_render_social( $class = 'soc' ) {
+	$icons = [
+		'facebook' => '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+		'instagram' => '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+		'youtube' => '<path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>',
+	];
 	foreach ( ib_social() as $net => $url ) {
 		if ( empty( $url ) ) { continue; }
-		printf( '<a class="%s" href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></a>',
-			esc_attr( $class ), esc_url( $url ), esc_attr( ucfirst( $net ) ) );
+		$svg = $icons[$net] ?? '<circle cx="12" cy="12" r="10"/>';
+		printf( '<a class="%s" href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">%s</svg></a>',
+			esc_attr( $class ), esc_url( $url ), esc_attr( ucfirst( $net ) ), $svg );
 	}
 }
 
@@ -84,55 +94,55 @@ function ib_breadcrumb() {
 
 	if ( is_singular( 'post' ) ) {
 		$cat = ib_primary_cat( get_the_ID() );
-		if ( $cat ) { echo '<span class="sep">›</span><a href="' . esc_url( get_category_link( $cat->term_id ) ) . '">' . esc_html( $cat->name ) . '</a>'; }
-		echo '<span class="sep">›</span><span>' . esc_html( wp_trim_words( get_the_title(), 8, '…' ) ) . '</span>';
+		if ( $cat ) { echo '<span class="sep" aria-hidden="true">›</span><a href="' . esc_url( get_category_link( $cat->term_id ) ) . '">' . esc_html( $cat->name ) . '</a>'; }
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( wp_trim_words( get_the_title(), 8, '…' ) ) . '</span>';
 
 	} elseif ( is_singular( 'publicacao' ) ) {
-		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'publicacao' ) ) . '">Publicações</a>';
-		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><a href="' . esc_url( get_post_type_archive_link( 'publicacao' ) ) . '">Publicações</a>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( get_the_title() ) . '</span>';
 
 	} elseif ( is_singular( 'livro' ) ) {
-		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'livro' ) ) . '">Livros</a>';
-		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><a href="' . esc_url( get_post_type_archive_link( 'livro' ) ) . '">Livros</a>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( get_the_title() ) . '</span>';
 
 	} elseif ( is_singular( 'material' ) ) {
-		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'material' ) ) . '">Materiais</a>';
-		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><a href="' . esc_url( get_post_type_archive_link( 'material' ) ) . '">Materiais</a>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( get_the_title() ) . '</span>';
 
 	} elseif ( is_singular( 'poiesis' ) ) {
-		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'poiesis' ) ) . '">Poiésis</a>';
-		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><a href="' . esc_url( get_post_type_archive_link( 'poiesis' ) ) . '">Poiésis</a>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( get_the_title() ) . '</span>';
 
 	} elseif ( is_page() ) {
 		$post = get_queried_object();
 		if ( $post && $post->post_parent ) {
 			$parents = array_reverse( get_post_ancestors( $post->ID ) );
 			foreach ( $parents as $parent_id ) {
-				echo '<span class="sep">›</span><a href="' . esc_url( get_permalink( $parent_id ) ) . '">' . esc_html( get_the_title( $parent_id ) ) . '</a>';
+				echo '<span class="sep" aria-hidden="true">›</span><a href="' . esc_url( get_permalink( $parent_id ) ) . '">' . esc_html( get_the_title( $parent_id ) ) . '</a>';
 			}
 		}
-		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( get_the_title() ) . '</span>';
 
 	} elseif ( is_category() ) {
-		echo '<span class="sep">›</span><span>' . esc_html( single_cat_title( '', false ) ) . '</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>' . esc_html( single_cat_title( '', false ) ) . '</span>';
 
 	} elseif ( is_search() ) {
-		echo '<span class="sep">›</span><span>Busca</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>Busca</span>';
 
 	} elseif ( is_post_type_archive( 'publicacao' ) ) {
-		echo '<span class="sep">›</span><span>Publicações</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>Publicações</span>';
 
 	} elseif ( is_post_type_archive( 'livro' ) ) {
-		echo '<span class="sep">›</span><span>Livros</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>Livros</span>';
 
 	} elseif ( is_post_type_archive( 'material' ) ) {
-		echo '<span class="sep">›</span><span>Materiais</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>Materiais</span>';
 
 	} elseif ( is_post_type_archive( 'poiesis' ) ) {
-		echo '<span class="sep">›</span><span>Poiésis</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>Poiésis</span>';
 
 	} elseif ( is_404() ) {
-		echo '<span class="sep">›</span><span>Página não encontrada</span>';
+		echo '<span class="sep" aria-hidden="true">›</span><span>Página não encontrada</span>';
 	}
 
 	echo '</nav>';

@@ -23,7 +23,7 @@ while (have_posts()) : the_post();
 	$participacao = wp_get_post_terms($pid, 'participacao', ['fields' => 'names']);
 	$part_label = !empty($participacao) ? $participacao[0] : 'Autor';
 ?>
-<div class="wrap single-wrap">
+<div class="wrap single-wrap" id="main">
 	<?php ib_breadcrumb(); ?>
 
 	<?php if (has_post_thumbnail()) : ?>
