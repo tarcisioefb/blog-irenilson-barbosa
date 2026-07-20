@@ -28,7 +28,7 @@ while ( have_posts() ) : the_post();
 				</div>
 
 				<?php if ( has_post_thumbnail() ) : ?>
-					<figure class="article__hero"><?php the_post_thumbnail( 'full', array( 'alt' => esc_attr( get_the_title() ), 'fetchpriority' => 'high', 'loading' => false ) ); if ( get_the_post_thumbnail_caption() ) : ?><figcaption><?php the_post_thumbnail_caption(); ?></figcaption><?php endif; ?></figure>
+					<figure class="article__hero"><?php the_post_thumbnail( 'full', array( 'alt' => esc_attr( get_the_title() ), 'fetchpriority' => 'high', 'loading' => false, 'data-no-lazy' => '1' ) ); if ( get_the_post_thumbnail_caption() ) : ?><figcaption><?php the_post_thumbnail_caption(); ?></figcaption><?php endif; ?></figure>
 				<?php endif; ?>
 
 				<?php ib_share_buttons( $pid ); ?>
