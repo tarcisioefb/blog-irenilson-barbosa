@@ -182,7 +182,39 @@ class Setup {
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Editora</label><input type="text" name="editora" value="<?php echo esc_attr(get_post_meta($post->ID, 'editora', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">ISBN</label><input type="text" name="isbn" value="<?php echo esc_attr(get_post_meta($post->ID, 'isbn', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Páginas</label><input type="number" name="numero_paginas" value="<?php echo esc_attr(get_post_meta($post->ID, 'numero_paginas', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
-			<p style="margin:0;grid-column:1/-1"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Links de compra</label><textarea name="comprar_links" style="width:100%;min-height:80px;padding:7px 8px;font-size:13px;font-family:monospace" placeholder="Texto do botão | https://...&#10;Outra loja | https://..."><?php echo esc_textarea(get_post_meta($post->ID, 'comprar_links', true)); ?></textarea><span style="font-size:11px;color:#6D5940">Um link por linha: <strong>Texto do botão | https://...</strong></span></p>
+		<?php
+		$comprar_raw = get_post_meta($post->ID, 'comprar_links', true);
+		$comprar_pairs = [];
+		if ($comprar_raw) {
+			foreach (explode("\n", $comprar_raw) as $linha) {
+				$linha = trim($linha);
+				if (!$linha) continue;
+				$parts = explode('|', $linha, 2);
+				if (count($parts) === 2) {
+					$comprar_pairs[] = ['texto' => trim($parts[0]), 'url' => trim($parts[1])];
+				}
+			}
+		}
+		?>
+			<div style="grid-column:1/-1;margin-top:8px">
+				<label style="display:block;font-weight:600;margin-bottom:6px;font-size:12px">Links de compra</label>
+				<div id="ib-comprar-links">
+					<?php for ($i = 0; $i < max(3, count($comprar_pairs) + 1); $i++) :
+						$p = $comprar_pairs[$i] ?? ['texto' => '', 'url' => ''];
+					?>
+					<div style="display:flex;gap:8px;margin-bottom:6px;align-items:end">
+						<span style="flex:1">
+							<input type="text" name="comprar_texto_<?php echo $i; ?>" value="<?php echo esc_attr($p['texto']); ?>" style="width:100%;padding:7px 8px;font-size:13px" placeholder="Texto do botão">
+						</span>
+						<span style="flex:2">
+							<input type="url" name="comprar_url_<?php echo $i; ?>" value="<?php echo esc_attr($p['url']); ?>" style="width:100%;padding:7px 8px;font-size:13px" placeholder="https://...">
+						</span>
+					</div>
+					<?php endfor; ?>
+				</div>
+				<input type="hidden" name="comprar_links_count" value="<?php echo max(3, count($comprar_pairs) + 1); ?>">
+				<span style="font-size:11px;color:#6D5940">Preencha texto e URL. Deixe em branco para ocultar.</span>
+			</div>
 		</div>
 		<?php
 	}
@@ -229,7 +261,7 @@ class Setup {
 		if (!current_user_can('edit_post', $post_id)) return;
 
 		$fields = [
-			'ano', 'editora', 'isbn', 'numero_paginas', 'comprar_links',
+			'ano', 'editora', 'isbn', 'numero_paginas',
 			'ano_publicacao', 'periodico', 'doi', 'link_externo', 'citacao_abnt',
 			'descricao', 'arquivo_url', 'poiesis_author', 'poiesis_notas',
 		];
@@ -238,6 +270,17 @@ class Setup {
 				update_post_meta($post_id, $f, sanitize_text_field($_POST[$f]));
 			}
 		}
+
+		$links = [];
+		$count = isset($_POST['comprar_links_count']) ? (int) $_POST['comprar_links_count'] : 3;
+		for ($i = 0; $i < $count; $i++) {
+			$texto = isset($_POST["comprar_texto_$i"]) ? trim(sanitize_text_field($_POST["comprar_texto_$i"])) : '';
+			$url   = isset($_POST["comprar_url_$i"]) ? trim(esc_url_raw($_POST["comprar_url_$i"])) : '';
+			if ($texto && $url) {
+				$links[] = "$texto | $url";
+			}
+		}
+		update_post_meta($post_id, 'comprar_links', implode("\n", $links));
 	}
 
 	public static function register_meta() {
