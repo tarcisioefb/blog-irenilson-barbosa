@@ -73,10 +73,18 @@ add_action('wp_enqueue_scripts', function () {
 // Data padrão Brasil
 add_filter('option_date_format', function () { return 'j \d\e F \d\e Y'; });
 
-// Limite de posts por página no archive de Poiésis
+// Ordenação e limite por tipo de arquivo
 add_action('pre_get_posts', function ($query) {
-	if (!is_admin() && $query->is_main_query() && is_post_type_archive('poiesis')) {
+	if (is_admin() || !$query->is_main_query()) return;
+
+	if (is_post_type_archive('poiesis')) {
 		$query->set('posts_per_page', 16);
+	}
+
+	if (is_post_type_archive('livro')) {
+		$query->set('meta_key', 'ano');
+		$query->set('orderby', 'meta_value_num');
+		$query->set('order', 'DESC');
 	}
 });
 
