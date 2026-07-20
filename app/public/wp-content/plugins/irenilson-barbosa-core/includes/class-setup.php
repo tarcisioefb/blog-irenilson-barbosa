@@ -137,34 +137,26 @@ class Setup {
 	}
 
 	public static function init_metaboxes() {
-		add_action('add_meta_boxes', [__CLASS__, 'add_poiesis_metabox']);
+		add_action('edit_form_after_title', [__CLASS__, 'render_poiesis_fields']);
 		add_action('save_post', [__CLASS__, 'save_poiesis_metabox']);
 	}
 
-	public static function add_poiesis_metabox() {
-		add_meta_box(
-			'poiesis_box',
-			'Dados do poema',
-			[__CLASS__, 'render_poiesis_metabox'],
-			'poiesis',
-			'after_title',
-			'high'
-		);
-	}
-
-	public static function render_poiesis_metabox($post) {
+	public static function render_poiesis_fields($post) {
+		if ('poiesis' !== $post->post_type) return;
 		wp_nonce_field('poiesis_save', 'poiesis_nonce');
 		$author = get_post_meta($post->ID, 'poiesis_author', true);
 		$notas = get_post_meta($post->ID, 'poiesis_notas', true);
 		?>
-		<p style="margin:0 0 12px">
-			<label for="poiesis_author" style="display:block;font-weight:600;margin-bottom:4px">Autor do poema</label>
-			<input type="text" id="poiesis_author" name="poiesis_author" value="<?php echo esc_attr($author ?: 'Irenilson Barbosa'); ?>" style="width:100%;padding:8px 10px;font-size:13px">
-		</p>
-		<p style="margin:0">
-			<label for="poiesis_notas" style="display:block;font-weight:600;margin-bottom:4px">Notas / texto explicativo</label>
-			<textarea id="poiesis_notas" name="poiesis_notas" style="width:100%;min-height:100px;padding:10px;font-size:13px" placeholder="Dedicatória, introdução, nota do autor..."><?php echo esc_textarea($notas); ?></textarea>
-		</p>
+		<div style="background:#f0f0f1;padding:12px 16px;margin:8px 0 16px;border-radius:4px">
+			<p style="margin:0 0 10px">
+				<label for="poiesis_author" style="display:block;font-weight:600;margin-bottom:4px">Autor do poema</label>
+				<input type="text" id="poiesis_author" name="poiesis_author" value="<?php echo esc_attr($author ?: 'Irenilson Barbosa'); ?>" style="width:100%;padding:7px 8px;font-size:13px">
+			</p>
+			<p style="margin:0">
+				<label for="poiesis_notas" style="display:block;font-weight:600;margin-bottom:4px">Notas / texto explicativo</label>
+				<textarea id="poiesis_notas" name="poiesis_notas" style="width:100%;min-height:80px;padding:7px 8px;font-size:13px" placeholder="Dedicatória, introdução, nota do autor..."><?php echo esc_textarea($notas); ?></textarea>
+			</p>
+		</div>
 		<?php
 	}
 
