@@ -6,6 +6,16 @@ class SEO {
 		add_action('add_meta_boxes', [__CLASS__, 'add_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_meta_box']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
+		add_filter('pre_get_document_title', [__CLASS__, 'filter_title']);
+		add_filter('wp_title', [__CLASS__, 'filter_wp_title'], 10, 2);
+	}
+
+	public static function filter_title() {
+		return self::get_title();
+	}
+
+	public static function filter_wp_title($title, $sep) {
+		return self::get_title();
 	}
 
 	public static function add_meta_box() {
@@ -41,21 +51,53 @@ class SEO {
 	}
 
 	public static function output() {
-		if (is_admin()) return;
+		if (is_admin() || is_feed() || is_robots() || is_trackback()) return;
+
+		$title = self::get_title();
+		$desc  = self::get_description();
+		$url   = self::get_url();
+		$img   = self::get_image();
+		$type  = self::get_og_type();
 
 		echo "\n<!-- SEO — Irenilson Barbosa Core -->\n";
-
-		if (is_singular()) {
-			self::output_singular();
-		} elseif (is_home() || is_front_page()) {
-			self::output_home();
-		} elseif (is_archive()) {
-			self::output_archive();
-		}
-
+		?>
+<meta name="description" content="<?php echo esc_attr($desc); ?>">
+<link rel="canonical" href="<?php echo esc_url($url); ?>">
+<meta property="og:type" content="<?php echo esc_attr($type); ?>">
+<meta property="og:title" content="<?php echo esc_attr($title); ?>">
+<meta property="og:description" content="<?php echo esc_attr($desc); ?>">
+<meta property="og:url" content="<?php echo esc_url($url); ?>">
+<meta property="og:site_name" content="<?php echo esc_attr(get_bloginfo('name')); ?>">
+<meta property="og:locale" content="pt_BR">
+<?php if ($img) : ?>
+<meta property="og:image" content="<?php echo esc_url($img); ?>">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<?php endif; ?>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<?php echo esc_attr($title); ?>">
+<meta name="twitter:description" content="<?php echo esc_attr($desc); ?>">
+<?php if ($img) : ?>
+<meta name="twitter:image" content="<?php echo esc_url($img); ?>">
+<?php endif;
 		self::output_schema();
-
 		echo "<!-- /SEO -->\n";
+	}
+
+	private static function get_url() {
+		if (is_singular()) return get_permalink(get_queried_object_id());
+		if (is_home() || is_front_page()) return home_url('/');
+		if (is_archive()) return get_pagenum_link(1);
+		return home_url('/');
+	}
+
+	private static function get_og_type() {
+		if (is_singular()) {
+			$pt = get_post_type();
+			if ('livro' === $pt) return 'book';
+			return 'article';
+		}
+		return 'website';
 	}
 
 	private static function get_title() {
@@ -120,83 +162,6 @@ class SEO {
 		}
 		$retrato = home_url('/wp-content/uploads/2026/07/Irenilson-Barbosa-Retrato.avif');
 		return $retrato;
-	}
-
-	private static function output_singular() {
-		$title = self::get_title();
-		$desc  = self::get_description();
-		$url   = get_permalink(get_queried_object_id());
-		$img   = self::get_image();
-		$type  = 'article';
-		$post_type = get_post_type();
-		if (in_array($post_type, ['livro'], true)) $type = 'book';
-		elseif (in_array($post_type, ['poiesis'], true)) $type = 'article';
-		?>
-<meta name="description" content="<?php echo esc_attr($desc); ?>">
-<link rel="canonical" href="<?php echo esc_url($url); ?>">
-<meta property="og:type" content="<?php echo esc_attr($type); ?>">
-<meta property="og:title" content="<?php echo esc_attr($title); ?>">
-<meta property="og:description" content="<?php echo esc_attr($desc); ?>">
-<meta property="og:url" content="<?php echo esc_url($url); ?>">
-<meta property="og:site_name" content="<?php echo esc_attr(get_bloginfo('name')); ?>">
-<meta property="og:locale" content="pt_BR">
-<?php if ($img) : ?>
-<meta property="og:image" content="<?php echo esc_url($img); ?>">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<?php endif; ?>
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="<?php echo esc_attr($title); ?>">
-<meta name="twitter:description" content="<?php echo esc_attr($desc); ?>">
-<?php if ($img) : ?>
-<meta name="twitter:image" content="<?php echo esc_url($img); ?>">
-<?php endif; ?>
-		<?php
-	}
-
-	private static function output_home() {
-		$title = self::get_title();
-		$desc  = self::get_description();
-		$url   = home_url('/');
-		$img   = self::get_image();
-		?>
-<meta name="description" content="<?php echo esc_attr($desc); ?>">
-<link rel="canonical" href="<?php echo esc_url($url); ?>">
-<meta property="og:type" content="website">
-<meta property="og:title" content="<?php echo esc_attr($title); ?>">
-<meta property="og:description" content="<?php echo esc_attr($desc); ?>">
-<meta property="og:url" content="<?php echo esc_url($url); ?>">
-<meta property="og:site_name" content="<?php echo esc_attr(get_bloginfo('name')); ?>">
-<meta property="og:locale" content="pt_BR">
-<?php if ($img) : ?>
-<meta property="og:image" content="<?php echo esc_url($img); ?>">
-<?php endif; ?>
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="<?php echo esc_attr($title); ?>">
-<meta name="twitter:description" content="<?php echo esc_attr($desc); ?>">
-<?php if ($img) : ?>
-<meta name="twitter:image" content="<?php echo esc_url($img); ?>">
-<?php endif; ?>
-		<?php
-	}
-
-	private static function output_archive() {
-		$title = self::get_title();
-		$desc  = self::get_description();
-		$url   = get_pagenum_link(1);
-		?>
-<meta name="description" content="<?php echo esc_attr($desc); ?>">
-<link rel="canonical" href="<?php echo esc_url($url); ?>">
-<meta property="og:type" content="website">
-<meta property="og:title" content="<?php echo esc_attr($title); ?>">
-<meta property="og:description" content="<?php echo esc_attr($desc); ?>">
-<meta property="og:url" content="<?php echo esc_url($url); ?>">
-<meta property="og:site_name" content="<?php echo esc_attr(get_bloginfo('name')); ?>">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="<?php echo esc_attr($title); ?>">
-<meta name="twitter:description" content="<?php echo esc_attr($desc); ?>">
-		<?php
 	}
 
 	private static function output_schema() {
