@@ -582,6 +582,7 @@ a{color:inherit;text-decoration:none}
 	.ib-inline-related .ib-inline-item__body{align-self:center}
 	.eh-content .eh-cards>article:nth-child(n+3){display:none}
 	.breadcrumb{margin-bottom:8px}
+	.wrap{padding-top:var(--space-6)!important}
 	.article__title{font-size:clamp(1.5rem,5vw,2rem)}
 	h1:not(.article__title):not(.eh-lead__title){font-size:var(--text-2xl)}
 	.eh-lead__title{font-size:clamp(1.25rem,5vw,1.75rem)}
