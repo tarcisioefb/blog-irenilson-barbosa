@@ -19,13 +19,13 @@ if ( empty( $editorias ) ) {
 
 	<?php if ( $lead ) :
 		$lc = ib_primary_cat( $lead );
-		$lt = get_the_post_thumbnail_url( $lead, 'full' );
+		$lt_id = get_post_thumbnail_id( $lead );
 		?>
 	<section class="eh-hero">
 		<div class="wrap eh-hero__grid">
 			<!-- Lead: col 1, rows 1-2 -->
-			<a class="eh-lead<?php echo $lt ? '' : ' is-empty'; ?>" href="<?php echo esc_url( get_permalink( $lead ) ); ?>">
-				<?php if ( $lt ) : ?><img src="<?php echo esc_url( $lt ); ?>" alt="" class="eh-lead__img"><?php endif; ?>
+			<a class="eh-lead<?php echo $lt_id ? '' : ' is-empty'; ?>" href="<?php echo esc_url( get_permalink( $lead ) ); ?>">
+				<?php if ( $lt_id ) : ?><?php echo wp_get_attachment_image( $lt_id, 'full', false, ['class' => 'eh-lead__img', 'alt' => '', 'loading' => false] ); ?><?php endif; ?>
 				<span class="eh-lead__body">
 					<?php if ( $lc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $lc->name ); ?></span><br><?php endif; ?>
 					<h1 class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></h1>
@@ -51,13 +51,13 @@ if ( empty( $editorias ) ) {
 						$hero_books = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
 						if ( ! empty( $hero_books ) ) :
 							foreach ( $hero_books as $bid ) :
-								$bthumb = get_the_post_thumbnail_url( $bid, 'ib-thumb' );
+								$bthumb_id = get_post_thumbnail_id( $bid );
 								$bparts = wp_get_post_terms( $bid, 'participacao', array( 'fields' => 'names' ) );
 								$bpart = ! empty( $bparts ) ? $bparts[0] : '';
 						?>
 							<a class="eh-h-item" href="<?php echo esc_url( get_permalink( $bid ) ); ?>">
-								<?php if ( $bthumb ) : ?>
-									<span class="eh-h-item__img"><img src="<?php echo esc_url( $bthumb ); ?>" alt="" loading="lazy"></span>
+								<?php if ( $bthumb_id ) : ?>
+									<span class="eh-h-item__img"><?php echo wp_get_attachment_image( $bthumb_id, 'ib-thumb', false, ['alt' => '', 'loading' => 'lazy'] ); ?></span>
 								<?php endif; ?>
 								<span class="eh-h-item__body">
 									<span class="eh-h-item__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>
@@ -148,7 +148,7 @@ if ( empty( $editorias ) ) {
 				<?php $tab = ib_opt('banner_image_tablet'); if ($tab) : ?>
 					<source media="(min-width:641px) and (max-width:1024px)" srcset="<?php echo esc_url($tab); ?>">
 				<?php endif; ?>
-				<img src="<?php echo esc_url($banner_img); ?>" alt="" width="1280" height="248" loading="lazy">
+				<img src="<?php echo esc_url($banner_img); ?>" alt="" width="1280" height="248" loading="lazy" srcset="<?php echo esc_attr($banner_img); ?> 1280w<?php $tab_img = ib_opt('banner_image_tablet'); if ($tab_img) : ?>, <?php echo esc_url($tab_img); ?> 800w<?php endif; ?><?php $mob_img = ib_opt('banner_image_mobile'); if ($mob_img) : ?>, <?php echo esc_url($mob_img); ?> 600w<?php endif; ?>">
 			</picture>
 			</a>
 		</div>

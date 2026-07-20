@@ -40,12 +40,12 @@ function ib_primary_cat( $id ) {
 function ib_card( $id ) {
 	$cat   = ib_primary_cat( $id );
 	$link  = get_permalink( $id );
-	$thumb = get_the_post_thumbnail_url( $id, 'ib-card' );
+	$thumb_id = get_post_thumbnail_id( $id );
 	?>
 	<article class="eh-card">
-		<a class="eh-card__imgwrap<?php echo $thumb ? '' : ' is-empty'; ?>" href="<?php echo esc_url( $link ); ?>"
+		<a class="eh-card__imgwrap<?php echo $thumb_id ? '' : ' is-empty'; ?>" href="<?php echo esc_url( $link ); ?>"
 			aria-label="<?php echo esc_attr( get_the_title( $id ) ); ?>">
-			<?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy"><?php endif; ?>
+			<?php if ( $thumb_id ) : ?><?php echo wp_get_attachment_image( $thumb_id, 'ib-card', false, ['alt' => '', 'loading' => 'lazy'] ); ?><?php endif; ?>
 			<?php if ( $cat ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $cat->name ); ?></span><?php endif; ?>
 		</a>
 		<h3 class="eh-card__t"><a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( get_the_title( $id ) ); ?></a></h3>
@@ -56,13 +56,14 @@ function ib_card( $id ) {
 /** Card de destaque (hero overlay). */
 function ib_feat_card( $id, $variant = 'small' ) {
 	$cat   = ib_primary_cat( $id );
-	$thumb = get_the_post_thumbnail_url( $id, 'wide' === $variant ? 'full' : 'ib-card' );
+	$thumb_id = get_post_thumbnail_id( $id );
+	$size  = 'wide' === $variant ? 'full' : 'ib-card';
 	$link  = get_permalink( $id );
 	$mod   = 'wide' === $variant ? ' eh-feat--wide' : '';
 	?>
-	<a class="eh-feat<?php echo $mod; ?><?php echo $thumb ? '' : ' is-empty'; ?>" href="<?php echo esc_url( $link ); ?>"
+	<a class="eh-feat<?php echo $mod; ?><?php echo $thumb_id ? '' : ' is-empty'; ?>" href="<?php echo esc_url( $link ); ?>"
 		aria-label="<?php echo esc_attr( get_the_title( $id ) ); ?>">
-		<?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" class="eh-feat__img"><?php endif; ?>
+		<?php if ( $thumb_id ) : ?><?php echo wp_get_attachment_image( $thumb_id, $size, false, ['class' => 'eh-feat__img', 'alt' => ''] ); ?><?php endif; ?>
 		<span class="eh-feat__body">
 			<?php if ( $cat ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $cat->name ); ?></span><br><?php endif; ?>
 			<span class="eh-feat__t"><?php echo esc_html( get_the_title( $id ) ); ?></span>
