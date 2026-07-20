@@ -20,6 +20,7 @@ class AdminSettings {
 			'font_heading'     => 'Literata',
 			'font_body'        => 'Inter',
 			'facebook_app_id'  => '',
+			'home_cats'        => [],
 			'banner_image'        => '',
 			'banner_image_tablet' => '',
 			'banner_image_mobile' => '',
@@ -84,6 +85,20 @@ class AdminSettings {
 		$allowed_body = ['Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System'];
 		$out['font_body'] = in_array($in['font_body'] ?? '', $allowed_body, true) ? $in['font_body'] : 'Inter';
 		$out['facebook_app_id'] = isset($in['facebook_app_id']) ? sanitize_text_field(trim($in['facebook_app_id'])) : '';
+		$out['home_cats'] = [];
+		if (isset($in['home_cats']) && is_array($in['home_cats'])) {
+			$selected = array_map('sanitize_text_field', $in['home_cats']);
+			$selected = array_filter($selected, fn($v) => $v !== '_disabled_');
+			$order = isset($in['home_cats_order']) && is_array($in['home_cats_order']) ? $in['home_cats_order'] : [];
+			// Ordena pelo campo order
+			$ordered = [];
+			foreach ($selected as $slug) {
+				$pos = isset($order[$slug]) ? (int) $order[$slug] : 0;
+				$ordered[$slug] = $pos;
+			}
+			asort($ordered);
+			$out['home_cats'] = array_keys($ordered);
+		}
 		$out['banner_image'] = isset($in['banner_image']) ? esc_url_raw(trim($in['banner_image'])) : '';
 		$out['banner_image_tablet'] = isset($in['banner_image_tablet']) ? esc_url_raw(trim($in['banner_image_tablet'])) : '';
 		$out['banner_image_mobile'] = isset($in['banner_image_mobile']) ? esc_url_raw(trim($in['banner_image_mobile'])) : '';
@@ -151,6 +166,32 @@ class AdminSettings {
 									<?php endif; ?>
 								</td>
 							</tr>
+						</tbody></table>
+					</div>
+
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🏠 Home — Categorias</h2>
+						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Escolha quais categorias aparecem na home e em que ordem. Use os números para definir a posição (1 = primeiro). Deixe em branco para exibir todas.</p>
+						<table class="form-table" role="presentation" style="margin:0"><tbody>
+							<?php
+							$saved = self::opt('home_cats');
+							$saved = is_array($saved) ? $saved : [];
+							$terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false]);
+							// Remove "Sem categoria"
+							$terms = array_filter($terms, fn($t) => 'uncategorized' !== $t->slug);
+							foreach ($terms as $t) :
+								$checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : '';
+							?>
+							<tr>
+								<th scope="row" style="width:60px;padding:4px 0"><label style="color:#3E2C1B;font-weight:600"><?php echo esc_html($t->name); ?></label></th>
+								<td style="padding:4px 0">
+									<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
+									<label><input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" style="margin-right:8px" <?php echo $checked; ?>></label>
+									<input type="number" name="ib_opts[home_cats_order][<?php echo esc_attr($t->slug); ?>]" value="<?php echo esc_attr($saved['order'][$t->slug] ?? '0'); ?>" min="0" max="99" style="width:60px;border-color:#e0d5c3;border-radius:4px" placeholder="0">
+									<span style="font-size:12px;color:var(--tx-dim)">posição</span>
+								</td>
+							</tr>
+							<?php endforeach; ?>
 						</tbody></table>
 					</div>
 

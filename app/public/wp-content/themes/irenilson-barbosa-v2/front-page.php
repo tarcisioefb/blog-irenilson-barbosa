@@ -9,7 +9,10 @@ $featured = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'f
 $lead      = isset( $featured[0] ) ? $featured[0] : 0;
 $secondary = array_slice( $featured, 1, 3 );
 $strip     = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post__not_in' => $featured, 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
-$editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano' );
+$editorias = ib_opt('home_cats');
+if ( empty( $editorias ) ) {
+	$editorias = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano' );
+}
 ?>
 
 <main class="eh-home">
