@@ -52,6 +52,7 @@ get_header(); ?>
 
 			<form method="post" style="display:flex;flex-direction:column;gap:var(--space-5)">
 				<?php wp_nonce_field('ib_contact', 'ib_contact_nonce'); ?>
+				<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4)">
 
 				<div>
 					<label for="ib_name" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Nome *</label>
@@ -66,6 +67,7 @@ get_header(); ?>
 				<div>
 					<label for="ib_subject" style="display:block;font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--ink);margin-bottom:6px">Assunto</label>
 					<input type="text" id="ib_subject" name="ib_subject" value="<?php echo esc_attr($_POST['ib_subject'] ?? ''); ?>" style="width:100%;padding:var(--space-3) var(--space-3);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-sm);font-family:inherit;font-size:var(--text-md);background:#fff">
+				</div>
 				</div>
 
 				<div>
