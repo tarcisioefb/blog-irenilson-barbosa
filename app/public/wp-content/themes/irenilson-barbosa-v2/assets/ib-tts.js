@@ -81,7 +81,7 @@
 		utterance.voice = getVoice();
 		utterance.rate = getRate();
 		utterance.lang = 'pt-BR';
-		utterance.onstart = function () { updateUI('play'); };
+		utterance.onstart = function () { updateUI('play'); setTimeout(function () { pauseBtn.focus(); }, 100); };
 		utterance.onend = function () { resetUI(); };
 		utterance.onerror = function () { resetUI(); statusEl.textContent = 'Erro ao reproduzir.'; };
 		utterance.onpause = function () { updateUI('pause'); };
