@@ -7,6 +7,22 @@ class AdminSettings {
 		add_action('admin_init', [__CLASS__, 'register_settings']);
 		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 		add_action('wp_head', [__CLASS__, 'output_google_analytics'], 0);
+		add_action('wp_ajax_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
+		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
+	}
+
+	public static function ajax_newsletter() {
+		$email = isset($_POST['email']) ? sanitize_email(trim($_POST['email'])) : '';
+		if (!is_email($email)) {
+			wp_send_json_error('E-mail inválido.');
+		}
+		$subs = (array) get_option('ib_newsletter_subscribers', []);
+		if (in_array($email, $subs, true)) {
+			wp_send_json_error('E-mail já cadastrado.');
+		}
+		$subs[] = $email;
+		update_option('ib_newsletter_subscribers', array_values(array_unique($subs)), false);
+		wp_send_json_success('Cadastrado com sucesso!');
 	}
 
 	public static function defaults() {

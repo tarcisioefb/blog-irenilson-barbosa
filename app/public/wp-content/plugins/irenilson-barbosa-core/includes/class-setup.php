@@ -260,15 +260,18 @@ class Setup {
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 		if (!current_user_can('edit_post', $post_id)) return;
 
-		$fields = [
-			'ano', 'editora', 'isbn', 'numero_paginas',
-			'ano_publicacao', 'periodico', 'doi', 'link_externo', 'citacao_abnt',
-			'descricao', 'arquivo_url', 'poiesis_author', 'poiesis_notas',
-		];
-		foreach ($fields as $f) {
-			if (isset($_POST[$f])) {
-				update_post_meta($post_id, $f, sanitize_text_field($_POST[$f]));
-			}
+		$text_fields = ['editora', 'isbn', 'periodico', 'citacao_abnt', 'descricao', 'poiesis_author', 'poiesis_notas', 'doi'];
+		$int_fields  = ['ano', 'numero_paginas', 'ano_publicacao'];
+		$url_fields  = ['link_externo', 'arquivo_url'];
+
+		foreach ($text_fields as $f) {
+			if (isset($_POST[$f])) update_post_meta($post_id, $f, sanitize_text_field($_POST[$f]));
+		}
+		foreach ($int_fields as $f) {
+			if (isset($_POST[$f])) update_post_meta($post_id, $f, absint($_POST[$f]));
+		}
+		foreach ($url_fields as $f) {
+			if (isset($_POST[$f])) update_post_meta($post_id, $f, esc_url_raw(trim($_POST[$f])));
 		}
 
 		$links = [];

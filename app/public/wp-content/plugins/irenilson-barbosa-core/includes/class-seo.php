@@ -136,7 +136,8 @@ class SEO {
 	}
 
 	private static function output_global_schema() {
-		$logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo') ?: home_url('/wp-content/uploads/2026/07/logo-irenilson.png');
+		$logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo');
+		if (!$logo) { $uploads = wp_upload_dir(); $logo = $uploads['baseurl'] . '/2026/07/logo-irenilson.png'; }
 		$name = get_bloginfo('name');
 		$url  = home_url('/');
 		?>
@@ -229,8 +230,10 @@ class SEO {
 				}
 			}
 		}
-		$retrato = home_url('/wp-content/uploads/2026/07/Irenilson-Barbosa-Retrato.avif');
-		return $retrato;
+		$retrato = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo');
+		if ($retrato) return $retrato;
+		$uploads = wp_upload_dir();
+		return $uploads['baseurl'] . '/2026/07/Irenilson-Barbosa-Retrato.avif';
 	}
 
 	private static function output_schema() {
