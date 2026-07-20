@@ -41,7 +41,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 				<?php
 				$logo_url = ib_opt('site_logo');
 				if ( $logo_url ) : ?>
-					<img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="240" height="50" style="height:44px;width:auto">
+					<img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="211" height="44" style="height:44px;width:auto">
 				<?php elseif ( has_custom_logo() ) :
 					the_custom_logo();
 				else : ?>
