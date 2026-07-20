@@ -3,8 +3,12 @@
 defined('ABSPATH') || exit;
 get_header(); ?>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
-	<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:400;color:var(--ink);margin:0 0 var(--space-2)">Poiésis</h1>
-	<p style="color:var(--tx-2);margin:0 0 var(--space-8);font-size:var(--text-md)">Poesia, criação e pensamento lírico.</p>
+	<!-- Hero -->
+	<div style="padding:var(--space-10) var(--space-8);background:linear-gradient(135deg,var(--paper-2) 0%,var(--paper) 100%);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-lg);margin-bottom:var(--space-10);text-align:center">
+		<p style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-widest);font-weight:700;margin:0 0 var(--space-3)">Ποίησις</p>
+		<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:400;color:var(--ink);margin:0 0 var(--space-4);line-height:var(--leading-tight)">Poiésis</h1>
+		<p style="max-width:640px;margin:0 auto;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)">Poiésis é uma palavra polissêmica de origem grega. Ela denota, entre outras coisas, a ação ou a capacidade de produzir ou fazer algo de forma criativa. Nos escritos de Platão é possível entender a poíésis como processo criativo, conhecimento e aprendizado lúdico — ação que converte o "não ser" em "ser".</p>
+	</div>
 
 	<?php if (have_posts()) : ?>
 		<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--space-6)">
