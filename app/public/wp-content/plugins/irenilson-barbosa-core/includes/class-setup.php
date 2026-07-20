@@ -6,6 +6,12 @@ class Setup {
 		add_action('init', [__CLASS__, 'register_post_types']);
 		add_action('init', [__CLASS__, 'register_taxonomies']);
 		add_action('init', [__CLASS__, 'register_meta']);
+		add_filter('use_block_editor_for_post_type', [__CLASS__, 'disable_block_editor'], 10, 2);
+	}
+
+	public static function disable_block_editor($enabled, $post_type) {
+		if ('poiesis' === $post_type) return false;
+		return $enabled;
 	}
 
 	public static function register_post_types() {
@@ -137,29 +143,39 @@ class Setup {
 
 	public static function add_poiesis_metabox() {
 		add_meta_box(
-			'poiesis_notas_box',
-			'Notas do poema',
+			'poiesis_box',
+			'Dados do poema',
 			[__CLASS__, 'render_poiesis_metabox'],
 			'poiesis',
-			'normal',
-			'default'
+			'after_title',
+			'high'
 		);
 	}
 
 	public static function render_poiesis_metabox($post) {
-		wp_nonce_field('poiesis_notas', 'poiesis_notas_nonce');
-		$value = get_post_meta($post->ID, 'poiesis_notas', true);
-		echo '<textarea name="poiesis_notas" style="width:100%;min-height:120px;padding:10px;font-size:13px" placeholder="Texto explicativo, dedicatória, notas do autor...">';
-		echo esc_textarea($value);
-		echo '</textarea>';
-		echo '<p style="color:#6D5940;font-size:12px;margin:4px 0 0">Este texto aparece abaixo do poema, em uma caixa de destaque separada.</p>';
+		wp_nonce_field('poiesis_save', 'poiesis_nonce');
+		$author = get_post_meta($post->ID, 'poiesis_author', true);
+		$notas = get_post_meta($post->ID, 'poiesis_notas', true);
+		?>
+		<p style="margin:0 0 12px">
+			<label for="poiesis_author" style="display:block;font-weight:600;margin-bottom:4px">Autor do poema</label>
+			<input type="text" id="poiesis_author" name="poiesis_author" value="<?php echo esc_attr($author ?: 'Irenilson Barbosa'); ?>" style="width:100%;padding:8px 10px;font-size:13px">
+		</p>
+		<p style="margin:0">
+			<label for="poiesis_notas" style="display:block;font-weight:600;margin-bottom:4px">Notas / texto explicativo</label>
+			<textarea id="poiesis_notas" name="poiesis_notas" style="width:100%;min-height:100px;padding:10px;font-size:13px" placeholder="Dedicatória, introdução, nota do autor..."><?php echo esc_textarea($notas); ?></textarea>
+		</p>
+		<?php
 	}
 
 	public static function save_poiesis_metabox($post_id) {
-		if (!isset($_POST['poiesis_notas_nonce']) || !wp_verify_nonce($_POST['poiesis_notas_nonce'], 'poiesis_notas')) return;
+		if (!isset($_POST['poiesis_nonce']) || !wp_verify_nonce($_POST['poiesis_nonce'], 'poiesis_save')) return;
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 		if (!current_user_can('edit_post', $post_id)) return;
 
+		if (isset($_POST['poiesis_author'])) {
+			update_post_meta($post_id, 'poiesis_author', sanitize_text_field($_POST['poiesis_author']));
+		}
 		if (isset($_POST['poiesis_notas'])) {
 			update_post_meta($post_id, 'poiesis_notas', sanitize_textarea_field($_POST['poiesis_notas']));
 		}
@@ -184,6 +200,7 @@ class Setup {
 			'link_marinete'    => ['type' => 'string', 'post_types' => ['livro']],
 			'descricao'        => ['type' => 'string', 'post_types' => ['material']],
 			'poiesis_notas'    => ['type' => 'string', 'post_types' => ['poiesis']],
+			'poiesis_author'   => ['type' => 'string', 'post_types' => ['poiesis']],
 		];
 
 		foreach ($meta_fields as $key => $config) {
