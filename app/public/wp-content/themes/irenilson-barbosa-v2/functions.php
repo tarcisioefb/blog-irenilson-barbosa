@@ -72,6 +72,13 @@ add_action('wp_enqueue_scripts', function () {
 // Data padrão Brasil
 add_filter('option_date_format', function () { return 'j \d\e F \d\e Y'; });
 
+// Limite de posts por página no archive de Poiésis
+add_action('pre_get_posts', function ($query) {
+	if (!is_admin() && $query->is_main_query() && is_post_type_archive('poiesis')) {
+		$query->set('posts_per_page', 16);
+	}
+});
+
 // ─── SVG ──────────────────────────────────────────────────
 
 add_filter('upload_mimes', function ($mimes) {
