@@ -47,7 +47,7 @@
 
 		var intro = title + '. ';
 		if (author) intro += 'Por ' + author + '. ' + '… … ';
-		var outro = ' Este ' + typeName + ' foi escrito por ele. ' + bio + '.';
+		var outro = ' Este ' + typeName + ' foi escrito por ' + author + '. ' + bio + '.';
 
 		return intro + body + outro;
 	}
