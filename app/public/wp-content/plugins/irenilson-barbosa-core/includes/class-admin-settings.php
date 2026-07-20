@@ -6,6 +6,7 @@ class AdminSettings {
 		add_action('admin_menu', [__CLASS__, 'register_menus']);
 		add_action('admin_init', [__CLASS__, 'register_settings']);
 		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+		add_action('wp_head', [__CLASS__, 'output_google_analytics'], 0);
 	}
 
 	public static function defaults() {
@@ -25,6 +26,7 @@ class AdminSettings {
 			'banner_image_tablet' => '',
 			'banner_image_mobile' => '',
 			'banner_link'         => '',
+			'google_analytics_id' => '',
 		];
 	}
 
@@ -96,6 +98,7 @@ class AdminSettings {
 		$out['banner_image_tablet'] = isset($in['banner_image_tablet']) ? esc_url_raw(trim($in['banner_image_tablet'])) : '';
 		$out['banner_image_mobile'] = isset($in['banner_image_mobile']) ? esc_url_raw(trim($in['banner_image_mobile'])) : '';
 		$out['banner_link'] = isset($in['banner_link']) ? esc_url_raw(trim($in['banner_link'])) : '';
+		$out['google_analytics_id'] = isset($in['google_analytics_id']) ? sanitize_text_field(trim($in['google_analytics_id'])) : '';
 		return $out;
 	}
 
@@ -105,6 +108,19 @@ class AdminSettings {
 		$theme_uri = get_template_directory_uri();
 		wp_enqueue_script('ib-admin', $theme_uri . '/assets/ib-admin.js', ['jquery'], IRENILSON_CORE_VERSION, true);
 		wp_enqueue_script('jquery-ui-sortable');
+	}
+
+	public static function output_google_analytics() {
+		$ga_id = self::opt('google_analytics_id');
+		if (!$ga_id) return;
+		?>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga_id); ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
+</script>
+		<?php
 	}
 
 	public static function render_page() {
@@ -259,6 +275,17 @@ class AdminSettings {
 							<tr>
 								<th scope="row" style="width:80px;padding:6px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600">App ID</label></th>
 								<td style="padding:8px 0"><input type="text" id="facebook_app_id" name="ib_opts[facebook_app_id]" value="<?php echo esc_attr(self::opt('facebook_app_id')); ?>" class="regular-text" placeholder="1234567890" style="border-color:#e0d5c3;border-radius:4px"></td>
+							</tr>
+						</tbody></table>
+					</div>
+
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">📊 Google Analytics</h2>
+						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Insira o ID de medição (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.</p>
+						<table class="form-table" role="presentation" style="margin:0"><tbody>
+							<tr>
+								<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
+								<td style="padding:6px 0"><input type="text" id="google_analytics_id" name="ib_opts[google_analytics_id]" value="<?php echo esc_attr(self::opt('google_analytics_id')); ?>" class="regular-text" placeholder="G-XXXXXXXXXX" style="border-color:#e0d5c3;border-radius:4px"></td>
 							</tr>
 						</tbody></table>
 					</div>

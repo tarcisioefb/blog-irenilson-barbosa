@@ -1,0 +1,27 @@
+# Irenilson Barbosa
+> Portal editorial de Irenilson Barbosa — professor universitário, escritor e pesquisador. Ensaios sobre filosofia, educação, política e cultura; poemas; publicações acadêmicas; livros; materiais educacionais.
+
+## Sobre o autor
+- [Sobre](https://irenilsonbarbosa.com/sobre/) — biografia, formação acadêmica (Doutor em Educação pela UFBA, Pós-Doutor pela Universidade do Porto), ORCID, currículo Lattes, publicações
+- [Contato](https://irenilsonbarbosa.com/contato/)
+
+## Conteúdo
+- [Artigos](https://irenilsonbarbosa.com/artigos/) — ensaios e reflexões (categorias: filosofia, educação, política, cultura, cotidiano)
+- [Publicações acadêmicas](https://irenilsonbarbosa.com/publicacoes/) — artigos científicos, capítulos de livros (taxonomia: tipo-de-publicacao)
+- [Livros](https://irenilsonbarbosa.com/livros/) — livros do autor (taxonomia: participacao: autor, organizador, coautor)
+- [Poiésis](https://irenilsonbarbosa.com/poiesis/) — poemas e criações literárias
+- [Materiais](https://irenilsonbarbosa.com/materiais/) — recursos educacionais para download (taxonomia: tipo-de-material: slides, apostila, guia)
+
+## Navegação principal
+- Início, Artigos, Publicações, Livros, Materiais, Poiésis, Sobre
+
+## Redes sociais
+- Facebook, Instagram, YouTube (links configurados na Central do Site)
+
+## Newsletter
+- Cadastro via formulário AJAX na página inicial e de contato
+
+## Observações técnicas
+- Este site usa WordPress com o tema "Blog do Irenilson" e o plugin "Irenilson Barbosa Core"
+- Tipografia: Literata (títulos) e Inter (corpo) — configuráveis
+- Paleta: marrom (#3E2C1B), bege (#F5F0E8), verde militar (#4A5D3E)
