@@ -126,7 +126,7 @@
 	}
 
 	function init() {
-		article = document.querySelector('.article__body, .ib-poem-body, .article');
+		article = document.querySelector('.article__body, .ib-poem-body');
 		if (!article) return;
 		playBtn = document.querySelector('[data-ib-tts-play]');
 		ctrls = document.querySelector('.ib-tts__controls');
