@@ -22,6 +22,9 @@ class ImageOptimizer {
 		if (isset($processing[$attachment_id])) return $metadata;
 		$processing[$attachment_id] = true;
 
+		if (defined('DOING_AJAX') && DOING_AJAX) return $metadata;
+		if (did_action('wp') && !is_admin()) return $metadata;
+
 		$uploads = wp_upload_dir();
 		$base = $uploads['basedir'] . '/' . dirname($metadata['file']);
 
