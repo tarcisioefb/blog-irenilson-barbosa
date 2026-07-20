@@ -84,8 +84,9 @@ add_action('pre_get_posts', function ($query) {
 add_filter('get_avatar_url', function ($url, $id_or_email, $args) {
 	$user_id = 0;
 	if (is_numeric($id_or_email)) $user_id = (int) $id_or_email;
+	elseif ($id_or_email instanceof \WP_User) $user_id = $id_or_email->ID;
 	elseif (is_object($id_or_email) && isset($id_or_email->user_id)) $user_id = (int) $id_or_email->user_id;
-	elseif (is_email($id_or_email)) {
+	elseif (is_string($id_or_email) && is_email($id_or_email)) {
 		$user = get_user_by('email', $id_or_email);
 		$user_id = $user ? $user->ID : 0;
 	}
