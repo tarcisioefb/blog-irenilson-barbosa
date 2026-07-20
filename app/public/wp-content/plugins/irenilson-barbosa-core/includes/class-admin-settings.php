@@ -120,7 +120,7 @@ class AdminSettings {
 				<div class="notice notice-success is-dismissible"><p>Alterações salvas.</p></div>
 			<?php endif; ?>
 
-			<div style="max-width:780px;margin:24px 0;padding:20px 24px;background:#FAF7F2;border-left:4px solid #4A5D3E;border-radius:4px;font-size:14px;line-height:1.6">
+			<div style="margin:24px 0;padding:20px 24px;background:#FAF7F2;border-left:4px solid #4A5D3E;border-radius:4px;font-size:14px;line-height:1.6">
 				<strong style="color:#3E2C1B">💡 Ajuste rápido</strong><br>
 				As alterações aparecem no site na hora. Campos em branco usam o valor padrão do tema.
 			</div>
@@ -128,97 +128,89 @@ class AdminSettings {
 			<form method="post" action="options.php">
 				<?php settings_fields('ib_group'); ?>
 
-				<div style="max-width:780px">
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🔗 Redes sociais</h2>
-						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Aparecem no topo do site.</p>
+				<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+					<div>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🔗 Redes sociais</h2>
+						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Aparecem no topo do site.</p>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<?php foreach (['social_facebook' => 'Facebook', 'social_instagram' => 'Instagram', 'social_youtube' => 'YouTube'] as $k => $lbl) : ?>
 								<tr>
-									<th scope="row" style="width:120px;padding:8px 0"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600"><?php echo esc_html($lbl); ?></label></th>
-									<td style="padding:8px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+									<th scope="row" style="width:80px;padding:6px 0"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600;font-size:12px"><?php echo esc_html($lbl); ?></label></th>
+									<td style="padding:6px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody></table>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🖼️ Logo</h2>
-						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Logo do site, usado no cabeçalho e rodapé. Recomendado: PNG ou SVG, largura máxima 240px.</p>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🖼️ Logo</h2>
+						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Usado no cabeçalho e rodapé. PNG ou SVG, largura máx. 240px.</p>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<?php $logo_val = self::opt('site_logo'); ?>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="site_logo" style="color:#3E2C1B;font-weight:600">Logo</label></th>
-								<td style="padding:8px 0">
-									<input type="url" id="site_logo" name="ib_opts[site_logo]" value="<?php echo esc_attr($logo_val); ?>" class="large-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px">
-									<button type="button" class="button" data-media-pick="site_logo" style="margin-top:4px">Selecionar</button>
-									<button type="button" class="button" data-media-clear="site_logo" style="margin-top:4px">Remover</button>
+								<th scope="row" style="width:80px;padding:6px 0"><label for="site_logo" style="color:#3E2C1B;font-weight:600;font-size:12px">Logo</label></th>
+								<td style="padding:6px 0">
+									<div style="display:flex;gap:6px;flex-wrap:wrap">
+										<input type="url" id="site_logo" name="ib_opts[site_logo]" value="<?php echo esc_attr($logo_val); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px;flex:1;min-width:140px">
+										<button type="button" class="button" data-media-pick="site_logo">Selecionar</button>
+										<button type="button" class="button" data-media-clear="site_logo">Remover</button>
+									</div>
 									<?php if ($logo_val) : ?>
-										<br><img id="preview-site_logo" src="<?php echo esc_url($logo_val); ?>" alt="" style="max-width:200px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
+										<br><img id="preview-site_logo" src="<?php echo esc_url($logo_val); ?>" alt="" style="max-width:160px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
 									<?php else : ?>
-										<br><img id="preview-site_logo" alt="" style="display:none;max-width:200px;height:auto;margin-top:8px;border:1px solid #dcdcde;border-radius:4px">
+										<br><img id="preview-site_logo" alt="" style="display:none;max-width:160px;height:auto;margin-top:6px;border:1px solid #dcdcde;border-radius:4px">
 									<?php endif; ?>
 								</td>
 							</tr>
 						</tbody></table>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🏠 Home — Categorias</h2>
-						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Arraste para reordenar. Desmarque para ocultar da home. Deixe tudo marcado para exibir todas.</p>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🏠 Home — Categorias</h2>
+						<p style="margin:0 0 16px;color:#6D5940;font-size:12px">Arraste para reordenar. Desmarque para ocultar.</p>
 						<ul id="ib-home-cats" style="margin:0;padding:0;list-style:none">
 							<?php
 							$saved = self::opt('home_cats');
 							$saved = is_array($saved) ? $saved : [];
 							$all_terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false, 'fields' => 'all']);
 							$all_terms = array_filter($all_terms, fn($t) => 'uncategorized' !== $t->slug);
-							// Se tem configuração salva, usa aquela ordem; senão, ordem alfabética
 							$ordered = [];
 							if (!empty($saved)) {
 								$term_by_slug = [];
 								foreach ($all_terms as $t) { $term_by_slug[$t->slug] = $t; }
-								foreach ($saved as $slug) {
-									if (isset($term_by_slug[$slug])) $ordered[] = $term_by_slug[$slug];
-								}
-								foreach ($all_terms as $t) {
-									if (!in_array($t->slug, $saved, true)) $ordered[] = $t;
-								}
-							} else {
-								$ordered = array_values($all_terms);
-							}
-							foreach ($ordered as $t) :
-								$checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : '';
-							?>
-							<li style="display:flex;align-items:center;gap:12px;padding:8px 10px;margin:0 0 4px;background:#fff;border:1px solid #e0d5c3;border-radius:6px;cursor:grab">
-								<span style="color:#bbb;font-size:18px;cursor:grab;user-select:none">⠿</span>
+								foreach ($saved as $slug) { if (isset($term_by_slug[$slug])) $ordered[] = $term_by_slug[$slug]; }
+								foreach ($all_terms as $t) { if (!in_array($t->slug, $saved, true)) $ordered[] = $t; }
+							} else { $ordered = array_values($all_terms); }
+							foreach ($ordered as $t) : $checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : ''; ?>
+							<li style="display:flex;align-items:center;gap:10px;padding:7px 10px;margin:0 0 3px;background:#fff;border:1px solid #e0d5c3;border-radius:5px;cursor:grab">
+								<span style="color:#bbb;font-size:16px;cursor:grab;user-select:none">⠿</span>
 								<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
-								<label style="display:flex;align-items:center;gap:8px;flex:1;cursor:pointer">
+								<label style="display:flex;align-items:center;gap:6px;flex:1;cursor:pointer">
 									<input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" <?php echo $checked; ?>>
-									<strong style="color:#3E2C1B;font-size:13px"><?php echo esc_html($t->name); ?></strong>
+									<span style="color:#3E2C1B;font-size:13px"><?php echo esc_html($t->name); ?></span>
 								</label>
 							</li>
 							<?php endforeach; ?>
 						</ul>
-						<script>
-						jQuery(function($){
-							$('#ib-home-cats').sortable({axis:'y',handle:'span',placeholder:'ui-state-highlight'});
-							$('#ib-home-cats').disableSelection();
-						});
-						</script>
+						<script>jQuery(function($){$('#ib-home-cats').sortable({axis:'y',handle:'span',placeholder:'ui-state-highlight'});$('#ib-home-cats').disableSelection();});</script>
+					</div>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">📌 Sidebar — Sobre</h2>
+					<div>
+
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">📌 Sidebar — Sobre</h2>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
+								<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
 								<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
 							</tr>
 						</tbody></table>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🖼️ Banner (Home)</h2>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🖼️ Banner (Home)</h2>
 						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Banner responsivo exibido abaixo de "Mais recentes" na home. Imagens diferentes para desktop, tablet e mobile — a ideal é landscape 1200x300, tablet 800x250, mobile 600x250.</p>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<?php foreach ([
@@ -247,35 +239,35 @@ class AdminSettings {
 						</tbody></table>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">📝 Rodapé</h2>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">📝 Rodapé</h2>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="footer_tagline" style="color:#3E2C1B;font-weight:600">Frase</label></th>
+								<th scope="row" style="width:80px;padding:6px 0"><label for="footer_tagline" style="color:#3E2C1B;font-weight:600">Frase</label></th>
 								<td style="padding:8px 0"><input type="text" id="footer_tagline" name="ib_opts[footer_tagline]" value="<?php echo esc_attr(self::opt('footer_tagline')); ?>" class="large-text" style="border-color:#e0d5c3;border-radius:4px"></td>
 							</tr>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
+								<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
 								<td style="padding:8px 0"><textarea id="footer_about" name="ib_opts[footer_about]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('footer_about')); ?></textarea></td>
 							</tr>
 						</tbody></table>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">💬 Comentários do Facebook</h2>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">💬 Comentários do Facebook</h2>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600">App ID</label></th>
+								<th scope="row" style="width:80px;padding:6px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600">App ID</label></th>
 								<td style="padding:8px 0"><input type="text" id="facebook_app_id" name="ib_opts[facebook_app_id]" value="<?php echo esc_attr(self::opt('facebook_app_id')); ?>" class="regular-text" placeholder="1234567890" style="border-color:#e0d5c3;border-radius:4px"></td>
 							</tr>
 						</tbody></table>
 					</div>
 
-					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
-						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🔤 Fontes</h2>
+					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
+						<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B">🔤 Fontes</h2>
 						<table class="form-table" role="presentation" style="margin:0"><tbody>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="font_heading" style="color:#3E2C1B;font-weight:600">Títulos</label></th>
+								<th scope="row" style="width:80px;padding:6px 0"><label for="font_heading" style="color:#3E2C1B;font-weight:600">Títulos</label></th>
 								<td style="padding:8px 0">
 									<select id="font_heading" name="ib_opts[font_heading]" style="min-width:240px;border-color:#e0d5c3;border-radius:4px">
 										<?php $h = self::opt('font_heading'); $serif_opts = [
@@ -293,7 +285,7 @@ class AdminSettings {
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" style="width:120px;padding:8px 0"><label for="font_body" style="color:#3E2C1B;font-weight:600">Corpo</label></th>
+								<th scope="row" style="width:80px;padding:6px 0"><label for="font_body" style="color:#3E2C1B;font-weight:600">Corpo</label></th>
 								<td style="padding:8px 0">
 									<select id="font_body" name="ib_opts[font_body]" style="min-width:240px;border-color:#e0d5c3;border-radius:4px">
 										<?php $b = self::opt('font_body'); $sans_opts = [
@@ -310,10 +302,14 @@ class AdminSettings {
 					</div>
 				</div>
 
+				</div>
+				</div>
+				<div style="margin-top:4px">
 				<?php submit_button('Salvar alterações', 'primary', 'submit', true, ['style' => 'background:#3E2C1B;border-color:#3E2C1B;border-radius:4px;padding:8px 28px;height:auto;font-size:14px']); ?>
-			</form>
-		</div>
-		<?php
+				</div>
+		</form>
+	</div>
+	<?php
 	}
 
 	public static function render_newsletter() {
