@@ -72,6 +72,45 @@ add_action('wp_enqueue_scripts', function () {
 // Data padrão Brasil
 add_filter('option_date_format', function () { return 'j \d\e F \d\e Y'; });
 
+// ─── SVG ──────────────────────────────────────────────────
+
+add_filter('upload_mimes', function ($mimes) {
+	$mimes['svg'] = 'image/svg+xml';
+	return $mimes;
+});
+
+add_filter('wp_check_filetype_and_ext', function ($data, $file, $filename, $mimes) {
+	$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+	if ('svg' === $ext) {
+		$data['ext']  = 'svg';
+		$data['type'] = 'image/svg+xml';
+	}
+	return $data;
+}, 10, 4);
+
+add_filter('wp_handle_upload_prefilter', function ($file) {
+	if ('image/svg+xml' !== $file['type']) return $file;
+
+	$content = file_get_contents($file['tmp_name']);
+	if (false === $content) return $file;
+
+	// Sanitiza: remove scripts, event handlers, iframes, foreign objects
+	$content = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $content);
+	$content = preg_replace('/<iframe[^>]*>.*?<\/iframe>/is', '', $content);
+	$content = preg_replace('/<foreignObject[^>]*>.*?<\/foreignObject>/is', '', $content);
+	$content = preg_replace('/\bon\w+\s*=\s*["\'][^"\']*["\']/i', '', $content);
+	$content = preg_replace('/javascript\s*:/i', '', $content);
+	$content = preg_replace('/data:\s*[^,]+,/i', '', $content);
+
+	file_put_contents($file['tmp_name'], $content);
+	return $file;
+});
+
+// Exibe preview de SVG na biblioteca de mídia
+add_action('admin_head', function () {
+	echo '<style type="text/css">.media-frame .attachment svg{width:100%;height:auto}</style>';
+});
+
 // ─── Newsletter (formulário — exibição no tema) ──────────────
 
 function ib_newsletter_form() {
