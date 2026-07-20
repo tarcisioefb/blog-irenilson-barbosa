@@ -42,12 +42,12 @@
 		var paragraphs = article.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
 		paragraphs.forEach(function (el) {
 			var txt = el.textContent.trim();
-			if (txt && !el.closest('.ib-tts')) body += txt + '.\n';
+			if (txt && !el.closest('.ib-tts') && !el.closest('.article__meta') && !el.closest('.ib-author-box')) body += txt + '.\n';
 		});
 
 		var intro = title + '. ';
 		if (author) intro += 'Por ' + author + '. ' + '… … ';
-		var outro = ' Este ' + typeName + ' foi escrito por ' + author + '. ' + bio + '.';
+		var outro = ' Este ' + typeName + ' foi escrito por ele. ' + bio + '.';
 
 		return intro + body + outro;
 	}
