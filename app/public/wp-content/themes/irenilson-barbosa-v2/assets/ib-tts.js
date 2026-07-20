@@ -5,7 +5,7 @@
 	if (!window.speechSynthesis || !window.ibTTS) return;
 
 	var article, utterance, voices = [], isPT = false;
-	var wrap = document.querySelector('.article__body') || document.querySelector('.article');
+	var wrap = document.querySelector('.article__body, .ib-poem-body, .article');
 	var playBtn, ctrls, pauseBtn, stopBtn, statusEl;
 
 	function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
@@ -104,7 +104,7 @@
 	}
 
 	function init() {
-		article = document.querySelector('.article__body') || document.querySelector('.article');
+		article = document.querySelector('.article__body, .ib-poem-body, .article');
 		if (!article) return;
 
 		playBtn = document.querySelector('[data-ib-tts-play]');
