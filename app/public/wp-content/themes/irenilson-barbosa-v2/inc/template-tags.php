@@ -15,9 +15,9 @@ function ib_social() {
 }
 function ib_render_social( $class = 'soc' ) {
 	$icons = [
-		'facebook' => '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor"/><path d="M14 9.5V8a1 1 0 0 1 1-1h2V4.5h-3a3 3 0 0 0-3 3v2H9v2.5h2V20h3v-8h2l.5-2.5H14z" fill="none" stroke="currentColor"/>',
-		'instagram' => '<rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>',
-		'youtube' => '<rect x="2" y="4" width="20" height="16" rx="3" fill="none" stroke="currentColor"/><polygon points="10 8 10 16 17 12 10 8" fill="none" stroke="currentColor"/>',
+		'facebook' => '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor"/><path d="M13.5 9.5V8a1 1 0 0 1 1-1h1.5v-3H13a3 3 0 0 0-3 3v2.5H8.5V13H10v6.5h3.5V13h2l.5-3.5H13.5z" fill="none" stroke="currentColor"/>',
+		'instagram' => '<rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor"/><circle cx="17" cy="7" r="1" fill="currentColor"/>',
+		'youtube' => '<rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor"/><polygon points="10.5 8.5 10.5 15.5 16.5 12 10.5 8.5" fill="none" stroke="currentColor"/>',
 	];
 	foreach ( ib_social() as $net => $url ) {
 		if ( empty( $url ) ) { continue; }
