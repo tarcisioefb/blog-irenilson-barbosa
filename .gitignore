@@ -1,3 +1,4 @@
+deploy.sh
 logs/
 app/.envrc
 app/public/wp-config.php
