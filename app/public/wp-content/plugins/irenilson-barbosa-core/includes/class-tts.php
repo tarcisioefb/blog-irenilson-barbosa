@@ -48,10 +48,10 @@ class TTS {
 			. '<span>Ouvir</span>'
 			. '</button>'
 			. '<div class="ib-tts__controls" hidden>'
-			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-prev aria-label="Voltar parágrafo"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>'
-			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-pause aria-label="Pausar"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></button>'
-			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-stop aria-label="Parar"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg></button>'
-			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-next aria-label="Avançar parágrafo"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>'
+			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-prev aria-label="Voltar parágrafo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="19 20 9 12 19 4"/><line x1="5" y1="4" x2="5" y2="20"/></svg></button>'
+			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-pause aria-label="Pausar"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></button>'
+			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-stop aria-label="Parar"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/></svg></button>'
+			. '<button type="button" class="ib-tts__ctrl" data-ib-tts-next aria-label="Avançar parágrafo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 4 15 12 5 20"/><line x1="19" y1="4" x2="19" y2="20"/></svg></button>'
 			. '<span class="ib-tts__status"></span>'
 			. '</div></div>';
 		return $btn . $content;

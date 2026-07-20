@@ -110,7 +110,8 @@
 		var next = chunkIdx + dir;
 		if (next < 0) next = 0;
 		if (next >= chunks.length) { stop(); return; }
-		speakFrom(next);
+		speechSynthesis.cancel();
+		setTimeout(function () { speakFrom(next); }, 50);
 	}
 
 	function stop() { speechSynthesis.cancel(); resetUI(); }
