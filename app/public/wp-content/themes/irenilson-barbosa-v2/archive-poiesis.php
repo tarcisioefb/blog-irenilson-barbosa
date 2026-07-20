@@ -1,7 +1,8 @@
 <?php
 /** IRENILSON BARBOSA — Arquivo Poiésis. */
 defined('ABSPATH') || exit;
-get_header(); ?>
+get_header();
+ib_breadcrumb(); ?>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<!-- Hero -->
 	<div style="padding:var(--space-10) var(--space-8);background:linear-gradient(135deg,var(--paper-2) 0%,var(--paper) 100%);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-lg);margin-bottom:var(--space-10);text-align:center">

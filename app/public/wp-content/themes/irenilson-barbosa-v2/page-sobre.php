@@ -2,6 +2,7 @@
 /** IRENILSON BARBOSA — Página Sobre. */
 defined('ABSPATH') || exit;
 get_header();
+ib_breadcrumb();
 while (have_posts()) : the_post(); ?>
 <style>
 @media(max-width:1024px){.ib-sobre-grid{grid-template-columns:1fr!important}.ib-sobre-foto{position:static!important;max-width:240px;margin:0 auto var(--space-6)}.ib-sobre-sticky{position:static!important}}

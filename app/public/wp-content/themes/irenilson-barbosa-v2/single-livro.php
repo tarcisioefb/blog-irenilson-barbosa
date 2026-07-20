@@ -2,6 +2,7 @@
 /** IRENILSON BARBOSA — Single Livro (página de produto). */
 defined('ABSPATH') || exit;
 get_header();
+ib_breadcrumb();
 while (have_posts()) : the_post();
 	$pid = get_the_ID();
 	$isbn = get_post_meta($pid, 'isbn', true);

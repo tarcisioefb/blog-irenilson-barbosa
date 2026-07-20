@@ -2,6 +2,7 @@
 /** IRENILSON BARBOSA — Arquivo de Livros (vitrine de produtos). */
 defined('ABSPATH') || exit;
 get_header();
+ib_breadcrumb();
 ?>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);color:var(--ink);margin:0 0 var(--space-2)">Livros</h1>

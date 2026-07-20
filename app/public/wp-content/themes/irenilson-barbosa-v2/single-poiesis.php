@@ -2,6 +2,7 @@
 /** IRENILSON BARBOSA — Single Poiésis (poema). */
 defined('ABSPATH') || exit;
 get_header();
+ib_breadcrumb();
 while (have_posts()) : the_post();
 	$notas = get_post_meta(get_the_ID(), 'poiesis_notas', true);
 	$poem_author = get_post_meta(get_the_ID(), 'poiesis_author', true) ?: 'Irenilson Barbosa';

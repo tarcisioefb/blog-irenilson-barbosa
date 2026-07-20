@@ -81,23 +81,60 @@ function ib_share_buttons( $id ) {
 /** Breadcrumb. */
 function ib_breadcrumb() {
 	echo '<nav class="breadcrumb" aria-label="Você está aqui"><a href="' . esc_url( home_url( '/' ) ) . '">Início</a>';
+
 	if ( is_singular( 'post' ) ) {
 		$cat = ib_primary_cat( get_the_ID() );
 		if ( $cat ) { echo '<span class="sep">›</span><a href="' . esc_url( get_category_link( $cat->term_id ) ) . '">' . esc_html( $cat->name ) . '</a>'; }
 		echo '<span class="sep">›</span><span>' . esc_html( wp_trim_words( get_the_title(), 8, '…' ) ) . '</span>';
+
+	} elseif ( is_singular( 'publicacao' ) ) {
+		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'publicacao' ) ) . '">Publicações</a>';
+		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+
+	} elseif ( is_singular( 'livro' ) ) {
+		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'livro' ) ) . '">Livros</a>';
+		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+
+	} elseif ( is_singular( 'material' ) ) {
+		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'material' ) ) . '">Materiais</a>';
+		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+
+	} elseif ( is_singular( 'poiesis' ) ) {
+		echo '<span class="sep">›</span><a href="' . esc_url( get_post_type_archive_link( 'poiesis' ) ) . '">Poiésis</a>';
+		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+
+	} elseif ( is_page() ) {
+		$post = get_queried_object();
+		if ( $post && $post->post_parent ) {
+			$parents = array_reverse( get_post_ancestors( $post->ID ) );
+			foreach ( $parents as $parent_id ) {
+				echo '<span class="sep">›</span><a href="' . esc_url( get_permalink( $parent_id ) ) . '">' . esc_html( get_the_title( $parent_id ) ) . '</a>';
+			}
+		}
+		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+
 	} elseif ( is_category() ) {
 		echo '<span class="sep">›</span><span>' . esc_html( single_cat_title( '', false ) ) . '</span>';
-	} elseif ( is_page() ) {
-		echo '<span class="sep">›</span><span>' . esc_html( get_the_title() ) . '</span>';
+
 	} elseif ( is_search() ) {
 		echo '<span class="sep">›</span><span>Busca</span>';
+
 	} elseif ( is_post_type_archive( 'publicacao' ) ) {
 		echo '<span class="sep">›</span><span>Publicações</span>';
+
 	} elseif ( is_post_type_archive( 'livro' ) ) {
 		echo '<span class="sep">›</span><span>Livros</span>';
+
 	} elseif ( is_post_type_archive( 'material' ) ) {
 		echo '<span class="sep">›</span><span>Materiais</span>';
+
+	} elseif ( is_post_type_archive( 'poiesis' ) ) {
+		echo '<span class="sep">›</span><span>Poiésis</span>';
+
+	} elseif ( is_404() ) {
+		echo '<span class="sep">›</span><span>Página não encontrada</span>';
 	}
+
 	echo '</nav>';
 }
 
