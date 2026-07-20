@@ -88,6 +88,14 @@ add_action('pre_get_posts', function ($query) {
 	}
 });
 
+// Reatribui posts de Tarcisio (ID 1) para Irenilson (ID 2) automaticamente
+add_filter('wp_insert_post_data', function ($data, $postarr) {
+	if (isset($data['post_author']) && (int)$data['post_author'] === 1) {
+		$data['post_author'] = 2;
+	}
+	return $data;
+}, 10, 2);
+
 // Avatar local para o usuário Irenilson (ID 2)
 add_filter('get_avatar_url', function ($url, $id_or_email, $args) {
 	$user_id = 0;
