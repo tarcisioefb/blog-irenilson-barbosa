@@ -23,7 +23,7 @@
 			if(!drawer)return;
 			drawer.classList.remove('is-open');
 			drawer.setAttribute('aria-hidden','true');
-			drawer.setAttribute('inert','');
+			drawer.setAttribute('inert','inert');
 			if(scrim){scrim.classList.remove('is-open'); setTimeout(function(){scrim.hidden=true;},260);}
 			if(burger){burger.classList.remove('is-open'); burger.setAttribute('aria-expanded','false');}
 			document.body.style.overflow='';
