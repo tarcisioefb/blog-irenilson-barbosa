@@ -25,7 +25,7 @@ if ( empty( $editorias ) ) {
 		<div class="wrap eh-hero__grid">
 			<!-- Lead: col 1, rows 1-2 -->
 			<a class="eh-lead<?php echo $lt_id ? '' : ' is-empty'; ?>" href="<?php echo esc_url( get_permalink( $lead ) ); ?>">
-				<?php if ( $lt_id ) : ?><?php echo wp_get_attachment_image( $lt_id, 'full', false, ['class' => 'eh-lead__img', 'alt' => '', 'loading' => false] ); ?><?php endif; ?>
+				<?php if ( $lt_id ) : ?><?php echo wp_get_attachment_image( $lt_id, 'full', false, ['class' => 'eh-lead__img', 'alt' => '', 'loading' => false, 'fetchpriority' => 'high'] ); ?><?php endif; ?>
 				<span class="eh-lead__body">
 					<?php if ( $lc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $lc->name ); ?></span><br><?php endif; ?>
 					<h1 class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></h1>
