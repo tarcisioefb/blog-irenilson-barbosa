@@ -3,7 +3,7 @@
 <footer class="footer" role="contentinfo">
 	<div class="wrap">
 		<div class="footer__row">
-			<div class="footer__logo"><?php $logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo'); if ($logo) : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" style="height:36px;width:auto"><?php else : ?><span style="font-family:var(--serif);font-weight:700;color:var(--ink)"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php endif; ?></div>
+			<div class="footer__logo"><?php $logo = ib_opt('site_logo'); if ($logo) : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" style="height:36px;width:auto"><?php else : ?><span style="font-family:var(--serif);font-weight:700;color:var(--ink)"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php endif; ?></div>
 
 			<div class="footer__links">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Início</a>

@@ -37,6 +37,8 @@ spl_autoload_register(function ($class) {
 /**
  * Bootstrap.
  */
+register_activation_hook(__FILE__, function () { flush_rewrite_rules(); });
+
 add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\Setup::init();
 	\IrenilsonBarbosa\Core\Setup::init_metaboxes();

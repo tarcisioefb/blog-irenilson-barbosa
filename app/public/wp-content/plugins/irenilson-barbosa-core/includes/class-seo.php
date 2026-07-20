@@ -8,6 +8,26 @@ class SEO {
 		add_action('wp_head', [__CLASS__, 'output'], 1);
 		add_filter('pre_get_document_title', [__CLASS__, 'filter_title']);
 		add_filter('wp_title', [__CLASS__, 'filter_wp_title'], 10, 2);
+		add_action('init', [__CLASS__, 'rewrite_rules']);
+		add_action('template_redirect', [__CLASS__, 'handle_sitemap']);
+		add_filter('robots_txt', [__CLASS__, 'robots_txt'], 10, 2);
+	}
+
+	public static function rewrite_rules() {
+		add_rewrite_rule('sitemap\.xml$', 'index.php?ib_sitemap=1', 'top');
+		add_rewrite_tag('%ib_sitemap%', '1');
+	}
+
+	public static function handle_sitemap() {
+		if (!get_query_var('ib_sitemap')) return;
+		self::generate_sitemap();
+		exit;
+	}
+
+	public static function robots_txt($output, $public) {
+		if (!$public) return $output;
+		$url = home_url('/sitemap.xml');
+		return "User-agent: *\nAllow: /\nDisallow: /wp-admin/\nDisallow: /wp-includes/\nSitemap: $url\n";
 	}
 
 	public static function filter_title() {
@@ -61,6 +81,7 @@ class SEO {
 
 		echo "\n<!-- SEO — Irenilson Barbosa Core -->\n";
 		?>
+<meta name="robots" content="<?php echo esc_attr(self::get_robots()); ?>">
 <meta name="description" content="<?php echo esc_attr($desc); ?>">
 <link rel="canonical" href="<?php echo esc_url($url); ?>">
 <meta property="og:type" content="<?php echo esc_attr($type); ?>">
@@ -81,7 +102,123 @@ class SEO {
 <meta name="twitter:image" content="<?php echo esc_url($img); ?>">
 <?php endif;
 		self::output_schema();
+		self::output_breadcrumb_schema();
+		self::output_global_schema();
 		echo "<!-- /SEO -->\n";
+	}
+
+	private static function get_robots() {
+		if (is_search() || is_404()) return 'noindex, follow';
+		if (is_tag() || is_date() || is_author()) return 'noindex, follow';
+		return 'index, follow';
+	}
+
+	private static function output_breadcrumb_schema() {
+		if (is_front_page() || is_home()) return;
+		$items = [];
+		$items[] = ['@type' => 'ListItem', 'position' => 1, 'name' => 'Início', 'item' => home_url('/')];
+
+		if (is_singular()) {
+			$post = get_queried_object();
+			$post_type = $post->post_type;
+			$type_labels = [
+				'post' => 'Artigos', 'publicacao' => 'Publicações',
+				'livro' => 'Livros', 'poiesis' => 'Poiésis', 'material' => 'Materiais',
+			];
+			if (isset($type_labels[$post_type])) {
+				$items[] = ['@type' => 'ListItem', 'position' => 2, 'name' => $type_labels[$post_type], 'item' => get_post_type_archive_link($post_type)];
+			}
+			if ('post' === $post_type) {
+				$cats = get_the_category($post->ID);
+				if (!empty($cats) && 'uncategorized' !== strtolower($cats[0]->slug)) {
+					$items[] = ['@type' => 'ListItem', 'position' => count($items) + 1, 'name' => $cats[0]->name, 'item' => get_category_link($cats[0]->term_id)];
+				}
+			}
+			$items[] = ['@type' => 'ListItem', 'position' => count($items) + 1, 'name' => get_the_title($post->ID)];
+		} elseif (is_category()) {
+			$items[] = ['@type' => 'ListItem', 'position' => 2, 'name' => single_cat_title('', false)];
+		} elseif (is_post_type_archive()) {
+			$pt = get_queried_object();
+			$items[] = ['@type' => 'ListItem', 'position' => 2, 'name' => $pt->label ?? ''];
+		}
+
+		if (count($items) < 2) return;
+		?><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[<?php
+		foreach ($items as $i) {
+			echo '{"@type":"ListItem","position":' . (int)$i['position'] . ',"name":"' . esc_js($i['name']) . '","item":"' . esc_js($i['item']) . '"},';
+		} ?></script><?php
+	}
+
+	public static function generate_sitemap() {
+		$posts_per_page = 500;
+		$paged = max(1, (int) ($_GET['page'] ?? 1));
+		$offset = ($paged - 1) * $posts_per_page;
+
+		$post_types = ['post', 'page', 'publicacao', 'livro', 'poiesis', 'material'];
+		$args = [
+			'post_type' => $post_types,
+			'post_status' => 'publish',
+			'posts_per_page' => $posts_per_page,
+			'offset' => $offset,
+			'orderby' => 'modified',
+			'order' => 'DESC',
+			'fields' => 'ids',
+			'suppress_filters' => true,
+		];
+		$ids = get_posts($args);
+
+		$total = wp_count_posts('post')->publish
+			+ wp_count_posts('page')->publish
+			+ wp_count_posts('publicacao')->publish
+			+ wp_count_posts('livro')->publish
+			+ wp_count_posts('poiesis')->publish
+			+ wp_count_posts('material')->publish;
+
+		$has_more = ($offset + $posts_per_page) < $total;
+
+		header('Content-Type: application/xml; charset=UTF-8');
+		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+		if ($paged === 1) {
+			echo '<?xml-stylesheet type="text/xsl" href="' . home_url('/?sitemap=xsl') . '"?>' . "\n";
+		}
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+		if ($paged === 1) {
+			echo "\t<url><loc>" . esc_url(home_url('/')) . "</loc><priority>1.0</priority><changefreq>daily</changefreq></url>\n";
+			$tax_types = ['category', 'post_tag'];
+			foreach ($tax_types as $tax) {
+				$terms = get_terms(['taxonomy' => $tax, 'hide_empty' => true, 'fields' => 'ids']);
+				foreach ($terms as $tid) {
+					echo "\t<url><loc>" . esc_url(get_term_link((int)$tid)) . "</loc><priority>0.5</priority><changefreq>weekly</changefreq></url>\n";
+				}
+			}
+		}
+
+		foreach ($ids as $id) {
+			$url = get_permalink($id);
+			$modified = get_the_modified_time('c', $id);
+			echo "\t<url><loc>" . esc_url($url) . "</loc><lastmod>" . esc_html($modified) . "</lastmod><priority>0.8</priority></url>\n";
+		}
+
+		echo '</urlset>';
+	}
+
+	private static function output_global_schema() {
+		$logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo') ?: home_url('/wp-content/uploads/2026/07/logo-irenilson.png');
+		$name = get_bloginfo('name');
+		$url  = home_url('/');
+		?>
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@graph":[
+{"@type":"WebSite","name":"<?php echo esc_js($name); ?>","url":"<?php echo esc_js($url); ?>","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"<?php echo esc_js($url); ?>?s={search_term_string}"},"query-input":"required name=search_term_string"}},
+{"@type":"Person","name":"Irenilson Barbosa","url":"<?php echo esc_js(home_url('/sobre/')); ?>","sameAs":["https://facebook.com/","https://instagram.com/","https://youtube.com/"],"jobTitle":"Professor universitário, escritor e pesquisador","description":"Doutor em Educação pela UFBA. Professor Adjunto da UFRB.","knowsAbout":["Educação","Filosofia","Teologia","Poesia","Inclusão"]},
+{"@type":"Organization","name":"<?php echo esc_js($name); ?>","url":"<?php echo esc_js($url); ?>","logo":{"@type":"ImageObject","url":"<?php echo esc_js($logo); ?>"},"foundingDate":"2023"}
+]
+}
+</script>
+		<?php
 	}
 
 	private static function get_url() {
