@@ -211,7 +211,7 @@ a{color:inherit;text-decoration:none}
 .eh-poem-card__t{font-family:var(--font-heading);font-size:clamp(1rem,2.5vw,var(--text-lg));font-weight:700;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight);text-wrap:balance}
 .eh-poem-card:hover .eh-poem-card__t{color:var(--accent)}
 .eh-poem-card__ex{font-size:var(--text-sm);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-4);line-height:var(--leading-snug)}
-.eh-poem-card__meta{font-size:var(--text-xxs);color:var(--tx-2);text-transform:uppercase;letter-spacing:var(--track-wider);opacity:.7}
+.eh-poem-card__meta{font-size:var(--text-xxs);color:var(--ink-3);text-transform:uppercase;letter-spacing:var(--track-wider)}
 
 
 .eh-lead{position:relative;display:flex;align-items:flex-end;grid-column:1;grid-row:1 / span 2;min-height:0;border-radius:var(--radius-lg);overflow:hidden;color:#fff;background:#2a2620;box-shadow:var(--shadow-card)}
