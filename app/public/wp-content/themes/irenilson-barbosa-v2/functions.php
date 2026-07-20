@@ -1,6 +1,6 @@
 <?php
 /**
- * Irenilson Barbosa v2 — setup do tema.
+ * Blog do Irenilson — setup do tema.
  */
 
 defined('ABSPATH') || exit;
