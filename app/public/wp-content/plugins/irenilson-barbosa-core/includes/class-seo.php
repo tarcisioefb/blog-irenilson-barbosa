@@ -131,7 +131,8 @@ class SEO {
 		if (count($items) < 2) return;
 		?><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[<?php
 		foreach ($items as $i) {
-			echo '{"@type":"ListItem","position":' . (int)$i['position'] . ',"name":"' . esc_js($i['name']) . '","item":"' . esc_js($i['item']) . '"},';
+			$item_url = $i['item'] ?? home_url('/');
+			echo '{"@type":"ListItem","position":' . (int)$i['position'] . ',"name":"' . esc_js($i['name']) . '","item":"' . esc_js($item_url) . '"},';
 		} ?></script><?php
 	}
 
