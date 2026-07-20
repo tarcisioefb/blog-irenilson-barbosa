@@ -17,6 +17,15 @@ while (have_posts()) : the_post();
 			<?php if (has_excerpt()) : ?>
 				<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8)"><?php echo esc_html(get_the_excerpt()); ?></p>
 			<?php endif; ?>
+
+			<div class="ib-poem-body">
+				<?php if (has_post_thumbnail()) : ?>
+					<div style="max-width:320px;margin:0 auto var(--space-6)">
+						<div style="aspect-ratio:16/9;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-card);opacity:.9">
+							<?php the_post_thumbnail('medium', array('style' => 'width:100%;height:100%;object-fit:cover;display:block')); ?>
+						</div>
+					</div>
+				<?php endif; ?>
 				<?php the_content(); ?>
 			</div>
 
