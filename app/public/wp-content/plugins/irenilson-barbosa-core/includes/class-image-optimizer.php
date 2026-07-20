@@ -6,6 +6,14 @@ class ImageOptimizer {
 		add_filter('wp_generate_attachment_metadata', [__CLASS__, 'generate_on_upload'], 10, 3);
 		add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'add_format_hint'], 10, 3);
 		add_filter('litespeed_media_excludes', [__CLASS__, 'litespeed_nolazy']);
+		add_filter('wp_img_tag_add_loading_attr', [__CLASS__, 'maybe_skip_lazy'], 10, 3);
+	}
+
+	public static function maybe_skip_lazy($value, $img_tag, $context) {
+		if (strpos($img_tag, 'fetchpriority="high"') !== false) {
+			return false;
+		}
+		return $value;
 	}
 
 	public static function generate_on_upload($metadata, $attachment_id, $context) {
