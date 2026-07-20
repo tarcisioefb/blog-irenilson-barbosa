@@ -172,28 +172,39 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 		<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px;margin-bottom:20px">
 			<h2 style="margin:0 0 4px;font-size:15px;color:#3E2C1B"><?php echo $icon; ?> <?php echo esc_html($title); ?></h2>
 			<?php if ($desc) : ?><p style="margin:0 0 16px;color:#6D5940;font-size:12px"><?php echo esc_html($desc); ?></p><?php endif; ?>
-			<table class="form-table" role="presentation" style="margin:0"><tbody>
 		<?php
 	}
 
 	private static function card_close() {
-		?></tbody></table></div><?php
+		?></div><?php
+	}
+
+	private static function card_table_open() {
+		?><table class="form-table" role="presentation" style="margin:0"><tbody><?php
+	}
+
+	private static function card_table_close() {
+		?></tbody></table><?php
 	}
 
 	private static function render_tab_geral() {
 		?>
 		<div>
-		<?php self::card_open('🔗', 'Redes sociais', 'Aparecem no topo do site.'); ?>
-			<?php foreach (['social_facebook' => 'Facebook', 'social_instagram' => 'Instagram', 'social_youtube' => 'YouTube'] as $k => $lbl) : ?>
-				<tr>
-					<th scope="row" style="width:80px;padding:6px 0"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600;font-size:12px"><?php echo esc_html($lbl); ?></label></th>
-					<td style="padding:6px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
-				</tr>
-			<?php endforeach; ?>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_open('🔗', 'Redes sociais', 'Aparecem no topo do site.');
+		self::card_table_open();
+		foreach (['social_facebook' => 'Facebook', 'social_instagram' => 'Instagram', 'social_youtube' => 'YouTube'] as $k => $lbl) : ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600;font-size:12px"><?php echo esc_html($lbl); ?></label></th>
+				<td style="padding:6px 0"><input type="url" id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" value="<?php echo esc_attr(self::opt($k)); ?>" class="regular-text" placeholder="https://..." style="border-color:#e0d5c3;border-radius:4px"></td>
+			</tr>
+		<?php endforeach;
+		self::card_table_close();
+		self::card_close();
 
-		<?php self::card_open('🖼️', 'Logo', 'Usado no cabecalho e rodape. PNG ou SVG, largura max. 240px.'); ?>
-			<?php $logo_val = self::opt('site_logo'); ?>
+		self::card_open('🖼️', 'Logo', 'Usado no cabecalho e rodape. PNG ou SVG, largura max. 240px.');
+		self::card_table_open();
+		$logo_val = self::opt('site_logo'); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="site_logo" style="color:#3E2C1B;font-weight:600;font-size:12px">Logo</label></th>
 				<td style="padding:6px 0">
@@ -209,22 +220,33 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 					<?php endif; ?>
 				</td>
 			</tr>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_table_close();
+		self::card_close();
+		?>
 		</div>
 		<div>
-		<?php self::card_open('📊', 'Google Analytics', 'Insira o ID de medicao (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.'); ?>
+		<?php
+		self::card_open('📊', 'Google Analytics', 'Insira o ID de medicao (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.');
+		self::card_table_open(); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
 				<td style="padding:6px 0"><input type="text" id="google_analytics_id" name="ib_opts[google_analytics_id]" value="<?php echo esc_attr(self::opt('google_analytics_id')); ?>" class="regular-text" placeholder="G-XXXXXXXXXX" style="border-color:#e0d5c3;border-radius:4px"></td>
 			</tr>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_table_close();
+		self::card_close();
 
-		<?php self::card_open('💬', 'Comentarios do Facebook'); ?>
+		self::card_open('💬', 'Comentarios do Facebook');
+		self::card_table_open(); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600;font-size:12px">App ID</label></th>
 				<td style="padding:6px 0"><input type="text" id="facebook_app_id" name="ib_opts[facebook_app_id]" value="<?php echo esc_attr(self::opt('facebook_app_id')); ?>" class="regular-text" placeholder="1234567890" style="border-color:#e0d5c3;border-radius:4px"></td>
 			</tr>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_table_close();
+		self::card_close();
+		?>
 		</div>
 		<?php
 	}
@@ -232,8 +254,8 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 	private static function render_tab_home() {
 		?>
 		<div>
-		<?php self::card_open('🏠', 'Categorias em destaque', 'Arraste para reordenar. Desmarque para ocultar da home.'); ?>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_open('🏠', 'Categorias em destaque', 'Arraste para reordenar. Desmarque para ocultar da home.'); ?>
 			<ul id="ib-home-cats" style="margin:0;padding:0;list-style:none">
 				<?php
 				$saved = self::opt('home_cats');
@@ -263,7 +285,6 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 		</div>
 		<div>
 		<?php self::card_open('🖼️', 'Banner responsivo', 'Exibido abaixo de "Mais recentes" na home. Desktop 1200x300, tablet 800x250, mobile 600x250.'); ?>
-		</td></tr></tbody></table>
 			<?php foreach ([
 				'banner_image' => 'Desktop',
 				'banner_image_tablet' => 'Tablet',
@@ -295,15 +316,22 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 	private static function render_tab_conteudo() {
 		?>
 		<div>
-		<?php self::card_open('📌', 'Sidebar — Sobre', 'Biografia exibida na barra lateral do site.'); ?>
+		<?php
+		self::card_open('📌', 'Sidebar — Sobre', 'Biografia exibida na barra lateral do site.');
+		self::card_table_open(); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
 				<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
 			</tr>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_table_close();
+		self::card_close();
+		?>
 		</div>
 		<div>
-		<?php self::card_open('📝', 'Rodape'); ?>
+		<?php
+		self::card_open('📝', 'Rodape');
+		self::card_table_open(); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="footer_tagline" style="color:#3E2C1B;font-weight:600">Frase</label></th>
 				<td style="padding:8px 0"><input type="text" id="footer_tagline" name="ib_opts[footer_tagline]" value="<?php echo esc_attr(self::opt('footer_tagline')); ?>" class="large-text" style="border-color:#e0d5c3;border-radius:4px"></td>
@@ -312,7 +340,10 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 				<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="footer_about" style="color:#3E2C1B;font-weight:600">Sobre</label></th>
 				<td style="padding:8px 0"><textarea id="footer_about" name="ib_opts[footer_about]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('footer_about')); ?></textarea></td>
 			</tr>
-		<?php self::card_close(); ?>
+		<?php
+		self::card_table_close();
+		self::card_close();
+		?>
 		</div>
 		<?php
 	}
@@ -321,7 +352,6 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 		?>
 		<div>
 		<?php self::card_open('🔤', 'Fontes', 'Defina as fontes usadas no site. As alteracoes aparecem na hora.'); ?>
-		</td></tr></tbody></table>
 			<p>
 				<label for="font_heading" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px;color:#3E2C1B">Titulos</label>
 				<select id="font_heading" name="ib_opts[font_heading]" style="width:100%;border-color:#e0d5c3;border-radius:4px;padding:4px 6px">
