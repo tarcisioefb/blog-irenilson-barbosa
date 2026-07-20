@@ -604,4 +604,5 @@ html{scrollbar-color:var(--ink-2,#584632) var(--line,#E5E5E5);scrollbar-width:th
 .ib-tts__controls{display:flex;align-items:center;gap:var(--space-2);margin-left:auto}
 .ib-tts__ctrl{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:0;background:var(--line);color:var(--ink);cursor:pointer;transition:background .15s}
 .ib-tts__ctrl:hover{background:var(--accent);color:#fff}
+.ib-tts__ctrl:disabled{opacity:.3;pointer-events:none}
 .ib-tts__status{font-size:var(--text-xs);color:var(--tx-2);white-space:nowrap}

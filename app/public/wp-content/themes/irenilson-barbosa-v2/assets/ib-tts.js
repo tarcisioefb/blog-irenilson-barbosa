@@ -4,9 +4,9 @@
 
 	if (!window.speechSynthesis || !window.ibTTS) return;
 
-	var article, utterance, voices = [], isPT = false;
-	var wrap = document.querySelector('.article__body, .ib-poem-body, .article');
-	var playBtn, ctrls, pauseBtn, stopBtn, statusEl;
+	var article, utterance, voices = [], isPT = false, chunks = [], chunkIdx = 0;
+
+	var playBtn, ctrls, pauseBtn, stopBtn, prevBtn, nextBtn, statusEl;
 
 	function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
@@ -32,12 +32,16 @@
 		return parseFloat(localStorage.getItem('ib-tts-rate')) || 1.1;
 	}
 
-	function getFullText() {
+	function buildChunks() {
+		chunks = []; chunkIdx = 0;
 		var title = ibTTS.title || '';
 		var author = ibTTS.author || '';
 		var typeName = ibTTS.typeName || 'artigo';
 		var bio = ibTTS.bio || '';
-		var body = '';
+
+		if (title) chunks.push(title + '.');
+		if (author) chunks.push('Por ' + author + '.');
+		if (title || author) chunks.push('');
 
 		var isPoem = article.classList.contains('ib-poem-body');
 		var paragraphs = article.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
@@ -47,67 +51,65 @@
 				var parts = el.innerHTML.split(/<br\s*\/?>/i);
 				parts.forEach(function (part) {
 					var txt = part.replace(/<[^>]+>/g, '').trim();
-					if (txt) body += txt + '…\n';
+					if (txt) chunks.push(txt);
 				});
 			} else {
 				var txt = el.textContent.trim();
-				if (txt) body += txt + (isPoem ? '…\n' : '.\n');
+				if (txt) chunks.push(txt);
 			}
 		});
 		if (isPoem) {
 			var notes = document.querySelector('.ib-poem-notes');
 			if (notes) {
-				body += '… … Notas do autor: … … ';
-				body += notes.textContent.trim() + '.\n';
+				chunks.push('');
+				chunks.push('Notas do autor.');
+				chunks.push(notes.textContent.trim());
 			}
 		}
-
-		var intro = title + '. ';
-		if (author) intro += 'Por ' + author + '. ' + '… … ';
-		var outro = ' Este ' + typeName + ' foi escrito por ' + author + '. ' + bio + '.';
-
-		return intro + body + outro;
+		chunks.push('');
+		chunks.push('Este ' + typeName + ' foi escrito por ' + author + '. ' + bio + '.');
 	}
 
-	function speak() {
-		if (speechSynthesis.speaking && !speechSynthesis.paused) {
-			speechSynthesis.cancel();
-		}
-		var text = getFullText();
+	function speakFrom(idx) {
+		if (idx < 0 || idx >= chunks.length) return;
+		chunkIdx = idx;
+		if (speechSynthesis.speaking) speechSynthesis.cancel();
+		var text = chunks.slice(chunkIdx).join(' … ');
 		if (!text) return;
-
 		utterance = new SpeechSynthesisUtterance(text);
 		utterance.voice = getVoice();
 		utterance.rate = getRate();
 		utterance.lang = 'pt-BR';
-
-		utterance.onstart = function () {
-			playBtn.hidden = true;
-			ctrls.hidden = false;
-			statusEl.textContent = isPT ? 'Reproduzindo…' : 'Reproduzindo… (voz PT pode nao estar disponivel)';
-		};
-
+		utterance.onstart = function () { updateUI('play'); };
 		utterance.onend = function () { resetUI(); };
 		utterance.onerror = function () { resetUI(); statusEl.textContent = 'Erro ao reproduzir.'; };
-
-		utterance.onpause = function () {
-			pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
-			pauseBtn.setAttribute('aria-label', 'Continuar');
-			statusEl.textContent = 'Pausado.';
-		};
-
-		utterance.onresume = function () {
-			pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
-			pauseBtn.setAttribute('aria-label', 'Pausar');
-			statusEl.textContent = 'Reproduzindo…';
-		};
-
+		utterance.onpause = function () { updateUI('pause'); };
+		utterance.onresume = function () { updateUI('resume'); };
 		speechSynthesis.speak(utterance);
 	}
+
+	function updateUI(state) {
+		playBtn.hidden = true;
+		ctrls.hidden = false;
+		if (state === 'play') statusEl.textContent = isPT ? 'Reproduzindo…' : 'Reproduzindo… (voz PT pode nao estar disponivel)';
+		else if (state === 'pause') { pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>'; pauseBtn.setAttribute('aria-label', 'Continuar'); statusEl.textContent = 'Pausado.'; }
+		else if (state === 'resume') { pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'; pauseBtn.setAttribute('aria-label', 'Pausar'); statusEl.textContent = 'Reproduzindo…'; }
+		prevBtn.disabled = chunkIdx <= 0;
+		nextBtn.disabled = chunkIdx >= chunks.length - 1;
+	}
+
+	function speak() { buildChunks(); speakFrom(0); }
 
 	function togglePause() {
 		if (speechSynthesis.paused) speechSynthesis.resume();
 		else if (speechSynthesis.speaking) speechSynthesis.pause();
+	}
+
+	function skip(dir) {
+		var next = chunkIdx + dir;
+		if (next < 0) next = 0;
+		if (next >= chunks.length) { stop(); return; }
+		speakFrom(next);
 	}
 
 	function stop() { speechSynthesis.cancel(); resetUI(); }
@@ -118,27 +120,27 @@
 		pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
 		pauseBtn.setAttribute('aria-label', 'Pausar');
 		statusEl.textContent = '';
+		chunks = [];
 	}
 
 	function init() {
 		article = document.querySelector('.article__body, .ib-poem-body, .article');
 		if (!article) return;
-
 		playBtn = document.querySelector('[data-ib-tts-play]');
 		ctrls = document.querySelector('.ib-tts__controls');
 		pauseBtn = document.querySelector('[data-ib-tts-pause]');
 		stopBtn = document.querySelector('[data-ib-tts-stop]');
+		prevBtn = document.querySelector('[data-ib-tts-prev]');
+		nextBtn = document.querySelector('[data-ib-tts-next]');
 		statusEl = document.querySelector('.ib-tts__status');
-		if (!playBtn || !ctrls || !pauseBtn || !stopBtn || !statusEl) return;
-
+		if (!playBtn || !ctrls || !pauseBtn || !stopBtn || !prevBtn || !nextBtn || !statusEl) return;
 		loadVoices();
-		if (typeof speechSynthesis.onvoiceschanged !== 'undefined') {
-			speechSynthesis.onvoiceschanged = loadVoices;
-		}
-
+		if (typeof speechSynthesis.onvoiceschanged !== 'undefined') speechSynthesis.onvoiceschanged = loadVoices;
 		playBtn.addEventListener('click', speak);
 		pauseBtn.addEventListener('click', togglePause);
 		stopBtn.addEventListener('click', stop);
+		prevBtn.addEventListener('click', function () { skip(-1); });
+		nextBtn.addEventListener('click', function () { skip(1); });
 	}
 
 	ready(init);
