@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="eh-widget ib-newsletter-card">
 		<span class="eh-widget__head">Newsletter</span>
-		<p class="ib-newsletter-card__desc">Receba os novos ensaios por e-mail.</p>
+		<p class="ib-newsletter-card__desc">Receba os novos artigos por e-mail.</p>
 		<?php ib_newsletter_form(); ?>
 	</div>
 </aside>

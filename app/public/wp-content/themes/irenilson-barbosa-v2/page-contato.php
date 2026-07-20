@@ -76,7 +76,7 @@ get_header(); ?>
 
 	<div style="max-width:640px;margin:48px auto 0;padding-top:var(--space-8);border-top:var(--border-w) solid var(--border-c)">
 		<h2 style="font-family:var(--font-heading);font-size:var(--text-xl);color:var(--ink);margin:0 0 6px">Newsletter</h2>
-		<p style="color:var(--tx-2);margin:0 0 var(--space-4)">Receba os novos ensaios por e-mail.</p>
+		<p style="color:var(--tx-2);margin:0 0 var(--space-4)">Receba os novos artigos por e-mail.</p>
 		<?php ib_newsletter_form(); ?>
 	</div>
 </div>
