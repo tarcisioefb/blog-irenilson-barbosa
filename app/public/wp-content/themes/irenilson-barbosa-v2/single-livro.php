@@ -48,7 +48,7 @@ while (have_posts()) : the_post();
 			<?php if ($links) : ?>
 			<div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin:var(--space-6) 0">
 				<?php foreach ($links as $lk) : ?>
-				<a href="<?php echo esc_url($lk['url']); ?>" target="_blank" rel="noopener noreferrer" class="ib-btn ib-btn--amazon" style="flex:1;min-width:180px">
+				<a href="<?php echo esc_url($lk['url']); ?>" target="_blank" rel="noopener noreferrer" class="ib-btn ib-btn--amazon" style="flex:1;min-width:180px;max-width:320px">
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
 					<?php echo esc_html($lk['texto']); ?>
 				</a>
