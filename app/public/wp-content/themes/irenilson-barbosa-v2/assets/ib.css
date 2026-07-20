@@ -208,7 +208,7 @@ a{color:inherit;text-decoration:none}
 .eh-poem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5)}
 .eh-poem-card{display:block;text-align:center;padding:var(--space-8) var(--space-6);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);text-decoration:none;color:inherit;transition:all .25s}
 .eh-poem-card:hover{box-shadow:var(--shadow-card);transform:translateY(-2px)}
-.eh-poem-card__t{font-family:var(--font-heading);font-size:var(--text-lg);font-weight:500;color:var(--ink);margin:0 0 var(--space-3);line-height:var(--leading-tight)}
+.eh-poem-card__t{font-family:var(--font-heading);font-size:clamp(1rem,2.5vw,var(--text-lg));font-weight:500;color:var(--ink);margin:0 0 var(--space-3);line-height:var(--leading-tight)}
 .eh-poem-card:hover .eh-poem-card__t{color:var(--accent)}
 .eh-poem-card__ex{font-size:var(--text-sm);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-4);line-height:var(--leading-snug)}
 .eh-poem-card__meta{font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider)}
@@ -579,6 +579,10 @@ a{color:inherit;text-decoration:none}
 	h1:not(.article__title):not(.eh-lead__title){font-size:var(--text-2xl)}
 	.eh-lead__title{font-size:clamp(1.25rem,5vw,1.75rem)}
 	.article__body{font-size:var(--text-md)}
+	.article__meta,.eh-meta,.ib-rel-item__date,.eh-h-item__meta,.eh-poem-card__meta{font-size:var(--text-xs)}
+	.eh-card__t{font-size:var(--text-15)}
+	.eh-sec-head h2{font-size:var(--text-13)}
+	.eh-scard__t{font-size:var(--text-13)}
 	.footer__cr{font-size:var(--text-13)}
 	.footer__row{flex-direction:column;align-items:flex-start;gap:var(--space-4)}
 	.footer__social{margin-left:0}
