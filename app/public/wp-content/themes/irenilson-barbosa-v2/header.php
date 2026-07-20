@@ -12,7 +12,7 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-<a class="skip-link" href="#main" style="position:absolute;top:-9999px;left:6px;background:var(--ink,#3E2C1B);color:#fff;padding:10px 16px;border-radius:0 0 6px 6px;font-size:14px;z-index:99999;text-decoration:none">Ir para o conteúdo</a>
+<a class="skip-link" href="#main" style="position:absolute;top:-9999px;left:6px;background:var(--ink,#3E2C1B);color:#fff;padding:10px 16px;border-radius:0 0 6px 6px;font-size:var(--text-base);z-index:99999;text-decoration:none">Ir para o conteúdo</a>
 <style>.skip-link:focus{top:6px;outline:2px solid var(--accent,#4A5D3E);outline-offset:2px;position:fixed}</style>
 <?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) : ?>
 <div id="fb-root"></div>
@@ -60,7 +60,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 
 <div class="drawer" id="drawer" data-elite-drawer aria-hidden="true" inert="inert">
 	<div class="drawer__head">
-		<span style="color:#fff;font-family:var(--serif);font-size:1.2rem;font-weight:700"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
+		<span style="color:#fff;font-family:var(--serif);font-size:var(--text-19);font-weight:700"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 		<button class="drawer__close" type="button" aria-label="Fechar menu" data-elite-close>&times;</button>
 	</div>
 	<nav aria-label="Menu principal (mobile)"><?php wp_nav_menu( $ib_menu ); ?></nav>

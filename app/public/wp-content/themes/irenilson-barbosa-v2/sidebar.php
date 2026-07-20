@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! is_singular( 'post' ) ) : ?>
 	<div class="eh-widget">
 		<span class="eh-widget__head">Sobre</span>
-		<div style="font-size:0.9rem;color:var(--tx-2);line-height:1.7">
+		<div style="font-size:var(--text-base);color:var(--tx-2);line-height:1.7">
 			<p><strong style="color:var(--ink)">Irenilson Barbosa</strong> <?php echo esc_html( ib_opt( 'sidebar_bio' ) ?: 'Professor universitário, escritor e pesquisador.' ); ?></p>
 		</div>
 	</div>
