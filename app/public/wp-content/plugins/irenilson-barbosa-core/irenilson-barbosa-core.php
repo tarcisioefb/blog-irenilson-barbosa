@@ -4,7 +4,7 @@
  * Plugin URI:  https://irenilsonbarbosa.com.br
  * Description: Funcionalidades do portal editorial — CPTs, taxonomias, metadados e componentes. Desenvolvido por Zucatech (zucatech.com).
  * Version:     1.0.0
- * Author:      Irenilson Barbosa
+ * Author:      Zucatech
  * Author URI:  https://zucatech.com
  * Text Domain: irenilson-barbosa-core
  */
