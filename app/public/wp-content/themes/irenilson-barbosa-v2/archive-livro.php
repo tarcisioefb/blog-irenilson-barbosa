@@ -20,7 +20,7 @@ ib_breadcrumb();
 				<article class="ib-book-card">
 					<a href="<?php the_permalink(); ?>" style="display:block;text-decoration:none;color:inherit">
 						<?php if (has_post_thumbnail()) : ?>
-							<div style="aspect-ratio:3/4;overflow:hidden;background:var(--page)">
+							<div style="aspect-ratio:2/3;overflow:hidden;background:var(--page)">
 								<?php the_post_thumbnail('full', ['style' => 'width:100%;height:100%;object-fit:cover;transition:transform .4s']); ?>
 							</div>
 						<?php endif; ?>
