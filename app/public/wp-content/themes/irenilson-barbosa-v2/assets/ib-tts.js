@@ -6,7 +6,7 @@
 
 	var article, utterance, voices = [], isPT = false, chunks = [], chunkIdx = 0;
 
-	var playBtn, ctrls, pauseBtn, stopBtn, prevBtn, nextBtn, statusEl;
+	var playBtn, ctrls, pauseBtn, stopBtn, statusEl;
 
 	function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
@@ -95,8 +95,6 @@
 		if (state === 'play') statusEl.textContent = isPT ? 'Reproduzindo…' : 'Reproduzindo… (voz PT pode nao estar disponivel)';
 		else if (state === 'pause') { pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>'; pauseBtn.setAttribute('aria-label', 'Continuar'); statusEl.textContent = 'Pausado.'; }
 		else if (state === 'resume') { pauseBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'; pauseBtn.setAttribute('aria-label', 'Pausar'); statusEl.textContent = 'Reproduzindo…'; }
-		prevBtn.disabled = chunkIdx <= 0;
-		nextBtn.disabled = chunkIdx >= chunks.length - 1;
 	}
 
 	function speak() { buildChunks(); speakFrom(0); }
@@ -104,14 +102,6 @@
 	function togglePause() {
 		if (speechSynthesis.paused) speechSynthesis.resume();
 		else if (speechSynthesis.speaking) speechSynthesis.pause();
-	}
-
-	function skip(dir) {
-		var next = chunkIdx + dir;
-		if (next < 0) next = 0;
-		if (next >= chunks.length) { stop(); return; }
-		speechSynthesis.cancel();
-		setTimeout(function () { speakFrom(next); }, 50);
 	}
 
 	function stop() { speechSynthesis.cancel(); resetUI(); }
@@ -132,17 +122,13 @@
 		ctrls = document.querySelector('.ib-tts__controls');
 		pauseBtn = document.querySelector('[data-ib-tts-pause]');
 		stopBtn = document.querySelector('[data-ib-tts-stop]');
-		prevBtn = document.querySelector('[data-ib-tts-prev]');
-		nextBtn = document.querySelector('[data-ib-tts-next]');
 		statusEl = document.querySelector('.ib-tts__status');
-		if (!playBtn || !ctrls || !pauseBtn || !stopBtn || !prevBtn || !nextBtn || !statusEl) return;
+		if (!playBtn || !ctrls || !pauseBtn || !stopBtn || !statusEl) return;
 		loadVoices();
 		if (typeof speechSynthesis.onvoiceschanged !== 'undefined') speechSynthesis.onvoiceschanged = loadVoices;
 		playBtn.addEventListener('click', speak);
 		pauseBtn.addEventListener('click', togglePause);
 		stopBtn.addEventListener('click', stop);
-		prevBtn.addEventListener('click', function () { skip(-1); });
-		nextBtn.addEventListener('click', function () { skip(1); });
 	}
 
 	ready(init);
