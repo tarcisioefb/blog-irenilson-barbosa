@@ -571,6 +571,8 @@ a{color:inherit;text-decoration:none}
 	.eh-feat-stack .eh-feat{min-height:clamp(160px,28vw,200px)}
 	.eh-feat__t{line-height:1.15}
 	.eh-hero-lists{grid-column:1;grid-row:auto;flex-direction:column}
+	.eh-hero-list{overflow:visible}
+	.eh-hero-list__items{overflow:visible}
 	.ib-inline-related .ib-inline-item{flex-direction:row;gap:14px}
 	.ib-inline-related .ib-inline-item__img{width:100px;height:72px;flex-shrink:0;aspect-ratio:auto}
 	.ib-inline-related .ib-inline-item__body{align-self:center}
