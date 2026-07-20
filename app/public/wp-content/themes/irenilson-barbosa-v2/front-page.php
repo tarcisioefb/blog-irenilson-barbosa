@@ -141,15 +141,15 @@ if ( empty( $editorias ) ) {
 		<?php $banner_img = ib_opt('banner_image'); if ($banner_img) : ?>
 		<div class="wrap" style="margin-top:var(--space-10)">
 			<a href="<?php echo esc_url( ib_opt('banner_link') ?: '#' ); ?>" class="ib-banner" target="_blank" rel="noopener" aria-label="Banner publicitário">
-				<picture>
-					<?php $tab = ib_opt('banner_image_tablet'); if ($tab) : ?>
-						<source media="(max-width:1024px)" srcset="<?php echo esc_url($tab); ?>">
-					<?php endif; ?>
-					<?php $mob = ib_opt('banner_image_mobile'); if ($mob) : ?>
-						<source media="(max-width:640px)" srcset="<?php echo esc_url($mob); ?>">
-					<?php endif; ?>
-					<img src="<?php echo esc_url($banner_img); ?>" alt="" width="1280" height="248" loading="lazy">
-				</picture>
+<picture>
+				<?php $mob = ib_opt('banner_image_mobile'); if ($mob) : ?>
+					<source media="(max-width:640px)" srcset="<?php echo esc_url($mob); ?>">
+				<?php endif; ?>
+				<?php $tab = ib_opt('banner_image_tablet'); if ($tab) : ?>
+					<source media="(min-width:641px) and (max-width:1024px)" srcset="<?php echo esc_url($tab); ?>">
+				<?php endif; ?>
+				<img src="<?php echo esc_url($banner_img); ?>" alt="" width="1280" height="248" loading="lazy">
+			</picture>
 			</a>
 		</div>
 		<?php endif; ?>
