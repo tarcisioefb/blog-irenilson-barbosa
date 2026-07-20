@@ -381,9 +381,9 @@ a{color:inherit;text-decoration:none}
 .share{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:var(--space-6) 0}
 .share__label{font-size:var(--text-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-dim);margin-right:8px}
 .share a,.share button{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;border:var(--border-w) solid var(--border-c);cursor:pointer;font-family:inherit;background:var(--paper);transition:background .2s,border-color .2s;text-decoration:none}
-.share svg{width:20px;height:20px;fill:var(--tx-2);transition:all .2s;padding:0}
+.share svg{width:20px;height:20px;color:var(--tx-2);transition:all .2s;padding:0}
 .share a:hover,.share button:hover{border-color:var(--accent);background:var(--accent)}
-.share a:hover svg,.share button:hover svg{fill:#fff}
+.share a:hover svg,.share button:hover svg{color:#fff}
 .tags{margin:0 0 22px;display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center}
 .tags__label{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-dim)}
 .tags a{font-size:var(--text-13);color:var(--tx-2);background:var(--paper-2);border:var(--border-w) solid transparent;padding:var(--space-1) 12px;border-radius:40px;transition:all .2s;text-decoration:none}
