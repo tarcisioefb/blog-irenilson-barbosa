@@ -4,7 +4,6 @@ namespace IrenilsonBarbosa\Core;
 class ReadingTime {
 	public static function init() {
 		add_action('save_post', [__CLASS__, 'calculate_reading_time']);
-		add_filter('the_content', [__CLASS__, 'display_reading_time']);
 	}
 
 	public static function calculate_reading_time($post_id) {
@@ -18,25 +17,5 @@ class ReadingTime {
 		$minutes = max(1, round($words / 200));
 
 		update_post_meta($post_id, 'tempo_leitura', $minutes);
-	}
-
-	public static function display_reading_time($content) {
-		if (! is_single() || ! in_the_loop() || in_array(get_post_type(), ['poiesis', 'livro'], true)) {
-			return $content;
-		}
-
-		$minutes = get_post_meta(get_the_ID(), 'tempo_leitura', true);
-		if (! $minutes) {
-			return $content;
-		}
-
-		$label = sprintf(_n('%d min de leitura', '%d min de leitura', $minutes, 'irenilson-barbosa-core'), $minutes);
-
-		$badge = sprintf(
-			'<p class="reading-time" style="font-size:var(--text-sm);color:var(--tx-dim);margin-bottom:var(--space-3)">%s</p>',
-			esc_html($label)
-		);
-
-		return $badge . $content;
 	}
 }
