@@ -195,9 +195,20 @@ class Setup {
 	public static function render_material_fields($post) {
 		if ('material' !== $post->post_type) return;
 		wp_nonce_field('cpt_save', 'cpt_nonce');
+		$arquivo = get_post_meta($post->ID, 'arquivo_url', true);
 		?>
 		<div style="background:#f0f0f1;padding:12px 16px;margin:8px 0 16px;border-radius:4px">
 			<p style="margin:0 0 10px"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Ano</label><input type="number" name="ano" value="<?php echo esc_attr(get_post_meta($post->ID, 'ano', true)); ?>" style="width:100%;padding:7px 8px;font-size:13px"></p>
+			<p style="margin:0 0 10px"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Arquivo para download</label>
+				<span style="display:flex;gap:6px">
+					<input type="url" id="arquivo_url" name="arquivo_url" value="<?php echo esc_attr($arquivo); ?>" class="regular-text" placeholder="https://..." style="flex:1;padding:7px 8px;font-size:13px;border:1px solid #8c8f94;border-radius:4px">
+					<button type="button" class="button" data-media-pick="arquivo_url">Selecionar</button>
+					<button type="button" class="button" data-media-clear="arquivo_url">Remover</button>
+				</span>
+				<?php if ($arquivo) : ?>
+					<br><span style="font-size:12px;color:#6D5940">📎 <a href="<?php echo esc_url($arquivo); ?>" target="_blank"><?php echo esc_html(basename($arquivo)); ?></a></span>
+				<?php endif; ?>
+			</p>
 			<p style="margin:0"><label style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Descrição</label><textarea name="descricao" style="width:100%;min-height:80px;padding:7px 8px;font-size:13px"><?php echo esc_textarea(get_post_meta($post->ID, 'descricao', true)); ?></textarea></p>
 		</div>
 		<?php
@@ -211,7 +222,7 @@ class Setup {
 		$fields = [
 			'ano', 'editora', 'isbn', 'numero_paginas', 'link_amazon', 'link_marinete',
 			'ano_publicacao', 'periodico', 'doi', 'link_externo', 'citacao_abnt',
-			'descricao', 'poiesis_author', 'poiesis_notas',
+			'descricao', 'arquivo_url', 'poiesis_author', 'poiesis_notas',
 		];
 		foreach ($fields as $f) {
 			if (isset($_POST[$f])) {
@@ -238,6 +249,7 @@ class Setup {
 			'link_amazon'      => ['type' => 'string', 'post_types' => ['livro']],
 			'link_marinete'    => ['type' => 'string', 'post_types' => ['livro']],
 			'descricao'        => ['type' => 'string', 'post_types' => ['material']],
+			'arquivo_url'      => ['type' => 'string', 'post_types' => ['material']],
 			'poiesis_notas'    => ['type' => 'string', 'post_types' => ['poiesis']],
 			'poiesis_author'   => ['type' => 'string', 'post_types' => ['poiesis']],
 		];
