@@ -39,10 +39,11 @@
 		var bio = ibTTS.bio || '';
 		var body = '';
 
+		var isPoem = article.classList.contains('ib-poem-body');
 		var paragraphs = article.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
 		paragraphs.forEach(function (el) {
 			var txt = el.textContent.trim();
-			if (txt && !el.closest('.ib-tts') && !el.closest('.article__meta') && !el.closest('.ib-author-box')) body += txt + '.\n';
+			if (txt && !el.closest('.ib-tts') && !el.closest('.article__meta') && !el.closest('.ib-author-box')) body += txt + (isPoem ? '…\n' : '.\n');
 		});
 
 		var intro = title + '. ';
