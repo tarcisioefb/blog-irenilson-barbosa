@@ -12,7 +12,7 @@ while (have_posts()) : the_post(); ?>
 		<div class="ib-sobre-grid" style="display:grid;grid-template-columns:320px 1fr;gap:var(--space-10);align-items:start;margin-bottom:var(--space-10)">
 			<div class="ib-sobre-sticky" style="position:sticky;top:140px">
 				<div style="aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card);background:var(--paper-2)">
-					<img src="http://irenilson-barbosa.local/wp-content/uploads/2026/07/Irenilson-Barbosa-Retrato.avif" alt="Irenilson Barbosa" style="width:100%;height:100%;object-fit:cover;display:block">
+					<img src="http://irenilson-barbosa.local/wp-content/uploads/2026/07/Irenilson-Barbosa-Retrato.avif-square.jpg" alt="Irenilson Barbosa" style="width:100%;height:100%;object-fit:cover;display:block">
 				</div>
 			</div>
 			<div>

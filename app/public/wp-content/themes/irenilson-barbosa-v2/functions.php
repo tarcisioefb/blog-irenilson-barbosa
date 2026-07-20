@@ -90,7 +90,7 @@ add_filter('get_avatar_url', function ($url, $id_or_email, $args) {
 	}
 	if (2 === $user_id) {
 		$uploads = wp_upload_dir();
-		return $uploads['baseurl'] . '/2026/07/Irenilson-Barbosa-Retrato.avif';
+		return $uploads['baseurl'] . '/2026/07/Irenilson-Barbosa-Retrato.avif-square.jpg';
 	}
 	return $url;
 }, 10, 3);
