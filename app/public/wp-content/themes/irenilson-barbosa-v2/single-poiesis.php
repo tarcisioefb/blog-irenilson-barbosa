@@ -12,10 +12,18 @@ while (have_posts()) : the_post();
 		<article style="max-width:680px">
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
 
-			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-8)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
+			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-6)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
+
+			<?php if (has_post_thumbnail()) : ?>
+				<div style="max-width:300px;margin:0 auto var(--space-8)">
+					<div style="aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card)">
+						<?php the_post_thumbnail('medium', array('style' => 'width:100%;height:100%;object-fit:cover;display:block')); ?>
+					</div>
+				</div>
+			<?php endif; ?>
 
 			<?php if (has_excerpt()) : ?>
-				<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8)"><?php echo esc_html(get_the_excerpt()); ?></p>
+				<p style="font-size:var(--text-base);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-8);text-align:center"><?php echo esc_html(get_the_excerpt()); ?></p>
 			<?php endif; ?>
 
 			<div class="ib-poem-body">
