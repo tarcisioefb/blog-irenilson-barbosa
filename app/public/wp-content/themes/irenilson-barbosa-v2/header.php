@@ -56,7 +56,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 	</div>
 </header>
 
-<div class="drawer" id="drawer" data-elite-drawer aria-hidden="true">
+<div class="drawer" id="drawer" data-elite-drawer aria-hidden="true" inert>
 	<div class="drawer__head">
 		<span style="color:#fff;font-family:var(--serif);font-size:1.2rem;font-weight:700"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 		<button class="drawer__close" type="button" aria-label="Fechar menu" data-elite-close>&times;</button>

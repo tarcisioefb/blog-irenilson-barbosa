@@ -13,7 +13,8 @@
 		function openDrawer(){
 			if(!drawer)return;
 			drawer.classList.add('is-open');
-			drawer.setAttribute('aria-hidden','false');
+			drawer.removeAttribute('aria-hidden');
+			drawer.removeAttribute('inert');
 			if(scrim){scrim.hidden=false; requestAnimationFrame(function(){scrim.classList.add('is-open');});}
 			if(burger){burger.classList.add('is-open'); burger.setAttribute('aria-expanded','true');}
 			document.body.style.overflow='hidden';
@@ -22,6 +23,7 @@
 			if(!drawer)return;
 			drawer.classList.remove('is-open');
 			drawer.setAttribute('aria-hidden','true');
+			drawer.setAttribute('inert','');
 			if(scrim){scrim.classList.remove('is-open'); setTimeout(function(){scrim.hidden=true;},260);}
 			if(burger){burger.classList.remove('is-open'); burger.setAttribute('aria-expanded','false');}
 			document.body.style.overflow='';

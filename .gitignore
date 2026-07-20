@@ -5,6 +5,8 @@ app/public/wp-config.php
 app/public/wp-content/uploads/
 app/public/wp-content/ai1wm-backups/
 app/public/wp-content/plugins/all-in-one-wp-migration/
+app/public/wp-content/plugins/updraftplus/
+app/public/wp-content/updraft/
 *.log
 .DS_Store
 *.pyc
