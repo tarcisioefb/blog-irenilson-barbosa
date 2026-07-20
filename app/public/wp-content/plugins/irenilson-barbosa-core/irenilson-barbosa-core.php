@@ -46,4 +46,5 @@ add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\AuthorBox::init();
 	\IrenilsonBarbosa\Core\AdminSettings::init();
 	\IrenilsonBarbosa\Core\SEO::init();
+	\IrenilsonBarbosa\Core\TTS::init();
 });
