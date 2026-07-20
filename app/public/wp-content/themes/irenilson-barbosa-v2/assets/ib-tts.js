@@ -67,7 +67,8 @@
 			}
 		}
 		chunks.push('');
-		chunks.push('Este ' + typeName + ' foi escrito por ' + author + '. ' + bio + '.');
+		var isIrenilson = author.indexOf('Irenilson') !== -1;
+		chunks.push('Este ' + typeName + ' foi escrito por ' + author + '.' + (isIrenilson ? ' ' + bio + '.' : ''));
 	}
 
 	function speakFrom(idx) {
