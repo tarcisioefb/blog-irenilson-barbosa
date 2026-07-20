@@ -295,10 +295,10 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 		self::card_table_close();
 		self::card_close();
 
-		self::card_open("📧", "E-mail de contato", "E-mail que recebe as mensagens do formulario de contato.");
-		self::card_table_open(); ?
-			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="contact_email" style="color:#3E2C1B;font-weight:600;font-size:12px">Destino</label></th><td style="padding:6px 0"><input type="email" id="contact_email" name="ib_opts[contact_email]" value="<?php echo esc_attr(self::opt("contact_email")); ?>" class="regular-text" placeholder="contato@..." style="border-color:#e0d5c3;border-radius:4px"></td></tr>
-		<?php 
+		self::card_open('📧', 'E-mail de contato', 'E-mail que recebe as mensagens do formulario de contato.');
+		self::card_table_open(); ?>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="contact_email" style="color:#3E2C1B;font-weight:600;font-size:12px">Destino</label></th><td style="padding:6px 0"><input type="email" id="contact_email" name="ib_opts[contact_email]" value="<?php echo esc_attr(self::opt('contact_email')); ?>" class="regular-text" placeholder="contato@..." style="border-color:#e0d5c3;border-radius:4px"></td></tr>
+		<?php
 		self::card_table_close();
 		self::card_close();
 
