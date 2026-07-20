@@ -8,7 +8,7 @@ while ( have_posts() ) : the_post();
 	$words = str_word_count( wp_strip_all_tags( get_the_content() ) );
 	$mins  = max( 1, (int) round( $words / 200 ) );
 	?>
-	<div class="wrap single-wrap" id="main">
+	<main class="wrap single-wrap" id="main">
 		<?php ib_breadcrumb(); ?>
 
 		<div class="article-layout">
@@ -57,7 +57,7 @@ while ( have_posts() ) : the_post();
 		</div>
 
 		<?php \IrenilsonBarbosa\Core\RelatedPosts::render(); ?>
-	</div>
+	</main>
 	<?php
 endwhile;
 get_footer();
