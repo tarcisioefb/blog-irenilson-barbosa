@@ -74,31 +74,35 @@ class AdminSettings {
 
 	public static function sanitize($in) {
 		$in  = is_array($in) ? $in : [];
-		$out = [];
+		$cur = (array) get_option('ib_opts', []);
+		$out = $cur;
+
 		foreach (['social_facebook', 'social_instagram', 'social_youtube'] as $k) {
-			$out[$k] = isset($in[$k]) ? esc_url_raw(trim($in[$k])) : '';
+			if (array_key_exists($k, $in)) $out[$k] = esc_url_raw(trim($in[$k]));
 		}
-		$out['footer_tagline'] = isset($in['footer_tagline']) ? sanitize_text_field($in['footer_tagline']) : '';
-		$out['footer_about']   = isset($in['footer_about']) ? sanitize_textarea_field($in['footer_about']) : '';
-		$out['sidebar_bio']    = isset($in['sidebar_bio']) ? sanitize_textarea_field($in['sidebar_bio']) : '';
+		if (array_key_exists('footer_tagline', $in)) $out['footer_tagline'] = sanitize_text_field($in['footer_tagline']);
+		if (array_key_exists('footer_about', $in)) $out['footer_about'] = sanitize_textarea_field($in['footer_about']);
+		if (array_key_exists('sidebar_bio', $in)) $out['sidebar_bio'] = sanitize_textarea_field($in['sidebar_bio']);
 		$allowed_heading = ['Literata', 'Merriweather', 'Playfair+Display', 'Lora', 'PT+Serif', 'Source+Serif+4', 'Cormorant', 'Cormorant+Upright', 'Red+Hat+Display', 'Fraunces', 'Epilogue', 'Georgia', 'System'];
-		$out['site_logo'] = isset($in['site_logo']) ? esc_url_raw(trim($in['site_logo'])) : '';
-		$out['font_heading'] = in_array($in['font_heading'] ?? '', $allowed_heading, true) ? $in['font_heading'] : 'Literata';
+		if (array_key_exists('site_logo', $in)) $out['site_logo'] = esc_url_raw(trim($in['site_logo']));
+		if (array_key_exists('font_heading', $in)) $out['font_heading'] = in_array($in['font_heading'], $allowed_heading, true) ? $in['font_heading'] : 'Literata';
 		$allowed_body = ['Inter', 'Source+Sans+3', 'Nunito', 'Work+Sans', 'DM+Sans', 'System'];
-		$out['font_body'] = in_array($in['font_body'] ?? '', $allowed_body, true) ? $in['font_body'] : 'Inter';
-		$out['facebook_app_id'] = isset($in['facebook_app_id']) ? sanitize_text_field(trim($in['facebook_app_id'])) : '';
-		$out['home_cats'] = [];
-		if (isset($in['home_cats']) && is_array($in['home_cats'])) {
-			$out['home_cats'] = array_values(array_filter(
-				array_map('sanitize_text_field', $in['home_cats']),
-				fn($v) => $v !== '_disabled_'
-			));
+		if (array_key_exists('font_body', $in)) $out['font_body'] = in_array($in['font_body'], $allowed_body, true) ? $in['font_body'] : 'Inter';
+		if (array_key_exists('facebook_app_id', $in)) $out['facebook_app_id'] = sanitize_text_field(trim($in['facebook_app_id']));
+		if (array_key_exists('home_cats', $in)) {
+			$out['home_cats'] = [];
+			if (is_array($in['home_cats'])) {
+				$out['home_cats'] = array_values(array_filter(
+					array_map('sanitize_text_field', $in['home_cats']),
+					fn($v) => $v !== '_disabled_'
+				));
+			}
 		}
-		$out['banner_image'] = isset($in['banner_image']) ? esc_url_raw(trim($in['banner_image'])) : '';
-		$out['banner_image_tablet'] = isset($in['banner_image_tablet']) ? esc_url_raw(trim($in['banner_image_tablet'])) : '';
-		$out['banner_image_mobile'] = isset($in['banner_image_mobile']) ? esc_url_raw(trim($in['banner_image_mobile'])) : '';
-		$out['banner_link'] = isset($in['banner_link']) ? esc_url_raw(trim($in['banner_link'])) : '';
-		$out['google_analytics_id'] = isset($in['google_analytics_id']) ? sanitize_text_field(trim($in['google_analytics_id'])) : '';
+		if (array_key_exists('banner_image', $in)) $out['banner_image'] = esc_url_raw(trim($in['banner_image']));
+		if (array_key_exists('banner_image_tablet', $in)) $out['banner_image_tablet'] = esc_url_raw(trim($in['banner_image_tablet']));
+		if (array_key_exists('banner_image_mobile', $in)) $out['banner_image_mobile'] = esc_url_raw(trim($in['banner_image_mobile']));
+		if (array_key_exists('banner_link', $in)) $out['banner_link'] = esc_url_raw(trim($in['banner_link']));
+		if (array_key_exists('google_analytics_id', $in)) $out['google_analytics_id'] = sanitize_text_field(trim($in['google_analytics_id']));
 		return $out;
 	}
 
