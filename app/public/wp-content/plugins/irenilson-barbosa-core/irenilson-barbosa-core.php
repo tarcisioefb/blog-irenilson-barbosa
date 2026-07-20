@@ -47,4 +47,9 @@ add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\AdminSettings::init();
 	\IrenilsonBarbosa\Core\SEO::init();
 	\IrenilsonBarbosa\Core\TTS::init();
+	\IrenilsonBarbosa\Core\ImageOptimizer::init();
 });
+
+if (defined('WP_CLI') && WP_CLI) {
+	\WP_CLI::add_command('ib-convert', ['\IrenilsonBarbosa\Core\ImageOptimizer', 'cli_convert']);
+}
