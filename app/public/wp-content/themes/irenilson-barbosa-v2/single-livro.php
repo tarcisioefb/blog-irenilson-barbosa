@@ -36,12 +36,12 @@ while (have_posts()) : the_post();
 		<div>
 	<?php endif; ?>
 
-			<h1 class="article__title" style="margin-bottom:var(--space-1)"><?php the_title(); ?></h1>
-
-			<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-6)">
+			<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-3)">
 				<span class="en-tag en-tag--solid"><?php echo esc_html($part_label); ?></span>
 				<?php if ($ano) : ?><span class="en-tag" style="background:var(--accent-2)"><?php echo esc_html($ano); ?></span><?php endif; ?>
 			</div>
+
+			<h1 class="article__title" style="margin-bottom:var(--space-5)"><?php the_title(); ?></h1>
 
 			<div class="article__body" style="max-width:none"><?php the_content(); ?></div>
 
