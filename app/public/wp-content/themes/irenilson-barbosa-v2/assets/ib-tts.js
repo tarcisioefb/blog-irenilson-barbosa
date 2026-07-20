@@ -42,8 +42,17 @@
 		var isPoem = article.classList.contains('ib-poem-body');
 		var paragraphs = article.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
 		paragraphs.forEach(function (el) {
-			var txt = el.textContent.trim();
-			if (txt && !el.closest('.ib-tts') && !el.closest('.article__meta') && !el.closest('.ib-author-box')) body += txt + (isPoem ? '…\n' : '.\n');
+			if (el.closest('.ib-tts') || el.closest('.article__meta') || el.closest('.ib-author-box')) return;
+			if (isPoem && el.querySelector('br')) {
+				var parts = el.innerHTML.split(/<br\s*\/?>/i);
+				parts.forEach(function (part) {
+					var txt = part.replace(/<[^>]+>/g, '').trim();
+					if (txt) body += txt + '…\n';
+				});
+			} else {
+				var txt = el.textContent.trim();
+				if (txt) body += txt + (isPoem ? '…\n' : '.\n');
+			}
 		});
 
 		var intro = title + '. ';
