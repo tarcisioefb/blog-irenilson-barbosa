@@ -87,17 +87,10 @@ class AdminSettings {
 		$out['facebook_app_id'] = isset($in['facebook_app_id']) ? sanitize_text_field(trim($in['facebook_app_id'])) : '';
 		$out['home_cats'] = [];
 		if (isset($in['home_cats']) && is_array($in['home_cats'])) {
-			$selected = array_map('sanitize_text_field', $in['home_cats']);
-			$selected = array_filter($selected, fn($v) => $v !== '_disabled_');
-			$order = isset($in['home_cats_order']) && is_array($in['home_cats_order']) ? $in['home_cats_order'] : [];
-			// Ordena pelo campo order
-			$ordered = [];
-			foreach ($selected as $slug) {
-				$pos = isset($order[$slug]) ? (int) $order[$slug] : 0;
-				$ordered[$slug] = $pos;
-			}
-			asort($ordered);
-			$out['home_cats'] = array_keys($ordered);
+			$out['home_cats'] = array_values(array_filter(
+				array_map('sanitize_text_field', $in['home_cats']),
+				fn($v) => $v !== '_disabled_'
+			));
 		}
 		$out['banner_image'] = isset($in['banner_image']) ? esc_url_raw(trim($in['banner_image'])) : '';
 		$out['banner_image_tablet'] = isset($in['banner_image_tablet']) ? esc_url_raw(trim($in['banner_image_tablet'])) : '';
@@ -111,6 +104,7 @@ class AdminSettings {
 		wp_enqueue_media();
 		$theme_uri = get_template_directory_uri();
 		wp_enqueue_script('ib-admin', $theme_uri . '/assets/ib-admin.js', ['jquery'], IRENILSON_CORE_VERSION, true);
+		wp_enqueue_script('jquery-ui-sortable');
 	}
 
 	public static function render_page() {
@@ -171,28 +165,46 @@ class AdminSettings {
 
 					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
 						<h2 style="margin:0 0 4px;font-size:16px;color:#3E2C1B">🏠 Home — Categorias</h2>
-						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Escolha quais categorias aparecem na home e em que ordem. Use os números para definir a posição (1 = primeiro). Deixe em branco para exibir todas.</p>
-						<table class="form-table" role="presentation" style="margin:0"><tbody>
+						<p style="margin:0 0 20px;color:#6D5940;font-size:13px">Arraste para reordenar. Desmarque para ocultar da home. Deixe tudo marcado para exibir todas.</p>
+						<ul id="ib-home-cats" style="margin:0;padding:0;list-style:none">
 							<?php
 							$saved = self::opt('home_cats');
 							$saved = is_array($saved) ? $saved : [];
-							$terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false]);
-							// Remove "Sem categoria"
-							$terms = array_filter($terms, fn($t) => 'uncategorized' !== $t->slug);
-							foreach ($terms as $t) :
+							$all_terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false, 'fields' => 'all']);
+							$all_terms = array_filter($all_terms, fn($t) => 'uncategorized' !== $t->slug);
+							// Se tem configuração salva, usa aquela ordem; senão, ordem alfabética
+							$ordered = [];
+							if (!empty($saved)) {
+								$term_by_slug = [];
+								foreach ($all_terms as $t) { $term_by_slug[$t->slug] = $t; }
+								foreach ($saved as $slug) {
+									if (isset($term_by_slug[$slug])) $ordered[] = $term_by_slug[$slug];
+								}
+								foreach ($all_terms as $t) {
+									if (!in_array($t->slug, $saved, true)) $ordered[] = $t;
+								}
+							} else {
+								$ordered = array_values($all_terms);
+							}
+							foreach ($ordered as $t) :
 								$checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : '';
 							?>
-							<tr>
-								<th scope="row" style="width:60px;padding:4px 0"><label style="color:#3E2C1B;font-weight:600"><?php echo esc_html($t->name); ?></label></th>
-								<td style="padding:4px 0">
-									<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
-									<label><input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" style="margin-right:8px" <?php echo $checked; ?>></label>
-									<input type="number" name="ib_opts[home_cats_order][<?php echo esc_attr($t->slug); ?>]" value="<?php echo esc_attr($saved['order'][$t->slug] ?? '0'); ?>" min="0" max="99" style="width:60px;border-color:#e0d5c3;border-radius:4px" placeholder="0">
-									<span style="font-size:12px;color:var(--tx-dim)">posição</span>
-								</td>
-							</tr>
+							<li style="display:flex;align-items:center;gap:12px;padding:8px 10px;margin:0 0 4px;background:#fff;border:1px solid #e0d5c3;border-radius:6px;cursor:grab">
+								<span style="color:#bbb;font-size:18px;cursor:grab;user-select:none">⠿</span>
+								<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
+								<label style="display:flex;align-items:center;gap:8px;flex:1;cursor:pointer">
+									<input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" <?php echo $checked; ?>>
+									<strong style="color:#3E2C1B;font-size:13px"><?php echo esc_html($t->name); ?></strong>
+								</label>
+							</li>
 							<?php endforeach; ?>
-						</tbody></table>
+						</ul>
+						<script>
+						jQuery(function($){
+							$('#ib-home-cats').sortable({axis:'y',handle:'span',placeholder:'ui-state-highlight'});
+							$('#ib-home-cats').disableSelection();
+						});
+						</script>
 					</div>
 
 					<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:24px;margin-bottom:20px">
