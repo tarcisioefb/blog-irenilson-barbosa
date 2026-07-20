@@ -9,6 +9,21 @@ class AdminSettings {
 		add_action('wp_head', [__CLASS__, 'output_google_analytics'], 0);
 		add_action('wp_ajax_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
+		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
+	}
+
+	public static function configure_smtp($phpmailer) {
+		$host = self::opt('smtp_host');
+		if (!$host) return;
+		$phpmailer->isSMTP();
+		$phpmailer->Host = $host;
+		$phpmailer->Port = self::opt('smtp_port') ?: 587;
+		$phpmailer->SMTPAuth = true;
+		$phpmailer->Username = self::opt('smtp_user');
+		$phpmailer->Password = self::opt('smtp_pass');
+		$phpmailer->SMTPSecure = self::opt('smtp_encrypt') ?: 'tls';
+		$phpmailer->From = self::opt('smtp_user') ?: 'contato@irenilsonbarbosa.com';
+		$phpmailer->FromName = get_bloginfo('name');
 	}
 
 	public static function ajax_newsletter() {
@@ -43,6 +58,11 @@ class AdminSettings {
 			'banner_image_mobile' => '',
 			'banner_link'         => '',
 			'google_analytics_id' => '',
+			'smtp_host'    => '',
+			'smtp_port'    => '',
+			'smtp_user'    => '',
+			'smtp_pass'    => '',
+			'smtp_encrypt' => 'tls',
 		];
 	}
 
@@ -119,6 +139,11 @@ class AdminSettings {
 		if (array_key_exists('banner_image_mobile', $in)) $out['banner_image_mobile'] = esc_url_raw(trim($in['banner_image_mobile']));
 		if (array_key_exists('banner_link', $in)) $out['banner_link'] = esc_url_raw(trim($in['banner_link']));
 		if (array_key_exists('google_analytics_id', $in)) $out['google_analytics_id'] = sanitize_text_field(trim($in['google_analytics_id']));
+		if (array_key_exists('smtp_host', $in)) $out['smtp_host'] = sanitize_text_field(trim($in['smtp_host']));
+		if (array_key_exists('smtp_port', $in)) $out['smtp_port'] = sanitize_text_field(trim($in['smtp_port']));
+		if (array_key_exists('smtp_user', $in)) $out['smtp_user'] = sanitize_email(trim($in['smtp_user']));
+		if (array_key_exists('smtp_pass', $in)) $out['smtp_pass'] = $in['smtp_pass']; // raw — senha
+		if (array_key_exists('smtp_encrypt', $in)) $out['smtp_encrypt'] = in_array($in['smtp_encrypt'], ['tls', 'ssl', ''], true) ? $in['smtp_encrypt'] : 'tls';
 		return $out;
 	}
 
@@ -253,6 +278,17 @@ gtag('js', new Date()); gtag('config', '<?php echo esc_js($ga_id); ?>');
 				<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
 				<td style="padding:6px 0"><input type="text" id="google_analytics_id" name="ib_opts[google_analytics_id]" value="<?php echo esc_attr(self::opt('google_analytics_id')); ?>" class="regular-text" placeholder="G-XXXXXXXXXX" style="border-color:#e0d5c3;border-radius:4px"></td>
 			</tr>
+		<?php
+		self::card_table_close();
+		self::card_close();
+
+		self::card_open('📧', 'E-mail SMTP', 'Configure o servidor SMTP para garantir a entrega dos emails do formulário de contato.');
+		self::card_table_open(); ?>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_host" style="color:#3E2C1B;font-weight:600;font-size:12px">Host</label></th><td style="padding:6px 0"><input type="text" id="smtp_host" name="ib_opts[smtp_host]" value="<?php echo esc_attr(self::opt('smtp_host')); ?>" class="regular-text" placeholder="smtp.hostinger.com" style="border-color:#e0d5c3;border-radius:4px"></td></tr>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_port" style="color:#3E2C1B;font-weight:600;font-size:12px">Porta</label></th><td style="padding:6px 0"><input type="text" id="smtp_port" name="ib_opts[smtp_port]" value="<?php echo esc_attr(self::opt('smtp_port')); ?>" class="small-text" placeholder="587" style="border-color:#e0d5c3;border-radius:4px"></td></tr>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_user" style="color:#3E2C1B;font-weight:600;font-size:12px">Usuário</label></th><td style="padding:6px 0"><input type="text" id="smtp_user" name="ib_opts[smtp_user]" value="<?php echo esc_attr(self::opt('smtp_user')); ?>" class="regular-text" placeholder="contato@..." style="border-color:#e0d5c3;border-radius:4px"></td></tr>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_pass" style="color:#3E2C1B;font-weight:600;font-size:12px">Senha</label></th><td style="padding:6px 0"><input type="password" id="smtp_pass" name="ib_opts[smtp_pass]" value="<?php echo esc_attr(self::opt('smtp_pass')); ?>" class="regular-text" style="border-color:#e0d5c3;border-radius:4px"></td></tr>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_encrypt" style="color:#3E2C1B;font-weight:600;font-size:12px">Criptografia</label></th><td style="padding:6px 0"><select id="smtp_encrypt" name="ib_opts[smtp_encrypt]" style="border-color:#e0d5c3;border-radius:4px"><option value="tls" <?php selected(self::opt('smtp_encrypt'), 'tls'); ?>>TLS</option><option value="ssl" <?php selected(self::opt('smtp_encrypt'), 'ssl'); ?>>SSL</option><option value="" <?php selected(self::opt('smtp_encrypt'), ''); ?>>Nenhuma</option></select></td></tr>
 		<?php
 		self::card_table_close();
 		self::card_close();
