@@ -2,7 +2,6 @@
 /** IRENILSON BARBOSA — Single Livro (página de produto). */
 defined('ABSPATH') || exit;
 get_header();
-ib_breadcrumb();
 while (have_posts()) : the_post();
 	$pid = get_the_ID();
 	$isbn = get_post_meta($pid, 'isbn', true);
@@ -15,6 +14,7 @@ while (have_posts()) : the_post();
 	$part_label = !empty($participacao) ? $participacao[0] : 'Autor';
 ?>
 <div class="wrap single-wrap">
+	<?php ib_breadcrumb(); ?>
 	<div class="article-layout" style="grid-template-columns:minmax(0,1fr)">
 		<article <?php post_class('article'); ?>>
 			<div style="display:grid;grid-template-columns:340px 1fr;gap:var(--space-10);align-items:start">

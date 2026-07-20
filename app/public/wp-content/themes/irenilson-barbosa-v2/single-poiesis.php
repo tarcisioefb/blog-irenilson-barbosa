@@ -2,13 +2,13 @@
 /** IRENILSON BARBOSA — Single Poiésis (poema). */
 defined('ABSPATH') || exit;
 get_header();
-ib_breadcrumb();
 while (have_posts()) : the_post();
 	$notas = get_post_meta(get_the_ID(), 'poiesis_notas', true);
 	$poem_author = get_post_meta(get_the_ID(), 'poiesis_author', true) ?: 'Irenilson Barbosa';
 	$other = get_posts(array('post_type' => 'poiesis', 'posts_per_page' => 5, 'post__not_in' => array(get_the_ID()), 'orderby' => 'rand'));
 ?>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
+	<?php ib_breadcrumb(); ?>
 	<div class="article-layout" style="grid-template-columns:minmax(0,1fr) 400px">
 		<article style="max-width:680px">
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>

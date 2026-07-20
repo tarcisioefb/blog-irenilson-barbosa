@@ -1,9 +1,9 @@
 <?php
 /** IRENILSON BARBOSA — Arquivo Poiésis. */
 defined('ABSPATH') || exit;
-get_header();
-ib_breadcrumb(); ?>
+get_header(); ?>
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
+	<?php ib_breadcrumb(); ?>
 	<!-- Hero -->
 	<div style="padding:var(--space-10) var(--space-8);background:linear-gradient(135deg,var(--paper-2) 0%,var(--paper) 100%);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-lg);margin-bottom:var(--space-10);text-align:center">
 		<p style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-widest);font-weight:700;margin:0 0 var(--space-3)">Ποίησις</p>
