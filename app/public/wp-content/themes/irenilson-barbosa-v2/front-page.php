@@ -157,19 +157,54 @@ $editorias  = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano'
 		<div class="wrap eh-layout">
 			<div class="eh-content">
 				<?php
+				$sec_i = 0;
 				foreach ( $editorias as $slug ) :
 					$term = get_term_by( 'slug', $slug, 'category' );
 					if ( ! $term || is_wp_error( $term ) ) { continue; }
 					$ids = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'category' => $term->term_id, 'fields' => 'ids', 'suppress_filters' => false ) );
 					if ( empty( $ids ) ) { continue; }
+					$sec_i++;
 					?>
 					<div class="eh-sec-head">
 						<h2><?php echo esc_html( $term->name ); ?></h2>
 						<a href="<?php echo esc_url( get_category_link( $term->term_id ) ); ?>">Ver tudo →</a>
 					</div>
-					<div class="eh-cards">
+
+					<?php if ( $sec_i === 1 ) : ?>
+					<div class="eh-feat-mosaic">
+						<div class="eh-feat-mosaic__lead"><?php ib_card( $ids[0] ); ?></div>
+						<div class="eh-feat-mosaic__grid">
+							<?php for ( $i = 1; $i < count( $ids ); $i++ ) : ?>
+								<div><?php ib_card( $ids[ $i ] ); ?></div>
+							<?php endfor; ?>
+						</div>
+					</div>
+
+					<?php elseif ( $sec_i % 2 === 0 ) : ?>
+					<div class="eh-cards eh-cards--3col">
 						<?php foreach ( $ids as $pid ) { ib_card( $pid ); } ?>
 					</div>
+
+					<?php else : ?>
+					<div class="eh-list-vertical">
+						<?php foreach ( $ids as $pid ) :
+							$pthumb = get_the_post_thumbnail_url( $pid, 'ib-thumb' );
+							$plink = get_permalink( $pid );
+							$pcat = ib_primary_cat( $pid );
+						?>
+						<a class="eh-list-item" href="<?php echo esc_url( $plink ); ?>">
+							<?php if ( $pthumb ) : ?>
+								<span class="eh-list-item__img"><img src="<?php echo esc_url( $pthumb ); ?>" alt="" loading="lazy"></span>
+							<?php endif; ?>
+							<span class="eh-list-item__body">
+								<?php if ( $pcat ) : ?><span class="en-tag en-tag--solid" style="margin-bottom:6px"><?php echo esc_html( $pcat->name ); ?></span><?php endif; ?>
+								<span class="eh-list-item__t"><?php echo esc_html( get_the_title( $pid ) ); ?></span>
+							</span>
+						</a>
+						<?php endforeach; ?>
+					</div>
+					<?php endif; ?>
+
 				<?php endforeach; ?>
 
 			</div>
