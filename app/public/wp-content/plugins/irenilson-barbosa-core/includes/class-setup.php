@@ -142,6 +142,16 @@ class Setup {
 		add_action('edit_form_after_title', [__CLASS__, 'render_publicacao_fields']);
 		add_action('edit_form_after_title', [__CLASS__, 'render_material_fields']);
 		add_action('save_post', [__CLASS__, 'save_cpt_metabox']);
+		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_media_scripts']);
+	}
+
+	public static function enqueue_media_scripts($hook) {
+		if (!in_array($hook, ['post.php', 'post-new.php'], true)) return;
+		$screen = get_current_screen();
+		if (!$screen || !in_array($screen->post_type, ['livro', 'material', 'publicacao', 'poiesis'], true)) return;
+		wp_enqueue_media();
+		$theme_uri = get_template_directory_uri();
+		wp_enqueue_script('ib-admin', $theme_uri . '/assets/ib-admin.js', ['jquery'], IRENILSON_CORE_VERSION, true);
 	}
 
 	public static function render_poiesis_fields($post) {
