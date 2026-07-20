@@ -574,6 +574,12 @@ body{transition:background .3s}
 	*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+/* ==================== SCROLLBAR CUSTOM ==================== */
+html{scrollbar-color:var(--accent,#4A5D3E) var(--line,#E5E5E5);scrollbar-width:thin}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--line,#E5E5E5)}
+::-webkit-scrollbar-thumb{background:var(--accent,#4A5D3E);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink,#3E2C1B)}
 /* ==================== ACESSIBILIDADE / MOBILE HARDENING ==================== */
 /* respeita quem pediu menos movimento no SO */
 @media(prefers-reduced-motion:reduce){
