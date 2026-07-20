@@ -7,6 +7,9 @@ $msg_sent = false;
 $msg_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ib_contact_nonce'])) {
 	if (wp_verify_nonce($_POST['ib_contact_nonce'], 'ib_contact')) {
+		if (!empty($_POST['ib_website'])) { $msg_sent = true; return; }
+		$time = (int) ($_POST['ib_time'] ?? 0);
+		if (time() - $time < 3) { $msg_error = 'Envio muito rápido. Tente novamente.'; }
 		$name = sanitize_text_field($_POST['ib_name'] ?? '');
 		$email = sanitize_email($_POST['ib_email'] ?? '');
 		$subject = sanitize_text_field($_POST['ib_subject'] ?? '');
@@ -17,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ib_contact_nonce'])) 
 		} elseif (!is_email($email)) {
 			$msg_error = 'E-mail inválido.';
 		} else {
-			$to = get_option('admin_email');
+			$to = 'contato@irenilsonbarbosa.com';
 			$headers = ['Content-Type: text/html; charset=UTF-8', "Reply-To: $email"];
 			$body = "<p><strong>Nome:</strong> $name</p>
 					<p><strong>E-mail:</strong> $email</p>
@@ -53,6 +56,8 @@ get_header(); ?>
 
 			<form method="post" style="display:flex;flex-direction:column;gap:var(--space-5)">
 				<?php wp_nonce_field('ib_contact', 'ib_contact_nonce'); ?>
+				<input type="text" name="ib_website" style="position:absolute;left:-9999px;top:-9999px" tabindex="-1" autocomplete="off">
+				<input type="hidden" name="ib_time" value="<?php echo time(); ?>">
 				<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--space-4)">
 
 				<div>
