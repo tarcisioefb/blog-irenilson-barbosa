@@ -8,7 +8,7 @@ get_header(); ?>
 	<p style="color:var(--tx-2);margin:0 0 var(--space-8);font-size:var(--text-md)">Obras de Irenilson Barbosa — autor, organizador e coautor.</p>
 
 	<?php if (have_posts()) : ?>
-		<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-7)">
+		<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-7)">
 			<?php while (have_posts()) : the_post();
 				$pid = get_the_ID();
 				$ano = get_post_meta($pid, 'ano', true);
