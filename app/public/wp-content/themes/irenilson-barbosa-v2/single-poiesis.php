@@ -10,6 +10,10 @@ while (have_posts()) : the_post();
 <div class="wrap" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
 	<div class="article-layout">
 		<article style="max-width:680px">
+			<?php if (has_post_thumbnail()) : ?>
+				<figure class="article__hero" style="margin-bottom:var(--space-8)"><?php the_post_thumbnail('full'); ?></figure>
+			<?php endif; ?>
+
 			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
 
 			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-8)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
@@ -19,13 +23,6 @@ while (have_posts()) : the_post();
 			<?php endif; ?>
 
 			<div class="ib-poem-body">
-				<?php if (has_post_thumbnail()) : ?>
-					<div style="max-width:320px;margin:0 auto var(--space-6)">
-						<div style="aspect-ratio:16/9;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-card);opacity:.9">
-							<?php the_post_thumbnail('medium', array('style' => 'width:100%;height:100%;object-fit:cover;display:block')); ?>
-						</div>
-					</div>
-				<?php endif; ?>
 				<?php the_content(); ?>
 			</div>
 
