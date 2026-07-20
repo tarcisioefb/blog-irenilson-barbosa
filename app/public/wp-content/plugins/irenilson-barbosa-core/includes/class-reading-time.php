@@ -21,7 +21,7 @@ class ReadingTime {
 	}
 
 	public static function display_reading_time($content) {
-		if (! is_single() || ! in_the_loop() || 'poiesis' === get_post_type()) {
+		if (! is_single() || ! in_the_loop() || in_array(get_post_type(), ['poiesis', 'livro'], true)) {
 			return $content;
 		}
 

@@ -37,7 +37,6 @@ while (have_posts()) : the_post();
 	<?php endif; ?>
 
 			<h1 class="article__title" style="margin-bottom:var(--space-1)"><?php the_title(); ?></h1>
-			<p style="font-size:var(--text-md);color:var(--tx-2);margin:0 0 var(--space-3)"><?php echo esc_html($part_label === 'Autor' ? 'Por Irenilson Barbosa' : 'Irenilson Barbosa (' . $part_label . ')'); ?></p>
 
 			<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-6)">
 				<span class="en-tag en-tag--solid"><?php echo esc_html($part_label); ?></span>
