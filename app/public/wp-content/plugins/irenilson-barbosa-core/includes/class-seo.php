@@ -191,6 +191,9 @@ class SEO {
 			}
 			return get_the_archive_title() . ' — ' . get_bloginfo('name');
 		}
+		if (is_search()) {
+			return 'Busca: ' . get_search_query() . ' — ' . get_bloginfo('name');
+		}
 		return wp_get_document_title();
 	}
 
