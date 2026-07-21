@@ -34,6 +34,7 @@ class AdminSettings {
 	public static function admin_bar_cache() {
 		if (!current_user_can('publish_pages')) return;
 		global $wp_admin_bar;
+		$wp_admin_bar->remove_node("comments");
 		$wp_admin_bar->add_node([
 			'id' => 'ib-purge-cache',
 			'title' => '⚡ Limpar cache',
@@ -754,11 +755,11 @@ if (accepted === '1') {
 			<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
 					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🧭 Como publicar</h2>
-					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Va em <strong>Posts > Adicionar novo</strong> (para artigos) ou no tipo de conteudo desejado no menu. Preencha o titulo, o corpo do texto e configure os metadados especificos de cada tipo na area abaixo do editor.</p>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Va em <strong>Posts > Adicionar novo</strong> (artigos) ou no tipo de conteudo no menu lateral. Preencha titulo, corpo e metadados especificos de cada tipo na area abaixo do editor. Use o botao <strong>⚡ Limpar cache</strong> na barra superior ao finalizar.</p>
 				</div>
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
-					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🔧 Central de configuracao</h2>
-					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Use o menu <strong>Irenilson Barbosa</strong> (acima) para ajustar: redes sociais, logo, Google Analytics, fontes, banner da home, descricao dos arquivos, newsletter e email SMTP.</p>
+					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🔧 Menu Irenilson Barbosa</h2>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Acesse <strong>Irenilson Barbosa</strong> no menu lateral para configurar: redes sociais, logo, Google Analytics, fontes, banner da home, descricao dos arquivos, newsletter e email SMTP (abas: Geral, Home, Conteudo, Aparencia).</p>
 				</div>
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
 					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">📬 Newsletter</h2>
