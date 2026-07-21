@@ -6,12 +6,42 @@ class AdminSettings {
 		add_action('admin_menu', [__CLASS__, 'register_menus']);
 		add_action('admin_init', [__CLASS__, 'register_settings']);
 		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+		add_action('wp_dashboard_setup', [__CLASS__, 'dashboard_widgets']);
 		add_action('wp_head', [__CLASS__, 'output_google_analytics'], 0);
 		add_action('wp_ajax_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_ib_preview_post', [__CLASS__, 'ajax_preview_post']);
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
 		add_action('init', [__CLASS__, 'handle_unsubscribe']);
+	}
+
+	public static function dashboard_widgets() {
+		wp_add_dashboard_widget('ib_dashboard_welcome', 'Irenilson Barbosa — Visao geral', [__CLASS__, 'render_dashboard']);
+	}
+
+	public static function render_dashboard() {
+		$types = [
+			'post' => ['Artigo', 'editor'],
+			'publicacao' => ['Publicacao', 'publicacao'],
+			'livro' => ['Livro', 'livro'],
+			'poiesis' => ['Poema', 'poiesis'],
+			'material' => ['Material', 'material'],
+		];
+		?>
+		<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+			<?php foreach ($types as $slug => $t) : ?>
+			<a href="<?php echo admin_url('post-new.php?post_type=' . $slug); ?>" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#4A5D3E;color:#fff;text-decoration:none;border-radius:4px;font-size:13px;font-weight:600">+ <?php echo esc_html($t[0]); ?></a>
+			<?php endforeach; ?>
+		</div>
+		<p style="font-size:13px;margin:0 0 8px"><strong>Links rapidos:</strong></p>
+		<ul style="font-size:13px;margin:0;list-style:none;padding:0">
+			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-ajustes'); ?>">⚙️ Configuracoes do site</a></li>
+			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-newsletter'); ?>">📬 Enviar newsletter</a></li>
+			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-tutoriais'); ?>">📖 Tutoriais</a></li>
+			<li style="margin-bottom:6px"><a href="<?php echo admin_url('edit.php?post_type=poiesis'); ?>">📝 Ver todos os poemas</a></li>
+			<li style="margin-bottom:6px"><a href="<?php echo admin_url('edit.php?post_type=livro'); ?>">📚 Ver todos os livros</a></li>
+		</ul>
+		<?php
 	}
 
 	public static function handle_unsubscribe() {
