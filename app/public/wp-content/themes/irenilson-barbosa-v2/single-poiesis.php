@@ -11,7 +11,7 @@ while (have_posts()) : the_post();
 	<?php ib_breadcrumb(); ?>
 	<div class="article-layout" style="grid-template-columns:minmax(0,1fr) 400px">
 		<article style="max-width:680px">
-			<h1 style="font-family:var(--font-heading);font-size:var(--text-4xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
+			<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:500;color:var(--ink);line-height:var(--leading-tight);margin:0 0 var(--space-1)"><?php the_title(); ?></h1>
 
 			<p style="font-size:var(--text-sm);color:var(--tx-dim);margin:0 0 var(--space-3)">por <strong style="color:var(--tx-2);font-weight:600"><?php echo esc_html($poem_author); ?></strong></p>
 
