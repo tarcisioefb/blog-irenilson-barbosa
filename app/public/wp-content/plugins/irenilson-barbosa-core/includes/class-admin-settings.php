@@ -602,7 +602,7 @@ if (accepted === '1') {
 		$type_name = mb_strtolower(get_post_type_object($post->post_type)->labels->singular_name ?? 'post');
 		$permalink = get_permalink($post->ID);
 		$title = $post->post_title;
-		$excerpt = $post->post_excerpt ? $post->post_excerpt : implode("\n\n", array_slice(explode("\n\n", trim(strip_tags($post->post_content, '<p><br>'))), 0, 3));
+		$excerpt = $post->post_excerpt ? $post->post_excerpt : wp_trim_words(strip_tags($post->post_content), 50);
 		$thumb = get_the_post_thumbnail_url($post->ID, 'large');
 		$date = get_the_date('j F Y', $post->ID);
 		$unsub_url = home_url('/?ib_unsubscribe=');
