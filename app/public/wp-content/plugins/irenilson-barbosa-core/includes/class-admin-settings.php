@@ -707,7 +707,8 @@ if (accepted === '1') {
 		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
 		$success = true;
 		foreach ($subs as $email) {
-			if (!wp_mail(trim($email), $title, $body, $headers)) {
+			$email_body = str_replace(home_url("/?ib_unsubscribe="), home_url("/?ib_unsubscribe=" . urlencode(trim($email))), $body);
+			if (!wp_mail(trim($email), $title, $email_body, $headers)) {
 				$success = false;
 			}
 		}
