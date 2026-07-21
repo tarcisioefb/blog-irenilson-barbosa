@@ -28,7 +28,18 @@ while ( have_posts() ) : the_post();
 				</div>
 
 				<?php if ( has_post_thumbnail() ) : ?>
-					<figure class="article__hero"><?php the_post_thumbnail( 'full', array( 'alt' => esc_attr( get_the_title() ), 'fetchpriority' => 'high', 'loading' => false, 'data-no-lazy' => '1' ) ); if ( get_the_post_thumbnail_caption() ) : ?><figcaption><?php the_post_thumbnail_caption(); ?></figcaption><?php endif; ?></figure>
+					<figure class="article__hero"><?php
+$thumb_id = get_post_thumbnail_id();
+if ($thumb_id) {
+    echo wp_get_attachment_image( $thumb_id, 'large', false, array(
+        'alt' => esc_attr( get_the_title() ),
+        'fetchpriority' => 'high',
+        'loading' => false,
+        'data-no-lazy' => '1',
+        'sizes' => '(max-width: 840px) 100vw, 840px',
+    ) );
+}
+if ( get_the_post_thumbnail_caption() ) : ?><figcaption><?php the_post_thumbnail_caption(); ?></figcaption><?php endif; ?></figure>
 				<?php endif; ?>
 
 				<?php ib_share_buttons( $pid ); ?>
