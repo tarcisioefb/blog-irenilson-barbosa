@@ -13,15 +13,23 @@ class AdminSettings {
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_ib_preview_post', [__CLASS__, 'ajax_preview_post']);
 		add_action('wp_ajax_ib_purge_cache', [__CLASS__, 'ajax_purge_cache']);
+		add_action('wp_ajax_ib_reindex', [__CLASS__, 'ajax_reindex']);
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
 		add_action('init', [__CLASS__, 'handle_unsubscribe']);
 		add_action('admin_init', [__CLASS__, 'remove_tools_menu']);
 		add_action('admin_head', [__CLASS__, 'admin_head_editor']);
+		add_action('admin_notices', [__CLASS__, 'admin_notices']);
 	}
 
 	public static function admin_head_editor() {
 		if (!current_user_can("editor")) return;
 		?><style>.user-url-wrap,.user-language-wrap,.user-admin-color-wrap,.user-comment-shortcuts-wrap,.application-passwords,.user-sessions-wrap{display:none!important}</style><?php
+	}
+
+	public static function admin_notices() {
+		if (isset($_GET['ib_reindexed']) && $_GET['ib_reindexed'] === '1') {
+			echo '<div class="notice notice-success is-dismissible"><p>🔍 Google notificado para reindexar o sitemap.</p></div>';
+		}
 	}
 
 	public static function remove_tools_menu() {
@@ -41,6 +49,12 @@ class AdminSettings {
 			'href' => admin_url('admin-ajax.php?action=ib_purge_cache&_wpnonce=' . wp_create_nonce('ib_purge')),
 			'meta' => ['class' => 'ib-cache-btn'],
 		]);
+		$wp_admin_bar->add_node([
+			'id' => 'ib-reindex',
+			'title' => '🔍 Reindexar Google',
+			'href' => admin_url('admin-ajax.php?action=ib_reindex&_wpnonce=' . wp_create_nonce('ib_reindex')),
+			'meta' => ['class' => 'ib-reindex-btn'],
+		]);
 	}
 
 	public static function ajax_purge_cache() {
@@ -56,6 +70,18 @@ class AdminSettings {
 		}
 
 		wp_redirect(wp_get_referer() ?: admin_url());
+		exit;
+	}
+
+	public static function ajax_reindex() {
+		if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'ib_reindex')) wp_die('Falha de segurança.');
+		if (!current_user_can('publish_pages')) wp_die('Sem permissão.');
+		$sitemap = urlencode(home_url('/wp-sitemap.xml'));
+		$resp = wp_remote_get("https://www.google.com/ping?sitemap=$sitemap", ['timeout' => 15]);
+		if (is_wp_error($resp)) {
+			wp_die('Erro ao notificar Google: ' . $resp->get_error_message());
+		}
+		wp_redirect(add_query_arg('ib_reindexed', '1', wp_get_referer() ?: admin_url()));
 		exit;
 	}
 
