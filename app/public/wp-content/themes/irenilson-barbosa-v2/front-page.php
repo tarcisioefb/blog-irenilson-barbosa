@@ -47,7 +47,7 @@ if ( empty( $editorias ) ) {
 					<div class="eh-hero-list__head">Livros</div>
 					<div class="eh-hero-list__items">
 						<?php
-						$hero_books = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false ) );
+						$hero_books = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'post_type' => 'livro', 'fields' => 'ids', 'suppress_filters' => false, 'meta_key' => 'ano', 'orderby' => 'meta_value_num', 'order' => 'DESC' ) );
 						if ( ! empty( $hero_books ) ) :
 							foreach ( $hero_books as $bid ) :
 								$bthumb_id = get_post_thumbnail_id( $bid );
