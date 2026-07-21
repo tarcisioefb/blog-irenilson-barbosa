@@ -40,9 +40,13 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 			<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 				<?php
 				$logo_url = ib_opt('site_logo');
-				if ( $logo_url ) : ?>
+				if ( $logo_url ) :
+					$logo_id = attachment_url_to_postid( $logo_url );
+					if ( $logo_id ) :
+						echo wp_get_attachment_image( $logo_id, 'medium_large', false, array( 'alt' => esc_attr( get_bloginfo( 'name' ) ), 'style' => 'height:44px;width:auto', 'loading' => false ) );
+					else : ?>
 					<img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="211" height="44" style="height:44px;width:auto">
-				<?php elseif ( has_custom_logo() ) :
+				<?php endif; elseif ( has_custom_logo() ) :
 					the_custom_logo();
 				else : ?>
 					<span class="brand__text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
