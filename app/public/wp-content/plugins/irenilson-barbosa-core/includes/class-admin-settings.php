@@ -626,7 +626,7 @@ if (accepted === '1') {
 			. '<div class="body">'
 			. ($thumb ? '<img src="' . esc_url($thumb) . '" alt="' . esc_attr($title) . '">' : '')
 			. '<div class="body-text">' . wpautop($excerpt) . '</div>'
-			. '<div class="btn-wrap"><a href="' . esc_url($permalink) . '" class="btn">Ver completo no Blog</a></div>'
+			. '<div class="btn-wrap"><a href="' . esc_url(add_query_arg(['utm_source' => 'newsletter', 'utm_medium' => 'email', 'utm_campaign' => 'novo_' . $post->post_type], $permalink)) . '" class="btn">Ver completo no Blog</a></div>'
 			. '</div>'
 			. '<div class="footer">'
 			. '<p style="margin:0 0 8px">Voce esta recebendo este email porque se inscreveu na newsletter do portal Irenilson Barbosa.</p>'
