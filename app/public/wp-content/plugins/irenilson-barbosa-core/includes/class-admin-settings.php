@@ -136,7 +136,6 @@ class AdminSettings {
 			'social_youtube'   => '',
 			'footer_tagline'   => 'Professor universitário, escritor e pesquisador.',
 			'footer_about'     => 'Doutor em Educação pela UFBA. Autor de ensaios sobre filosofia, educação, política e cultura.',
-			'sidebar_bio'      => 'Professor universitário, escritor e pesquisador. Doutor em Educação, autor de ensaios sobre filosofia, política, educação e cultura.',
 			'site_logo'        => '',
 			'font_heading'     => 'Literata',
 			'font_body'        => 'Inter',
@@ -222,7 +221,6 @@ class AdminSettings {
 		}
 		if (array_key_exists('footer_tagline', $in)) $out['footer_tagline'] = sanitize_text_field($in['footer_tagline']);
 		if (array_key_exists('footer_about', $in)) $out['footer_about'] = sanitize_textarea_field($in['footer_about']);
-		if (array_key_exists('sidebar_bio', $in)) $out['sidebar_bio'] = sanitize_textarea_field($in['sidebar_bio']);
 		$allowed_heading = ['Literata', 'Merriweather', 'Playfair+Display', 'Lora', 'PT+Serif', 'Source+Serif+4', 'Cormorant', 'Cormorant+Upright', 'Red+Hat+Display', 'Fraunces', 'Epilogue', 'Georgia', 'System'];
 		if (array_key_exists('site_logo', $in)) $out['site_logo'] = esc_url_raw(trim($in['site_logo']));
 		if (array_key_exists('font_heading', $in)) $out['font_heading'] = in_array($in['font_heading'], $allowed_heading, true) ? $in['font_heading'] : 'Literata';
@@ -490,16 +488,6 @@ if (accepted === '1') {
 		?>
 		<div>
 		<?php
-		self::card_open('📌', 'Sidebar — Sobre', 'Biografia exibida na barra lateral do site.');
-		self::card_table_open(); ?>
-			<tr>
-				<th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="sidebar_bio" style="color:#3E2C1B;font-weight:600">Biografia</label></th>
-				<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
-			</tr>
-		<?php
-		self::card_table_close();
-		self::card_close();
-
 		self::card_open('📂', 'Descrição dos arquivos', 'Texto exibido abaixo do título em cada página de listagem.');
 		self::card_table_open();
 		$arch_fields = [
