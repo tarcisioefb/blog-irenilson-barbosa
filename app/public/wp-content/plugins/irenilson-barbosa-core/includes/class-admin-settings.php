@@ -103,8 +103,8 @@ class AdminSettings {
 
 	public static function register_menus() {
 		add_menu_page(
-			'Central do Site',
-			'Central do Site',
+			'Irenilson Barbosa — Configuracoes',
+			'Irenilson Barbosa',
 			'publish_pages',
 			'ib-ajustes',
 			[__CLASS__, 'render_page'],
@@ -114,11 +114,20 @@ class AdminSettings {
 
 		add_submenu_page(
 			'ib-ajustes',
-			'Newsletter — Assinantes',
+			'Newsletter',
 			'Newsletter',
 			'publish_pages',
 			'ib-newsletter',
 			[__CLASS__, 'render_newsletter']
+		);
+
+		add_submenu_page(
+			'ib-ajustes',
+			'Tutoriais — Irenilson Barbosa',
+			'Tutoriais',
+			'publish_pages',
+			'ib-tutoriais',
+			[__CLASS__, 'render_tutoriais']
 		);
 	}
 
@@ -202,7 +211,7 @@ if (accepted === '1') {
 		<div class="wrap">
 			<h1 style="display:flex;align-items:center;gap:12px">
 				<span class="dashicons dashicons-admin-site-alt3" style="font-size:32px;width:32px;height:32px"></span>
-				Central do Site — Irenilson Barbosa
+				Irenilson Barbosa — Configuracoes
 			</h1>
 
 			<?php if (isset($_GET['settings-updated'])) : ?>
@@ -662,6 +671,53 @@ if (accepted === '1') {
 			. '<p style="margin:8px 0 0"><span style="display:inline-block;padding:6px 16px;background:#4A5D3E;color:#fff;border-radius:4px;font-size:12px">Ver completo no Blog</span></p>'
 			. '</div>';
 		wp_send_json_success(['html' => $html]);
+	}
+
+	public static function render_tutoriais() {
+		if (!current_user_can('publish_pages')) return;
+		$types = [
+			'post' => ['Artigos', 'Artigos (posts) sao o conteudo principal do blog. Use para ensaios, reflexoes e noticias. O editor de blocos permite adicionar imagens, citacoes, galerias e muito mais.', 'Artigos', 'artigos', true],
+			'publicacao' => ['Publicacoes', 'Publicacoes academicas: artigos cientificos, capitulos de livros e ensaios academicos. Preencha os campos de ano, periodico/veiculo, DOI e citacao ABNT nos metadados abaixo do editor.', 'Publicacoes', 'publicacoes', false],
+			'livro' => ['Livros', 'Livros de autoria, coautoria ou organizacao. Apos preencher titulo e conteudo (sinopse), use os campos de metadados para ano, editora, ISBN e paginas. Os links de compra sao configurados em "Links de compra" com texto personalizado.', 'Livros', 'livros', false],
+			'poiesis' => ['Poiesis (Poemas)', 'Poemas e criacoes literarias. O campo "Autor do poema" aparece abaixo do titulo — use para creditar o autor (nem sempre Irenilson). "Notas" e um campo opcional para texto explicativo ou dedicatoria.', 'Poiésis', 'poiesis', false],
+			'material' => ['Materiais', 'Materiais educacionais para download. Apos criar o material, use o campo "Arquivo para download" para selecionar ou enviar o arquivo da biblioteca de midia.', 'Materiais', 'materiais', false],
+		];
+		?>
+		<div class="wrap">
+			<h1 style="display:flex;align-items:center;gap:12px">
+				<span class="dashicons dashicons-welcome-learn-more" style="font-size:32px;width:32px;height:32px"></span>
+				Tutoriais — Irenilson Barbosa
+			</h1>
+			<p style="font-size:14px;color:#6D5940;margin:0 0 24px">Guia rapido para publicar e configurar o portal.</p>
+
+			<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
+					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🧭 Como publicar</h2>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Va em <strong>Posts > Adicionar novo</strong> (para artigos) ou no tipo de conteudo desejado no menu. Preencha o titulo, o corpo do texto e configure os metadados especificos de cada tipo na area abaixo do editor.</p>
+				</div>
+				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
+					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🔧 Central de configuracao</h2>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Use o menu <strong>Irenilson Barbosa</strong> (acima) para ajustar: redes sociais, logo, Google Analytics, fontes, banner da home, descricao dos arquivos, newsletter e email SMTP.</p>
+				</div>
+				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
+					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">📬 Newsletter</h2>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Para enviar um email com um post novo: va em <strong>Irenilson Barbosa > Newsletter</strong>, selecione o post, veja a previsualizacao e clique em "Enviar". Os assinantes recebem o link com titulo, imagem e excerto.</p>
+				</div>
+			</div>
+
+			<h2 style="font-size:18px;color:#3E2C1B;margin:32px 0 16px">Tipos de conteudo</h2>
+			<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+				<?php foreach ($types as $slug => $t) : ?>
+				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
+					<h3 style="font-size:15px;color:#3E2C1B;margin:0 0 6px"><?php echo esc_html($t[0]); ?></h3>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0 0 12px"><?php echo esc_html($t[1]); ?></p>
+					<p style="margin:0"><a href="<?php echo admin_url('post-new.php?post_type=' . $slug); ?>" class="button button-primary" style="background:#4A5D3E;border-color:#4A5D3E">Criar <?php echo esc_html($t[2]); ?></a>
+					<a href="<?php echo esc_url(home_url('/' . $t[3] . '/')); ?>" class="button" target="_blank" style="margin-left:6px">Ver no site</a></p>
+				</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
 	}
 }
 }
