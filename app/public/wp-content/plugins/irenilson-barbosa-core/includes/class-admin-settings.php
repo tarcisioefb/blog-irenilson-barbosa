@@ -21,7 +21,7 @@ class AdminSettings {
 
 	public static function admin_head_editor() {
 		if (!current_user_can("editor")) return;
-		?><style>.app-pass-wrap,.user-sessions-wrap,.user-url-wrap,tr.user-language-wrap,tr.user-admin-color-wrap,tr.user-comment-shortcuts-wrap,h2:has(+.user-sessions-wrap),h2:has(+.app-pass-wrap){display:none!important}</style><?php
+		?><style>.user-url-wrap,.user-language-wrap,.user-admin-color-wrap,.user-comment-shortcuts-wrap,.application-passwords,.user-sessions-wrap{display:none!important}</style><?php
 	}
 
 	public static function remove_tools_menu() {
