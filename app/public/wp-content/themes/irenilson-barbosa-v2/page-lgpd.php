@@ -1,5 +1,5 @@
 <?php
-/** Template Name: LGPD - Politica de Privacidade */
+/** Template Name: LGPD - Política de Privacidade */
 defined('ABSPATH') || exit;
 get_header(); ?>
 <div class="wrap" id="main" style="padding-top:16px;padding-bottom:var(--space-10)">

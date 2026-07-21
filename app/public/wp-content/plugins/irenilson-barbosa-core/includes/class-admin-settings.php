@@ -44,8 +44,8 @@ class AdminSettings {
 	}
 
 	public static function ajax_purge_cache() {
-		if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'ib_purge')) wp_die('Falha de seguranca.');
-		if (!current_user_can('publish_pages')) wp_die('Sem permissao.');
+		if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'ib_purge')) wp_die('Falha de segurança.');
+		if (!current_user_can('publish_pages')) wp_die('Sem permissão.');
 
 		if (function_exists('LiteSpeed_Cache_API')) {
 			LiteSpeed_Cache_API::purge_all();
@@ -60,7 +60,7 @@ class AdminSettings {
 	}
 
 	public static function dashboard_widgets() {
-		wp_add_dashboard_widget('ib_dashboard_welcome', 'Irenilson Barbosa — Visao geral', [__CLASS__, 'render_dashboard']);
+		wp_add_dashboard_widget('ib_dashboard_welcome', 'Irenilson Barbosa — Visão geral', [__CLASS__, 'render_dashboard']);
 	}
 
 	public static function render_dashboard() {
@@ -77,9 +77,9 @@ class AdminSettings {
 			<a href="<?php echo admin_url('post-new.php?post_type=' . $slug); ?>" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#4A5D3E;color:#fff;text-decoration:none;border-radius:4px;font-size:13px;font-weight:600">+ <?php echo esc_html($t[0]); ?></a>
 			<?php endforeach; ?>
 		</div>
-		<p style="font-size:13px;margin:0 0 8px"><strong>Links rapidos:</strong></p>
+		<p style="font-size:13px;margin:0 0 8px"><strong>Links rápidos:</strong></p>
 		<ul style="font-size:13px;margin:0;list-style:none;padding:0">
-			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-ajustes'); ?>">⚙️ Configuracoes do site</a></li>
+			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-ajustes'); ?>">⚙️ Configurações do site</a></li>
 			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-newsletter'); ?>">📬 Enviar newsletter</a></li>
 			<li style="margin-bottom:6px"><a href="<?php echo admin_url('admin.php?page=ib-tutoriais'); ?>">📖 Tutoriais</a></li>
 			<li style="margin-bottom:6px"><a href="<?php echo admin_url('edit.php?post_type=poiesis'); ?>">📝 Ver todos os poemas</a></li>
@@ -91,7 +91,7 @@ class AdminSettings {
 	public static function handle_unsubscribe() {
 		if (!isset($_GET['ib_unsubscribe'])) return;
 		$email = sanitize_email($_GET['ib_unsubscribe']);
-		if (!$email) { wp_die('Link invalido.'); return; }
+		if (!$email) { wp_die('Link inválido.'); return; }
 
 		$subs = (array) get_option('ib_newsletter_subscribers', []);
 		$key = array_search($email, $subs, true);
@@ -99,7 +99,7 @@ class AdminSettings {
 			unset($subs[$key]);
 			update_option('ib_newsletter_subscribers', array_values($subs), false);
 		}
-		wp_die('Voce foi removido da newsletter. Seu e-mail <strong>' . esc_html($email) . '</strong> nao recebera mais nossas atualizacoes.');
+		wp_die('Você foi removido da newsletter. Seu e-mail <strong>' . esc_html($email) . '</strong> não receberá mais nossas atualizações.');
 	}
 
 	public static function configure_smtp($phpmailer) {
@@ -176,7 +176,7 @@ class AdminSettings {
 
 	public static function register_menus() {
 		add_menu_page(
-			'Irenilson Barbosa — Configuracoes',
+			'Irenilson Barbosa — Configurações',
 			'Irenilson Barbosa',
 			'publish_pages',
 			'ib-ajustes',
@@ -283,18 +283,18 @@ if (accepted === '1') {
 		<div class="wrap">
 			<h1 style="display:flex;align-items:center;gap:12px">
 				<span class="dashicons dashicons-admin-site-alt3" style="font-size:32px;width:32px;height:32px"></span>
-				Irenilson Barbosa — Configuracoes
+				Irenilson Barbosa — Configurações
 			</h1>
 
 			<?php if (isset($_GET['settings-updated'])) : ?>
-				<div class="notice notice-success is-dismissible"><p>Alteracoes salvas.</p></div>
+				<div class="notice notice-success is-dismissible"><p>Alterações salvas.</p></div>
 			<?php endif; ?>
 
 			<nav class="nav-tab-wrapper" style="margin-bottom:20px">
 				<a href="?page=ib-ajustes&amp;tab=geral" class="nav-tab <?php echo $tab === 'geral' ? 'nav-tab-active' : ''; ?>">Geral</a>
 				<a href="?page=ib-ajustes&amp;tab=home" class="nav-tab <?php echo $tab === 'home' ? 'nav-tab-active' : ''; ?>">Home</a>
-				<a href="?page=ib-ajustes&amp;tab=conteudo" class="nav-tab <?php echo $tab === 'conteudo' ? 'nav-tab-active' : ''; ?>">Conteudo</a>
-				<a href="?page=ib-ajustes&amp;tab=aparencia" class="nav-tab <?php echo $tab === 'aparencia' ? 'nav-tab-active' : ''; ?>">Aparencia</a>
+				<a href="?page=ib-ajustes&amp;tab=conteudo" class="nav-tab <?php echo $tab === 'conteudo' ? 'nav-tab-active' : ''; ?>">Conteúdo</a>
+				<a href="?page=ib-ajustes&amp;tab=aparencia" class="nav-tab <?php echo $tab === 'aparencia' ? 'nav-tab-active' : ''; ?>">Aparência</a>
 			</nav>
 
 			<form method="post" action="options.php">
@@ -313,7 +313,7 @@ if (accepted === '1') {
 				</div>
 
 				<div style="margin-top:4px">
-				<?php submit_button('Salvar alteracoes', 'primary', 'submit', true, ['style' => 'background:#3E2C1B;border-color:#3E2C1B;border-radius:4px;padding:8px 28px;height:auto;font-size:14px']); ?>
+				<?php submit_button('Salvar alterações', 'primary', 'submit', true, ['style' => 'background:#3E2C1B;border-color:#3E2C1B;border-radius:4px;padding:8px 28px;height:auto;font-size:14px']); ?>
 				</div>
 			</form>
 		</div>
@@ -355,7 +355,7 @@ if (accepted === '1') {
 		self::card_table_close();
 		self::card_close();
 
-		self::card_open('🖼️', 'Logo', 'Usado no cabecalho e rodape. PNG ou SVG, largura max. 240px.');
+		self::card_open('🖼️', 'Logo', 'Usado no cabeçalho e rodapé. PNG ou SVG, largura max. 240px.');
 		self::card_table_open();
 		$logo_val = self::opt('site_logo'); ?>
 			<tr>
@@ -380,7 +380,7 @@ if (accepted === '1') {
 		</div>
 		<div>
 		<?php
-		self::card_open('📊', 'Google Analytics', 'Insira o ID de medicao (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.');
+		self::card_open('📊', 'Google Analytics', 'Insira o ID de medição (ex.: G-XXXXXXXXXX) para ativar o Google Analytics 4.');
 		self::card_table_open(); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
@@ -401,7 +401,7 @@ if (accepted === '1') {
 		self::card_table_close();
 		self::card_close();
 
-		self::card_open('📧', 'E-mail de contato', 'E-mail que recebe as mensagens do formulario de contato.');
+		self::card_open('📧', 'E-mail de contato', 'E-mail que recebe as mensagens do formulário de contato.');
 		self::card_table_open(); ?>
 			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="contact_email" style="color:#3E2C1B;font-weight:600;font-size:12px">Destino</label></th><td style="padding:6px 0"><input type="email" id="contact_email" name="ib_opts[contact_email]" value="<?php echo esc_attr(self::opt('contact_email')); ?>" class="regular-text" placeholder="contato@..." style="border-color:#e0d5c3;border-radius:4px"></td></tr>
 		<?php
@@ -409,7 +409,7 @@ if (accepted === '1') {
 		self::card_close();
 
 
-		self::card_open('💬', 'Comentarios do Facebook');
+		self::card_open('💬', 'Comentários do Facebook');
 		self::card_table_open(); ?>
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="facebook_app_id" style="color:#3E2C1B;font-weight:600;font-size:12px">App ID</label></th>
@@ -529,7 +529,7 @@ if (accepted === '1') {
 	private static function render_tab_aparencia() {
 		?>
 		<div>
-		<?php self::card_open('🔤', 'Fontes', 'Defina as fontes usadas no site. As alteracoes aparecem na hora.'); ?>
+		<?php self::card_open('🔤', 'Fontes', 'Defina as fontes usadas no site. As alterações aparecem na hora.'); ?>
 			<p>
 				<label for="font_heading" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px;color:#3E2C1B">Titulos</label>
 				<select id="font_heading" name="ib_opts[font_heading]" style="width:100%;border-color:#e0d5c3;border-radius:4px;padding:4px 6px">
@@ -588,7 +588,7 @@ if (accepted === '1') {
 				$sent = self::send_newsletter_email($post);
 				if (!$sent) $send_error = 'Falha ao enviar. Verifique o SMTP.';
 			} else {
-				$send_error = 'Post invalido.';
+				$send_error = 'Post inválido.';
 			}
 		}
 
@@ -700,8 +700,8 @@ if (accepted === '1') {
 			. '<div class="btn-wrap"><a href="' . esc_url(add_query_arg(['utm_source' => 'newsletter', 'utm_medium' => 'email', 'utm_campaign' => 'novo_' . $post->post_type], $permalink)) . '" class="btn">Ver completo no Blog</a></div>'
 			. '</div>'
 			. '<div class="footer">'
-			. '<p style="margin:0 0 8px">Voce esta recebendo este email porque se inscreveu na newsletter do portal Irenilson Barbosa.</p>'
-			. '<p style="margin:0"><a href="' . esc_url($unsub_url) . '">Cancelar inscricao</a> &nbsp;|&nbsp; <a href="' . esc_url(home_url('/privacidade/')) . '">Politica de Privacidade</a></p>'
+			. '<p style="margin:0 0 8px">Você está recebendo este e-mail porque se inscreveu na newsletter do portal Irenilson Barbosa.</p>'
+			. '<p style="margin:0"><a href="' . esc_url($unsub_url) . '">Cancelar inscrição</a> &nbsp;|&nbsp; <a href="' . esc_url(home_url('/privacidade/')) . '">Política de Privacidade</a></p>'
 			. '</div></div></body></html>';
 
 		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
@@ -738,11 +738,11 @@ if (accepted === '1') {
 	public static function render_tutoriais() {
 		if (!current_user_can('publish_pages')) return;
 		$types = [
-			'post' => ['Artigos', 'Artigos (posts) sao o conteudo principal do blog. Use para ensaios, reflexoes e noticias. O editor de blocos permite adicionar imagens, citacoes, galerias e muito mais.', 'Artigos', 'artigos', true],
-			'publicacao' => ['Publicacoes', 'Publicacoes academicas: artigos cientificos, capitulos de livros e ensaios academicos. Preencha os campos de ano, periodico/veiculo, DOI e citacao ABNT nos metadados abaixo do editor.', 'Publicacoes', 'publicacoes', false],
-			'livro' => ['Livros', 'Livros de autoria, coautoria ou organizacao. Apos preencher titulo e conteudo (sinopse), use os campos de metadados para ano, editora, ISBN e paginas. Os links de compra sao configurados em "Links de compra" com texto personalizado.', 'Livros', 'livros', false],
-			'poiesis' => ['Poiesis (Poemas)', 'Poemas e criacoes literarias. O campo "Autor do poema" aparece abaixo do titulo — use para creditar o autor (nem sempre Irenilson). "Notas" e um campo opcional para texto explicativo ou dedicatoria.', 'Poiésis', 'poiesis', false],
-			'material' => ['Materiais', 'Materiais educacionais para download. Apos criar o material, use o campo "Arquivo para download" para selecionar ou enviar o arquivo da biblioteca de midia.', 'Materiais', 'materiais', false],
+			'post' => ['Artigos', 'Artigos (posts) são o conteúdo principal do blog. Use para ensaios, reflexões e notícias. O editor de blocos permite adicionar imagens, citações, galerias e muito mais.', 'Artigos', 'artigos', true],
+			'publicacao' => ['Publicacoes', 'Publicações acadêmicas: artigos científicos, capítulos de livros e ensaios acadêmicos. Preencha os campos de ano, periódico/veículo, DOI e citação ABNT nos metadados abaixo do editor.', 'Publicacoes', 'publicacoes', false],
+			'livro' => ['Livros', 'Livros de autoria, coautoria ou organização. Após preencher título e conteúdo (sinopse), use os campos de metadados para ano, editora, ISBN e páginas. Os links de compra são configurados em "Links de compra" com texto personalizado.', 'Livros', 'livros', false],
+			'poiesis' => ['Poiesis (Poemas)', 'Poemas e criações literárias. O campo "Autor do poema" aparece abaixo do título — use para creditar o autor (nem sempre Irenilson). "Notas" é um campo opcional para texto explicativo ou dedicatória.', 'Poiésis', 'poiesis', false],
+			'material' => ['Materiais', 'Materiais educacionais para download. Após criar o material, use o campo "Arquivo para download" para selecionar ou enviar o arquivo da biblioteca de mídia.', 'Materiais', 'materiais', false],
 		];
 		?>
 		<div class="wrap">
@@ -750,24 +750,24 @@ if (accepted === '1') {
 				<span class="dashicons dashicons-welcome-learn-more" style="font-size:32px;width:32px;height:32px"></span>
 				Tutoriais — Irenilson Barbosa
 			</h1>
-			<p style="font-size:14px;color:#6D5940;margin:0 0 24px">Guia rapido para publicar e configurar o portal.</p>
+			<p style="font-size:14px;color:#6D5940;margin:0 0 24px">Guia rápido para publicar e configurar o portal.</p>
 
 			<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
 					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🧭 Como publicar</h2>
-					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Va em <strong>Posts > Adicionar novo</strong> (artigos) ou no tipo de conteudo no menu lateral. Preencha titulo, corpo e metadados especificos de cada tipo na area abaixo do editor. Use o botao <strong>⚡ Limpar cache</strong> na barra superior ao finalizar.</p>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Vá em <strong>Posts > Adicionar novo</strong> (artigos) ou no tipo de conteúdo no menu lateral. Preencha título, corpo e metadados específicos de cada tipo na área abaixo do editor. Use o botao <strong>⚡ Limpar cache</strong> na barra superior ao finalizar.</p>
 				</div>
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
 					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">🔧 Menu Irenilson Barbosa</h2>
-					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Acesse <strong>Irenilson Barbosa</strong> no menu lateral para configurar: redes sociais, logo, Google Analytics, fontes, banner da home, descricao dos arquivos, newsletter e email SMTP (abas: Geral, Home, Conteudo, Aparencia).</p>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Acesse <strong>Irenilson Barbosa</strong> no menu lateral para configurar: redes sociais, logo, Google Analytics, fontes, banner da home, descrição dos arquivos, newsletter e email SMTP (abas: Geral, Home, Conteúdo, Aparência).</p>
 				</div>
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
 					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 8px">📬 Newsletter</h2>
-					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Para enviar um email com um post novo: va em <strong>Irenilson Barbosa > Newsletter</strong>, selecione o post, veja a previsualizacao e clique em "Enviar". Os assinantes recebem o link com titulo, imagem e excerto.</p>
+					<p style="font-size:13px;color:#6D5940;line-height:1.6;margin:0">Para enviar um email com um post novo: vá em <strong>Irenilson Barbosa > Newsletter</strong>, selecione o post, veja a pré-visualização e clique em "Enviar". Os assinantes recebem o link com titulo, imagem e excerto.</p>
 				</div>
 			</div>
 
-			<h2 style="font-size:18px;color:#3E2C1B;margin:32px 0 16px">Tipos de conteudo</h2>
+			<h2 style="font-size:18px;color:#3E2C1B;margin:32px 0 16px">Tipos de conteúdo</h2>
 			<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
 				<?php foreach ($types as $slug => $t) : ?>
 				<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:20px">
