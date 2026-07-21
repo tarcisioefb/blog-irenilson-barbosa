@@ -610,7 +610,7 @@ if (accepted === '1') {
 		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>'
 			. 'body{margin:0;padding:0;background-color:#F5F0E8;font-family:Georgia,"Times New Roman",serif}'
 			. '.wrapper{max-width:600px;margin:0 auto;background:#FFFFFF;border-radius:8px;overflow:hidden}'
-			. '.header{padding:32px 40px 0;text-align:center;border-bottom:3px solid #4A5D3E}'
+			. '.header{padding:32px 40px 0;text-align:center}'
 			. '.header h1{font-size:22px;color:#3E2C1B;margin:0 0 4px;line-height:1.3}'
 			. '.meta{font-size:13px;color:#6D5940;margin:0 0 24px}'
 			. '.body{padding:0 40px 32px}'
