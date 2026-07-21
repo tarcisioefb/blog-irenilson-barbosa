@@ -43,7 +43,7 @@ while (have_posts()) : the_post();
 
 			<h1 class="article__title" style="margin-bottom:var(--space-5)"><?php the_title(); ?></h1>
 
-			<div class="article__body" style="max-width:none"><?php the_content(); ?></div>
+			<div class="article__body" style="max-width:none;font-size:var(--text-15)"><?php the_content(); ?></div>
 
 			<?php if ($links) : ?>
 			<div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin:var(--space-6) 0;align-items:center">
