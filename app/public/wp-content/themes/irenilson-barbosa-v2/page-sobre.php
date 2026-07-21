@@ -17,7 +17,7 @@ while (have_posts()) : the_post(); ?>
 				</div>
 			</div>
 			<div>
-				<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:500;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight)">Irenilson Barbosa</h1>
+				<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight)">Irenilson Barbosa</h1>
 				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)">Professor, escritor e pesquisador</p>
 
 				<div style="padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);margin-bottom:var(--space-8);border-left:3px solid var(--accent)">
