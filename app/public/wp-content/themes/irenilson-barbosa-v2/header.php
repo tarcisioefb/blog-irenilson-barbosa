@@ -5,6 +5,8 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+	<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<?php wp_head(); ?>
 <?php $fb_app_id = ib_opt('facebook_app_id'); if ($fb_app_id) : ?>
 <meta property="fb:app_id" content="<?php echo esc_attr($fb_app_id); ?>">
