@@ -4,8 +4,11 @@ defined('ABSPATH') || exit;
 get_header(); ?>
 <div class="wrap" id="main" style="padding-top:16px;padding-bottom:var(--space-10)">
 	<?php ib_breadcrumb(); ?>
-	<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);color:var(--ink);margin:0 0 var(--space-2)">Livros</h1>
-	<p style="color:var(--tx-2);margin:0 0 var(--space-8);font-size:var(--text-md)">Obras de Irenilson Barbosa — autor, organizador e coautor.</p>
+	<div class="arch-hero">
+		<p class="arch-hero__kick">Bibliografia</p>
+		<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-4);line-height:var(--leading-tight)">Livros</h1>
+		<p class="arch-hero__desc">Obras de Irenilson Barbosa — autor, organizador e coautor.</p>
+	</div>
 
 	<?php if (have_posts()) : ?>
 		<div class="ib-book-archive-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-7)">

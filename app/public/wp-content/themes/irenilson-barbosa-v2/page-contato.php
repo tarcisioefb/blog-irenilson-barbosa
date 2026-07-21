@@ -52,7 +52,7 @@ get_header(); ?>
 	<div class="ib-contact-grid" style="display:grid;grid-template-columns:1fr 340px;gap:var(--space-10);align-items:start">
 <style>@media(max-width:900px){.ib-contact-grid{grid-template-columns:1fr!important}.ib-contact-grid>div:last-child{position:static!important}}</style>
 		<div>
-			<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);color:var(--ink);margin:0 0 var(--space-2)">Contato</h1>
+			<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-2)">Contato</h1>
 			<p style="color:var(--tx-2);margin:0 0 var(--space-8)">Envie uma mensagem. Responderei assim que possível.</p>
 
 			<form method="post" style="display:flex;flex-direction:column;gap:var(--space-5)">
