@@ -58,7 +58,12 @@ class AdminSettings {
 			'banner_image_mobile' => '',
 			'banner_link'         => '',
 			'google_analytics_id' => '',
-			'contact_email' => '',
+			'contact_email'    => '',
+			'arch_desc_artigos' => 'Ensaios, reflexões e artigos sobre filosofia, educação, política, cultura e cotidiano.',
+			'arch_desc_publicacoes' => 'Publicações acadêmicas de Irenilson Barbosa — artigos científicos, capítulos de livros e ensaios.',
+			'arch_desc_livros' => 'Obras de Irenilson Barbosa — autor, organizador e coautor.',
+			'arch_desc_materiais' => 'Materiais educacionais para download — slides, apostilas e guias.',
+			'arch_desc_poiesis' => 'Poemas e criações literárias de Irenilson Barbosa.',
 			'smtp_host'    => '',
 			'smtp_port'    => '',
 			'smtp_user'    => '',
@@ -141,6 +146,9 @@ class AdminSettings {
 		if (array_key_exists('banner_link', $in)) $out['banner_link'] = esc_url_raw(trim($in['banner_link']));
 		if (array_key_exists('google_analytics_id', $in)) $out['google_analytics_id'] = sanitize_text_field(trim($in['google_analytics_id']));
 		if (array_key_exists("contact_email", $in)) $out["contact_email"] = sanitize_email(trim($in["contact_email"]));
+		foreach (['arch_desc_artigos', 'arch_desc_publicacoes', 'arch_desc_livros', 'arch_desc_materiais', 'arch_desc_poiesis'] as $k) {
+			if (array_key_exists($k, $in)) $out[$k] = sanitize_textarea_field($in[$k]);
+		}
 		if (array_key_exists('smtp_host', $in)) $out['smtp_host'] = sanitize_text_field(trim($in['smtp_host']));
 		if (array_key_exists('smtp_port', $in)) $out['smtp_port'] = sanitize_text_field(trim($in['smtp_port']));
 		if (array_key_exists('smtp_user', $in)) $out['smtp_user'] = sanitize_email(trim($in['smtp_user']));
@@ -391,6 +399,22 @@ if (accepted === '1') {
 				<td style="padding:8px 0"><textarea id="sidebar_bio" name="ib_opts[sidebar_bio]" rows="4" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt('sidebar_bio')); ?></textarea></td>
 			</tr>
 		<?php
+		self::card_table_close();
+		self::card_close();
+
+		self::card_open('📂', 'Descrição dos arquivos', 'Texto exibido abaixo do título em cada página de listagem.');
+		self::card_table_open();
+		$arch_fields = [
+			'arch_desc_artigos' => 'Artigos',
+			'arch_desc_publicacoes' => 'Publicações',
+			'arch_desc_livros' => 'Livros',
+			'arch_desc_materiais' => 'Materiais',
+			'arch_desc_poiesis' => 'Poiésis',
+		];
+		foreach ($arch_fields as $k => $lbl) : ?>
+			<tr><th scope="row" style="width:80px;padding:6px 0;vertical-align:top"><label for="<?php echo esc_attr($k); ?>" style="color:#3E2C1B;font-weight:600;font-size:12px"><?php echo esc_html($lbl); ?></label></th>
+			<td style="padding:6px 0"><textarea id="<?php echo esc_attr($k); ?>" name="ib_opts[<?php echo esc_attr($k); ?>]" rows="2" class="large-text" style="border-color:#e0d5c3;border-radius:4px"><?php echo esc_textarea(self::opt($k)); ?></textarea></td></tr>
+		<?php endforeach;
 		self::card_table_close();
 		self::card_close();
 		?>

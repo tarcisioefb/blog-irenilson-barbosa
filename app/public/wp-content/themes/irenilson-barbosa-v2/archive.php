@@ -16,7 +16,12 @@ get_header();
 			else { echo 'Arquivo'; }
 		?></p>
 		<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-4);line-height:var(--leading-tight)"><?php echo esc_html( wp_strip_all_tags( get_the_archive_title() ) ); ?></h1>
-		<?php $desc = get_the_archive_description(); if ($desc) : ?><p class="arch-hero__desc"><?php echo $desc; ?></p><?php endif; ?>
+		<?php
+		$desc = '';
+		if (is_post_type_archive('publicacao')) $desc = ib_opt('arch_desc_publicacoes');
+		elseif (is_post_type_archive('material')) $desc = ib_opt('arch_desc_materiais');
+		else $desc = get_the_archive_description();
+		if ($desc) : ?><p class="arch-hero__desc"><?php echo esc_html($desc); ?></p><?php endif; ?>
 	</div>
 </div>
 

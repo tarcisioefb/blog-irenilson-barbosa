@@ -7,7 +7,7 @@ get_header();
 	<div class="arch-hero">
 		<p class="arch-hero__kick">Artigos</p>
 		<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-4);line-height:var(--leading-tight)">Últimas notícias</h1>
-		<p class="arch-hero__desc">Ensaios, reflexões e artigos sobre filosofia, educação, política, cultura e cotidiano.</p>
+		<p class="arch-hero__desc"><?php echo esc_html( ib_opt('arch_desc_artigos') ?: 'Ensaios, reflexões e artigos sobre filosofia, educação, política, cultura e cotidiano.' ); ?></p>
 	</div>
 </div>
 <div class="wrap arch-layout">

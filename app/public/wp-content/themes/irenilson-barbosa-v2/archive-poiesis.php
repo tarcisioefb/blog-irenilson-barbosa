@@ -7,7 +7,7 @@ get_header(); ?>
 	<div class="arch-hero">
 		<p class="arch-hero__kick">Ποίησις</p>
 		<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-4);line-height:var(--leading-tight)">Poiésis</h1>
-		<p class="arch-hero__desc">Poiésis é uma palavra polissêmica de origem grega. Ela denota, entre outras coisas, a ação ou a capacidade de produzir ou fazer algo de forma criativa. Nos escritos de Platão é possível entender a poíésis como processo criativo, conhecimento e aprendizado lúdico — ação que converte o "não ser" em "ser".</p>
+		<p class="arch-hero__desc"><?php echo esc_html( ib_opt('arch_desc_poiesis') ?: 'Poemas e criações literárias de Irenilson Barbosa.' ); ?></p>
 	</div>
 
 	<?php if (have_posts()) : ?>
