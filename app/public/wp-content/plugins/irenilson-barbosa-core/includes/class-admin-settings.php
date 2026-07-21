@@ -10,6 +10,40 @@ class AdminSettings {
 		add_action('wp_ajax_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
+		add_action('transition_post_status', [__CLASS__, 'notify_new_post'], 10, 3);
+	}
+
+	public static function notify_new_post($new_status, $old_status, $post) {
+		if ($new_status !== 'publish' || $old_status === 'publish') return;
+		if (wp_is_post_revision($post->ID) || wp_is_post_autosave($post->ID)) return;
+
+		$post_date = strtotime($post->post_date);
+		$now = time();
+		if (($now - $post_date) > 3600) return;
+
+		$post_type = get_post_type_object($post->post_type);
+		$type_name = $post_type ? mb_strtolower($post_type->labels->singular_name) : 'post';
+
+		$subs = (array) get_option('ib_newsletter_subscribers', []);
+		if (empty($subs)) return;
+
+		$subject = 'Novo ' . $type_name . ': ' . $post->post_title;
+		$permalink = get_permalink($post->ID);
+		$excerpt = wp_trim_words(wp_strip_all_tags($post->post_content), 40);
+
+		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;color:#3E2C1B;max-width:600px;margin:0 auto;padding:20px}h1{font-size:22px;color:#3E2C1B}a{color:#4A5D3E}.excerpt{color:#6D5940;line-height:1.6;margin:16px 0}.footer{font-size:12px;color:#9E8A68;border-top:1px solid #E5E5E5;padding-top:12px;margin-top:24px}</style></head><body>'
+			. '<h1>' . esc_html($post->post_title) . '</h1>'
+			. '<p style="color:#6D5940;font-size:14px">' . esc_html($type_name) . ' &middot; ' . esc_html(get_the_date('j F Y', $post->ID)) . '</p>'
+			. ($excerpt ? '<p class="excerpt">' . esc_html($excerpt) . '</p>' : '')
+			. '<p><a href="' . esc_url($permalink) . '" style="display:inline-block;padding:10px 20px;background:#4A5D3E;color:#fff;text-decoration:none;border-radius:4px;font-family:Helvetica,Arial,sans-serif;font-size:14px">Ler ' . $type_name . '</a></p>'
+			. '<p class="footer">Você recebeu este email porque se inscreveu na newsletter do portal Irenilson Barbosa. <br><a href="' . esc_url(home_url('/privacidade/')) . '" style="color:#9E8A68">Política de Privacidade</a></p>'
+			. '</body></html>';
+
+		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
+
+		foreach ($subs as $email) {
+			wp_mail($email, $subject, $body, $headers);
+		}
 	}
 
 	public static function configure_smtp($phpmailer) {
@@ -512,11 +546,40 @@ if (accepted === '1') {
 						<?php endforeach; ?>
 					</tbody>
 				</table>
-			<?php endif; ?>
-		</div>
+		<?php endif; ?>
+
+		<?php if (!empty($_GET['test']) && !empty($subs)) : ?>
+		<div class="notice notice-info"><p>Enviando e-mail de teste...</p></div>
 		<?php
+		$test = self::send_test_newsletter();
+		echo '<div class="notice ' . ($test ? 'notice-success' : 'notice-error') . '"><p>' . ($test ? 'E-mail de teste enviado!' : 'Falha ao enviar e-mail de teste.') . '</p></div>';
+		endif; ?>
+
+		<hr style="margin-top:24px">
+		<h2 style="font-size:15px;color:#3E2C1B">Teste de notificação</h2>
+		<p style="font-size:13px;color:#6D5940">Envia um e-mail de teste para o primeiro assinante com um layout simulado de novo post.</p>
+		<a href="?page=ib-newsletter&amp;test=1" class="button">📧 Enviar teste</a>
+	</div>
+	<?php
 	}
-}
+
+	public static function send_test_newsletter() {
+		$subs = (array) get_option('ib_newsletter_subscribers', []);
+		if (empty($subs)) return false;
+		$email = $subs[0];
+
+		$subject = '[Teste] Novo artigo: Exemplo de título para newsletter';
+		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;color:#3E2C1B;max-width:600px;margin:0 auto;padding:20px}h1{font-size:22px;color:#3E2C1B}a{color:#4A5D3E}.excerpt{color:#6D5940;line-height:1.6;margin:16px 0}.footer{font-size:12px;color:#9E8A68;border-top:1px solid #E5E5E5;padding-top:12px;margin-top:24px}</style></head><body>'
+			. '<h1>Exemplo de título para newsletter</h1>'
+			. '<p style="color:#6D5940;font-size:14px">artigo &middot; 21 de julho de 2026</p>'
+			. '<p class="excerpt">Este é um e-mail de teste para verificar o layout da newsletter. Quando um novo post for publicado, os assinantes receberão uma notificação com este formato.</p>'
+			. '<p><a href="' . esc_url(home_url('/')) . '" style="display:inline-block;padding:10px 20px;background:#4A5D3E;color:#fff;text-decoration:none;border-radius:4px;font-family:Helvetica,Arial,sans-serif;font-size:14px">Ler artigo</a></p>'
+			. '<p class="footer">Você recebeu este email porque se inscreveu na newsletter do portal Irenilson Barbosa. <br><a href="' . esc_url(home_url('/privacidade/')) . '" style="color:#9E8A68">Política de Privacidade</a></p>'
+			. '</body></html>';
+
+		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
+		return wp_mail($email, $subject, $body, $headers);
+	}
 }
 
 namespace {
