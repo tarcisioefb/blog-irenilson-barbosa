@@ -20,7 +20,7 @@
 
 <div id="ib-cookie-banner" role="alert" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink);color:#fff;padding:var(--space-4) var(--space-6);font-size:var(--text-13);line-height:1.5;box-shadow:0 -4px 20px rgba(0,0,0,.2)">
 	<div style="max-width:var(--wrap);margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-4)">
-		<p style="flex:1;margin:0;min-width:200px">Olá! Este site usa cookies do Google Analytics para entender melhor como você navega e melhorar sua experiência. Ao clicar em "Aceitar", você nos ajuda a fazer o blog cada vez melhor. 😊<br><a href="/privacidade/" target="_blank" style="color:var(--tx-inv);text-decoration:underline">Saiba mais na Política de Privacidade</a>.</p>
+		<p style="flex:1;margin:0;min-width:150px;font-size:var(--text-xs)">Este site usa cookies do Google Analytics para entender sua navegação. Ao clicar em "Aceitar", você consente com nossa <a href="/privacidade/" target="_blank" style="color:var(--tx-inv);text-decoration:underline">Política de Privacidade</a>.</p>
 		<div style="display:flex;gap:var(--space-2);flex-shrink:0">
 			<button type="button" id="ib-cookie-reject" style="padding:var(--space-1) var(--space-4);background:transparent;color:var(--tx-inv-dim);border:1px solid var(--tx-inv-dim);border-radius:var(--radius-sm);cursor:pointer;font-size:var(--text-13)">Rejeitar</button>
 			<button type="button" id="ib-cookie-accept" style="padding:var(--space-1) var(--space-4);background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:var(--text-13)">Aceitar</button>
