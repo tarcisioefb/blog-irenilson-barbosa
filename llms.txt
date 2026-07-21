@@ -3,25 +3,41 @@
 
 ## Sobre o autor
 - [Sobre](https://irenilsonbarbosa.com/sobre/) — biografia, formação acadêmica (Doutor em Educação pela UFBA, Pós-Doutor pela Universidade do Porto), ORCID, currículo Lattes, publicações
-- [Contato](https://irenilsonbarbosa.com/contato/)
+- [Contato](https://irenilsonbarbosa.com/contato/) — formulário de contato com checkbox LGPD, honeypot anti-spam e time trap
 
 ## Conteúdo
 - [Artigos](https://irenilsonbarbosa.com/artigos/) — ensaios e reflexões (categorias: filosofia, educação, política, cultura, cotidiano)
 - [Publicações acadêmicas](https://irenilsonbarbosa.com/publicacoes/) — artigos científicos, capítulos de livros (taxonomia: tipo-de-publicacao)
 - [Livros](https://irenilsonbarbosa.com/livros/) — livros do autor (taxonomia: participacao: autor, organizador, coautor)
-- [Poiésis](https://irenilsonbarbosa.com/poiesis/) — poemas e criações literárias
+- [Poiésis](https://irenilsonbarbosa.com/poiesis/) — poemas e criações literárias (autor personalizável por poema, notas)
 - [Materiais](https://irenilsonbarbosa.com/materiais/) — recursos educacionais para download (taxonomia: tipo-de-material: slides, apostila, guia)
+- [Política de Privacidade](https://irenilsonbarbosa.com/privacidade/) — LGPD compliance
 
 ## Navegação principal
-- Início, Artigos, Publicações, Livros, Materiais, Poiésis, Sobre
+- Início, Artigos, Publicações, Livros, Materiais, Poiésis, Sobre, Contato
 
-## Redes sociais
-- Facebook, Instagram, YouTube (links configurados na Central do Site)
+## Funcionalidades
+- **TTS (Text-to-Speech)** — botão "Ouvir" em artigos, livros e poemas. Lê título, autor, conteúdo e bio de encerramento. Controles play/pause/stop. Suporte a vozes PT-BR.
+- **SEO** — meta description, Open Graph, Twitter Cards, schema Article/Book/BreadcrumbList/WebSite/Person/Organization. Sitemap nativo do WordPress. robots.txt dinâmico.
+- **Google Analytics (GA4)** — carregamento condicional após consentimento do banner de cookies. UTM parameters em links da newsletter.
+- **Newsletter** — cadastro via AJAX, envio manual de posts com preview (título, imagem destacada, excerto, CTA), unsubscribe link, export CSV.
+- **LGPD** — banner de cookies com opt-in, checkbox de consentimento no formulário de contato, política de privacidade, direito de exclusão.
+- **Imagens responsivas** — srcset nativo, WebP/AVIF via .htaccess rewrite, fetchpriority high na LCP, image sizes: ib-card (640x400), ib-thumb (220x150), ib-book-thumb (150x225).
+- **Breadcrumbs** — navegação hierárquica em todas as páginas com schema BreadcrumbList.
+- **Banner publicitário** — responsivo (desktop/tablet/mobile) configurável na Central do Site.
 
-## Newsletter
-- Cadastro via formulário AJAX na página inicial e de contato
+## Admin
+- **Irenilson Barbosa** (menu principal) — configurações de redes sociais, logo, GA4, SMTP, fontes, banner, home categories, descrição dos arquivos, e-mail de contato
+- **Newsletter** — envio manual de posts para assinantes
+- **Tutoriais** — guia de publicação para cada tipo de conteúdo
+- **Dashboard widget** — botões de ação rápida para criar conteúdo
+- **Role Editor** — acesso limitado: sem Tools/Comentários/Páginas, profile simplificado
 
 ## Observações técnicas
-- Este site usa WordPress com o tema "Blog do Irenilson" e o plugin "Irenilson Barbosa Core"
-- Tipografia: Literata (títulos) e Inter (corpo) — configuráveis
+- WordPress com tema "Blog do Irenilson" (fork de Elite Notícias) e plugin "Irenilson Barbosa Core"
+- Tipografia: Literata (títulos) e Inter (corpo) — configuráveis via admin
 - Paleta: marrom (#3E2C1B), bege (#F5F0E8), verde militar (#4A5D3E)
+- Cache: LiteSpeed Cache, botão "Limpar cache" na admin bar
+- Deploy: rsync via SSH (deploy.sh) para domains/irenilsonbarbosa.com/public_html/
+- Contato: contato@irenilsonbarbosa.com / tarcisioefbarbosa@gmail.com (formulário)
+- LGPD: encarregado via contato@, dados retidos conforme política de privacidade
