@@ -27,7 +27,7 @@ while (have_posts()) : the_post();
 	<?php ib_breadcrumb(); ?>
 
 	<?php if (has_post_thumbnail()) : ?>
-	<div class="ib-book-detail-grid" style="display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:clamp(var(--space-6),4vw,var(--space-10));align-items:start;margin-bottom:var(--space-10)">
+	<div class="ib-book-detail-grid" style="display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(var(--space-6),4vw,var(--space-10));align-items:start;margin-bottom:var(--space-10)">
 		<div style="position:sticky;top:140px">
 			<div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-hero);background:#fff">
 				<?php the_post_thumbnail('full', ['style' => 'width:100%;height:auto;display:block']); ?>
