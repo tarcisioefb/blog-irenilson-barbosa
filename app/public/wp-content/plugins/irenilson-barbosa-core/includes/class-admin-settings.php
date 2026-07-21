@@ -16,6 +16,7 @@ class AdminSettings {
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
 		add_action('init', [__CLASS__, 'handle_unsubscribe']);
 		add_action('admin_init', [__CLASS__, 'remove_tools_menu']);
+		add_action('admin_head', [__CLASS__, 'admin_head_editor']);
 	}
 
 	public static function admin_head_editor() {
