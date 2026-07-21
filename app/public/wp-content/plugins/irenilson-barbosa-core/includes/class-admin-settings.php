@@ -446,17 +446,34 @@ if (accepted === '1') {
 					foreach ($all_terms as $t) { if (!in_array($t->slug, $saved, true)) $ordered[] = $t; }
 				} else { $ordered = array_values($all_terms); }
 				foreach ($ordered as $t) : $checked = empty($saved) || in_array($t->slug, $saved, true) ? 'checked' : ''; ?>
-				<li style="display:flex;align-items:center;gap:10px;padding:7px 10px;margin:0 0 3px;background:#fff;border:1px solid #e0d5c3;border-radius:5px;cursor:grab">
-					<span style="color:#bbb;font-size:16px;cursor:grab;user-select:none">⠿</span>
+				<li style="display:flex;align-items:center;gap:6px;padding:7px 10px;margin:0 0 3px;background:#fff;border:1px solid #e0d5c3;border-radius:5px">
+					<span class="ib-drag-handle" style="color:#bbb;font-size:16px;cursor:grab;user-select:none">⠿</span>
+					<span class="ib-up-btn" style="cursor:pointer;color:#888;font-size:14px;line-height:1">▲</span>
+					<span class="ib-down-btn" style="cursor:pointer;color:#888;font-size:14px;line-height:1">▼</span>
 					<input type="hidden" name="ib_opts[home_cats][]" value="_disabled_">
-					<label style="display:flex;align-items:center;gap:6px;flex:1;cursor:pointer">
+					<label style="display:flex;align-items:center;gap:6px;flex:1;cursor:pointer;user-select:none">
 						<input type="checkbox" name="ib_opts[home_cats][]" value="<?php echo esc_attr($t->slug); ?>" <?php echo $checked; ?>>
 						<span style="color:#3E2C1B;font-size:13px"><?php echo esc_html($t->name); ?></span>
 					</label>
 				</li>
 				<?php endforeach; ?>
 			</ul>
-			<script>jQuery(function($){$('#ib-home-cats').sortable({axis:'y',handle:'span',placeholder:'ui-state-highlight'});$('#ib-home-cats').disableSelection();});</script>
+			<script>
+jQuery(function($){
+	$('#ib-home-cats').sortable({axis:'y',handle:'.ib-drag-handle',placeholder:'ui-state-highlight'});
+	$('#ib-home-cats').disableSelection();
+	$('#ib-home-cats').on('click','.ib-up-btn,.ib-down-btn',function(){
+		var li=$(this).closest('li'),ul=li.closest('ul');
+		if($(this).is('.ib-up-btn')){
+			var prev=li.prev('li');
+			if(prev.length) li.insertBefore(prev);
+		}else{
+			var next=li.next('li');
+			if(next.length) li.insertAfter(next);
+		}
+	});
+});
+</script>
 		<?php self::card_close(); ?>
 		</div>
 		<div>
