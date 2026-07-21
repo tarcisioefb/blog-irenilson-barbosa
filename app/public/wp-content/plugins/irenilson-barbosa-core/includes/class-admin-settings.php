@@ -19,9 +19,10 @@ class AdminSettings {
 	}
 
 	public static function remove_tools_menu() {
-		if (current_user_can('editor')) {
-			remove_menu_page('tools.php');
-		}
+		if (!current_user_can('editor')) return;
+		remove_menu_page('tools.php');
+		remove_menu_page('edit-comments.php');
+		remove_menu_page('edit.php?post_type=page');
 	}
 
 	public static function admin_bar_cache() {
