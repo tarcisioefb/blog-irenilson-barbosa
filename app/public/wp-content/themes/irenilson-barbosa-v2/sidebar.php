@@ -29,15 +29,6 @@ defined( 'ABSPATH' ) || exit;
 		<?php endif;
 	endif; ?>
 
-	<div class="eh-widget">
-		<span class="eh-widget__head">Artigos recentes</span>
-		<div class="eh-rank">
-			<?php $n = 1; foreach ( get_posts( array( 'numberposts' => 5, 'post_status' => 'publish', 'fields' => 'ids' ) ) as $pid ) : ?>
-				<a href="<?php echo esc_url( get_permalink( $pid ) ); ?>"><span class="eh-rank__n"><?php echo (int) $n++; ?></span><span class="eh-rank__t"><?php echo esc_html( get_the_title( $pid ) ); ?></span></a>
-			<?php endforeach; ?>
-		</div>
-	</div>
-
 	<div class="eh-widget ib-newsletter-card">
 		<span class="eh-widget__head">Newsletter</span>
 		<p class="ib-newsletter-card__desc">Receba os novos artigos por e-mail.</p>
