@@ -602,7 +602,7 @@ if (accepted === '1') {
 		$type_name = mb_strtolower(get_post_type_object($post->post_type)->labels->singular_name ?? 'post');
 		$permalink = get_permalink($post->ID);
 		$title = $post->post_title;
-		$excerpt = wp_trim_words(wp_strip_all_tags($post->post_content), 40);
+		$excerpt = $post->post_excerpt ? $post->post_excerpt : implode("\n\n", array_slice(explode("\n\n", trim(strip_tags($post->post_content, '<p><br>'))), 0, 3));
 		$thumb = get_the_post_thumbnail_url($post->ID, 'large');
 		$date = get_the_date('j F Y', $post->ID);
 		$unsub_url = home_url('/?ib_unsubscribe=');
@@ -625,7 +625,7 @@ if (accepted === '1') {
 			. '<div class="header"><h1>' . esc_html($title) . '</h1><p class="meta">' . esc_html($type_name) . ' &middot; ' . esc_html($date) . '</p></div>'
 			. '<div class="body">'
 			. ($thumb ? '<img src="' . esc_url($thumb) . '" alt="' . esc_attr($title) . '">' : '')
-			. '<p>' . nl2br(esc_html($excerpt)) . '</p>'
+			. '<div class="body-text">' . wpautop($excerpt) . '</div>'
 			. '<div class="btn-wrap"><a href="' . esc_url($permalink) . '" class="btn">Ver completo no Blog</a></div>'
 			. '</div>'
 			. '<div class="footer">'
