@@ -7,7 +7,7 @@ class AuthorBox {
 	}
 
 	public static function auto_append($content) {
-		if (! is_single() || ! in_the_loop() || in_array(get_post_type(), ['poiesis', 'livro'], true)) {
+		if (! is_single() || ! in_the_loop() || in_array(get_post_type(), ['poiesis', 'livro', 'material'], true)) {
 			return $content;
 		}
 		return $content . self::render_html();
