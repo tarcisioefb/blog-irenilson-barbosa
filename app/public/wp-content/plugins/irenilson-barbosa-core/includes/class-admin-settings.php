@@ -105,7 +105,7 @@ class AdminSettings {
 		add_menu_page(
 			'Central do Site',
 			'Central do Site',
-			'manage_options',
+			'publish_pages',
 			'ib-ajustes',
 			[__CLASS__, 'render_page'],
 			'dashicons-admin-site-alt3',
@@ -116,7 +116,7 @@ class AdminSettings {
 			'ib-ajustes',
 			'Newsletter — Assinantes',
 			'Newsletter',
-			'manage_options',
+			'publish_pages',
 			'ib-newsletter',
 			[__CLASS__, 'render_newsletter']
 		);
@@ -196,7 +196,7 @@ if (accepted === '1') {
 	}
 
 	public static function render_page() {
-		if (!current_user_can('manage_options')) return;
+		if (!current_user_can('publish_pages')) return;
 		$tab = $_GET['tab'] ?? 'geral';
 		?>
 		<div class="wrap">
@@ -494,7 +494,7 @@ if (accepted === '1') {
 	}
 
 	public static function render_newsletter() {
-		if (!current_user_can('manage_options')) return;
+		if (!current_user_can('publish_pages')) return;
 		$subs = (array) get_option('ib_newsletter_subscribers', []);
 
 		if (!empty($_GET['export'])) {
