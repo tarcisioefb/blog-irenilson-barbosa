@@ -57,7 +57,7 @@ if ( empty( $editorias ) ) {
 						?>
 							<a class="eh-h-item" href="<?php echo esc_url( get_permalink( $bid ) ); ?>">
 								<?php if ( $bthumb_id ) : ?>
-									<span class="eh-h-item__img"><?php echo wp_get_attachment_image( $bthumb_id, 'ib-thumb', false, ['alt' => '', 'loading' => 'lazy'] ); ?></span>
+									<span class="eh-h-item__img"><?php echo wp_get_attachment_image( $bthumb_id, 'ib-book-thumb', false, ['alt' => '', 'loading' => 'lazy'] ); ?></span>
 								<?php endif; ?>
 								<span class="eh-h-item__body">
 									<span class="eh-h-item__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>

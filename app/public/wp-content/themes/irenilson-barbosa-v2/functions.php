@@ -24,6 +24,7 @@ add_action('after_setup_theme', function () {
 
 	add_image_size('ib-card', 640, 400, true);
 	add_image_size('ib-thumb', 220, 150, true);
+add_image_size('ib-book-thumb', 150, 225, true);
 });
 
 // Fontes (configuráveis via Central do Site)
