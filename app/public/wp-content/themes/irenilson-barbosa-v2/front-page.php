@@ -3,12 +3,11 @@
 defined( 'ABSPATH' ) || exit;
 get_header();
 
-/* Destaques: 5 posts mais recentes (hero usa 4, o 5º aparece em "Mais recentes"). */
-$featured = get_posts( array( 'numberposts' => 5, 'post_status' => 'publish', 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
+/* Destaques: 3 posts mais recentes no hero. 4º+ vão para "Mais recentes". */
+$featured = get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
 $lead      = isset( $featured[0] ) ? $featured[0] : 0;
-$secondary = array_slice( $featured, 1, 3 );
-$hero_ids  = array_slice( $featured, 0, 4 );
-$strip     = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post__not_in' => $hero_ids, 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
+$secondary = array_slice( $featured, 1, 2 );
+$strip     = get_posts( array( 'numberposts' => 4, 'post_status' => 'publish', 'post__not_in' => $featured, 'fields' => 'ids', 'ignore_sticky_posts' => 1, 'suppress_filters' => false ) );
 $editorias = ib_opt('home_cats');
 if ( empty( $editorias ) ) {
 	$editorias = array( 'filosofia', 'educacao', 'politica', 'cultura', 'cotidiano' );
