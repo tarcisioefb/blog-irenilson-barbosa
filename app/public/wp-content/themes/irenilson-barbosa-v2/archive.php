@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 get_header();
 ?>
-<div class="wrap" id="main">
+<div class="wrap" id="main" style="padding-top:16px;padding-bottom:var(--space-6)">
 	<?php ib_breadcrumb(); ?>
 	<header class="arch-head">
 		<span class="kick"><?php

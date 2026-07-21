@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ib_contact_nonce'])) 
 
 end:
 get_header(); ?>
-<div class="wrap" id="main" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
+<div class="wrap" id="main" style="padding-top:16px;padding-bottom:var(--space-10)">
 	<?php ib_breadcrumb(); ?>
 
 	<?php if ($msg_sent) : ?>

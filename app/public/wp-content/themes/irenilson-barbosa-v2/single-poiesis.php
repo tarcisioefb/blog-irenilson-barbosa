@@ -7,7 +7,7 @@ while (have_posts()) : the_post();
 	$poem_author = get_post_meta(get_the_ID(), 'poiesis_author', true) ?: 'Irenilson Barbosa';
 	$other = get_posts(array('post_type' => 'poiesis', 'posts_per_page' => 5, 'post__not_in' => array(get_the_ID()), 'orderby' => 'rand'));
 ?>
-<div class="wrap" id="main" style="padding-top:var(--space-10);padding-bottom:var(--space-10)">
+<div class="wrap" id="main" style="padding-top:16px;padding-bottom:var(--space-10)">
 	<?php ib_breadcrumb(); ?>
 	<div class="article-layout" style="grid-template-columns:minmax(0,1fr) 400px">
 		<article style="max-width:680px">
