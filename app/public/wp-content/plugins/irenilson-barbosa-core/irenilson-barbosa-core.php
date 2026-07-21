@@ -14,17 +14,29 @@ defined('ABSPATH') || exit;
 define('IRENILSON_CORE_VERSION', '1.0.1');
 define('IRENILSON_CORE_PATH', plugin_dir_path(__FILE__));
 
-// Direct includes instead of autoloader (avoids memory issue on search)
-require_once IRENILSON_CORE_PATH . 'includes/class-setup.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-magazine.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-reading-time.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-related-posts.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-author-box.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-admin-settings.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-seo.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-tts.php';
-require_once IRENILSON_CORE_PATH . 'includes/class-image-optimizer.php';
+/**
+ * Autoload de classes.
+ */
+spl_autoload_register(function ($class) {
+	$prefix = 'IrenilsonBarbosa\\Core\\';
+	$base   = IRENILSON_CORE_PATH . 'includes/';
 
+	if (strpos($class, $prefix) !== 0) {
+		return;
+	}
+
+	$relative_class = substr($class, strlen($prefix));
+	$class_kebab    = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $relative_class));
+	$file           = $base . 'class-' . $class_kebab . '.php';
+
+	if (file_exists($file)) {
+		require_once $file;
+	}
+});
+
+/**
+ * Bootstrap.
+ */
 add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\Setup::init();
 	\IrenilsonBarbosa\Core\Setup::init_metaboxes();
