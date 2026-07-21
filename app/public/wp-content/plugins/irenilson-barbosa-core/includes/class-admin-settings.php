@@ -9,41 +9,8 @@ class AdminSettings {
 		add_action('wp_head', [__CLASS__, 'output_google_analytics'], 0);
 		add_action('wp_ajax_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
+		add_action('wp_ajax_ib_preview_post', [__CLASS__, 'ajax_preview_post']);
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
-		add_action('transition_post_status', [__CLASS__, 'notify_new_post'], 10, 3);
-	}
-
-	public static function notify_new_post($new_status, $old_status, $post) {
-		if ($new_status !== 'publish' || $old_status === 'publish') return;
-		if (wp_is_post_revision($post->ID) || wp_is_post_autosave($post->ID)) return;
-
-		$post_date = strtotime($post->post_date);
-		$now = time();
-		if (($now - $post_date) > 3600) return;
-
-		$post_type = get_post_type_object($post->post_type);
-		$type_name = $post_type ? mb_strtolower($post_type->labels->singular_name) : 'post';
-
-		$subs = (array) get_option('ib_newsletter_subscribers', []);
-		if (empty($subs)) return;
-
-		$subject = 'Novo ' . $type_name . ': ' . $post->post_title;
-		$permalink = get_permalink($post->ID);
-		$excerpt = wp_trim_words(wp_strip_all_tags($post->post_content), 40);
-
-		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;color:#3E2C1B;max-width:600px;margin:0 auto;padding:20px}h1{font-size:22px;color:#3E2C1B}a{color:#4A5D3E}.excerpt{color:#6D5940;line-height:1.6;margin:16px 0}.footer{font-size:12px;color:#9E8A68;border-top:1px solid #E5E5E5;padding-top:12px;margin-top:24px}</style></head><body>'
-			. '<h1>' . esc_html($post->post_title) . '</h1>'
-			. '<p style="color:#6D5940;font-size:14px">' . esc_html($type_name) . ' &middot; ' . esc_html(get_the_date('j F Y', $post->ID)) . '</p>'
-			. ($excerpt ? '<p class="excerpt">' . esc_html($excerpt) . '</p>' : '')
-			. '<p><a href="' . esc_url($permalink) . '" style="display:inline-block;padding:10px 20px;background:#4A5D3E;color:#fff;text-decoration:none;border-radius:4px;font-family:Helvetica,Arial,sans-serif;font-size:14px">Ler ' . $type_name . '</a></p>'
-			. '<p class="footer">Você recebeu este email porque se inscreveu na newsletter do portal Irenilson Barbosa. <br><a href="' . esc_url(home_url('/privacidade/')) . '" style="color:#9E8A68">Política de Privacidade</a></p>'
-			. '</body></html>';
-
-		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
-
-		foreach ($subs as $email) {
-			wp_mail($email, $subject, $body, $headers);
-		}
 	}
 
 	public static function configure_smtp($phpmailer) {
@@ -525,60 +492,146 @@ if (accepted === '1') {
 			}
 			exit;
 		}
+
+		$sent = false;
+		$send_error = '';
+		if (!empty($_POST['ib_send_post']) && !empty($subs)) {
+			$post_id = (int) $_POST['ib_send_post'];
+			$post = get_post($post_id);
+			if ($post) {
+				$sent = self::send_newsletter_email($post);
+				if (!$sent) $send_error = 'Falha ao enviar. Verifique o SMTP.';
+			} else {
+				$send_error = 'Post inválido.';
+			}
+		}
+
+		$recent = get_posts(['posts_per_page' => 20, 'post_type' => ['post', 'publicacao', 'livro', 'poiesis', 'material'], 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC']);
 		?>
 		<div class="wrap">
 			<h1 style="display:flex;align-items:center;gap:12px">
 				<span class="dashicons dashicons-email-alt" style="font-size:32px;width:32px;height:32px"></span>
-				Newsletter — Assinantes
+				Newsletter
 			</h1>
-			<p style="font-size:14px;color:#6D5940">
-				<strong style="color:#3E2C1B"><?php echo count($subs); ?></strong> assinante(s) cadastrado(s).
-				<a href="?page=ib-newsletter&amp;export=1" class="button" style="margin-left:12px">📥 Exportar CSV</a>
-			</p>
-			<?php if (empty($subs)) : ?>
-				<div class="notice notice-info"><p>Nenhum assinante cadastrado ainda.</p></div>
-			<?php else : ?>
-				<table class="wp-list-table widefat fixed striped" style="max-width:600px">
-					<thead><tr><th>E-mail</th></tr></thead>
-					<tbody>
-						<?php foreach ($subs as $email) : ?>
-							<tr><td><?php echo esc_html($email); ?></td></tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-		<?php endif; ?>
 
-		<?php if (!empty($_GET['test']) && !empty($subs)) : ?>
-		<div class="notice notice-info"><p>Enviando e-mail de teste...</p></div>
+			<?php if ($sent) : ?>
+				<div class="notice notice-success is-dismissible"><p>E-mail enviado com sucesso para <?php echo count($subs); ?> assinante(s).</p></div>
+			<?php elseif ($send_error) : ?>
+				<div class="notice notice-error is-dismissible"><p><?php echo esc_html($send_error); ?></p></div>
+			<?php endif; ?>
+
+			<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+				<div>
+					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 12px">📬 Enviar novo e-mail</h2>
+					<form method="post" style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;padding:16px">
+						<p><label for="ib_send_post" style="display:block;font-weight:600;margin-bottom:4px;color:#3E2C1B;font-size:13px">Selecione o post</label>
+						<select id="ib_send_post" name="ib_send_post" style="width:100%;padding:6px;border-color:#e0d5c3;border-radius:4px">
+							<option value="">— Selecione —</option>
+							<?php foreach ($recent as $p) : ?>
+							<option value="<?php echo $p->ID; ?>">[<?php echo esc_html(get_post_type_object($p->post_type)->labels->singular_name ?? $p->post_type); ?>] <?php echo esc_html($p->post_title); ?> — <?php echo get_the_date('d/m/Y', $p->ID); ?></option>
+							<?php endforeach; ?>
+						</select></p>
+
+						<div id="ib-newsletter-preview" style="display:none;margin:16px 0;padding:16px;background:var(--paper-2);border-radius:6px">
+							<h3 style="font-size:14px;color:#3E2C1B;margin:0 0 8px">Prévia do e-mail</h3>
+							<div id="ib-preview-content"></div>
+						</div>
+
+						<p><button type="submit" class="button button-primary" id="ib-send-btn" disabled style="background:#3E2C1B;border-color:#3E2C1B;padding:6px 24px;height:auto;font-size:14px">📤 Enviar para <?php echo count($subs); ?> assinante(s)</button></p>
+					</form>
+
+					<script>
+					document.getElementById('ib_send_post').onchange = function() {
+						var id = this.value;
+						var preview = document.getElementById('ib-newsletter-preview');
+						var content = document.getElementById('ib-preview-content');
+						var btn = document.getElementById('ib-send-btn');
+						if (!id) { preview.style.display = 'none'; btn.disabled = true; return; }
+						fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=ib_preview_post&id=' + id)
+						.then(function(r){return r.json()}).then(function(d){
+							if (d.success) {
+								content.innerHTML = d.data.html;
+								preview.style.display = 'block';
+								btn.disabled = false;
+							}
+						});
+					};
+					</script>
+				</div>
+
+				<div>
+					<h2 style="font-size:15px;color:#3E2C1B;margin:0 0 12px">📋 Assinantes</h2>
+					<p style="font-size:13px;color:#6D5940;margin:0 0 8px"><?php echo count($subs); ?> assinante(s). <a href="?page=ib-newsletter&amp;export=1">📥 Exportar CSV</a></p>
+					<?php if (empty($subs)) : ?>
+						<div class="notice notice-info"><p>Nenhum assinante cadastrado.</p></div>
+					<?php else : ?>
+						<div style="background:#fff;border:1px solid #e0d5c3;border-radius:8px;max-height:320px;overflow-y:auto">
+							<table class="wp-list-table widefat fixed striped" style="border:none">
+								<tbody>
+									<?php foreach ($subs as $email) : ?>
+										<tr><td style="padding:6px 12px"><?php echo esc_html($email); ?></td></tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		<?php
-		$test = self::send_test_newsletter();
-		echo '<div class="notice ' . ($test ? 'notice-success' : 'notice-error') . '"><p>' . ($test ? 'E-mail de teste enviado!' : 'Falha ao enviar e-mail de teste.') . '</p></div>';
-		endif; ?>
-
-		<hr style="margin-top:24px">
-		<h2 style="font-size:15px;color:#3E2C1B">Teste de notificação</h2>
-		<p style="font-size:13px;color:#6D5940">Envia um e-mail de teste para o primeiro assinante com um layout simulado de novo post.</p>
-		<a href="?page=ib-newsletter&amp;test=1" class="button">📧 Enviar teste</a>
-	</div>
-	<?php
 	}
 
-	public static function send_test_newsletter() {
+	public static function send_newsletter_email($post) {
 		$subs = (array) get_option('ib_newsletter_subscribers', []);
-		if (empty($subs)) return false;
-		$email = $subs[0];
+		if (empty($subs) || !$post) return false;
 
-		$subject = '[Teste] Novo artigo: Exemplo de título para newsletter';
-		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;color:#3E2C1B;max-width:600px;margin:0 auto;padding:20px}h1{font-size:22px;color:#3E2C1B}a{color:#4A5D3E}.excerpt{color:#6D5940;line-height:1.6;margin:16px 0}.footer{font-size:12px;color:#9E8A68;border-top:1px solid #E5E5E5;padding-top:12px;margin-top:24px}</style></head><body>'
-			. '<h1>Exemplo de título para newsletter</h1>'
-			. '<p style="color:#6D5940;font-size:14px">artigo &middot; 21 de julho de 2026</p>'
-			. '<p class="excerpt">Este é um e-mail de teste para verificar o layout da newsletter. Quando um novo post for publicado, os assinantes receberão uma notificação com este formato.</p>'
-			. '<p><a href="' . esc_url(home_url('/')) . '" style="display:inline-block;padding:10px 20px;background:#4A5D3E;color:#fff;text-decoration:none;border-radius:4px;font-family:Helvetica,Arial,sans-serif;font-size:14px">Ler artigo</a></p>'
-			. '<p class="footer">Você recebeu este email porque se inscreveu na newsletter do portal Irenilson Barbosa. <br><a href="' . esc_url(home_url('/privacidade/')) . '" style="color:#9E8A68">Política de Privacidade</a></p>'
+		$type_name = mb_strtolower(get_post_type_object($post->post_type)->labels->singular_name ?? 'post');
+		$permalink = get_permalink($post->ID);
+		$title = $post->post_title;
+		$excerpt = wp_trim_words(wp_strip_all_tags($post->post_content), 40);
+		$thumb = get_the_post_thumbnail_url($post->ID, 'large');
+		$date = get_the_date('j F Y', $post->ID);
+
+		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;color:#3E2C1B;max-width:600px;margin:0 auto;padding:20px}h1{font-size:22px;color:#3E2C1B;line-height:1.3}a{color:#4A5D3E}.excerpt{color:#6D5940;line-height:1.7;margin:16px 0;font-size:15px}.meta{color:#6D5940;font-size:14px;margin:8px 0 16px}.btn{display:inline-block;padding:12px 28px;background:#4A5D3E;color:#fff!important;text-decoration:none;border-radius:6px;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600}.footer{font-size:12px;color:#9E8A68;border-top:1px solid #E5E5E5;padding-top:12px;margin-top:24px}.footer a{color:#9E8A68}img{max-width:100%;height:auto;border-radius:6px}</style></head><body>'
+			. '<h1>' . esc_html($title) . '</h1>'
+			. '<p class="meta">' . esc_html($type_name) . ' &middot; ' . esc_html($date) . '</p>'
+			. ($thumb ? '<p><img src="' . esc_url($thumb) . '" alt="' . esc_attr($title) . '"></p>' : '')
+			. '<p class="excerpt">' . esc_html($excerpt) . '</p>'
+			. '<p><a href="' . esc_url($permalink) . '" class="btn">Ver completo no Blog</a></p>'
+			. '<p class="footer">Você recebeu este email porque se inscreveu na newsletter do portal Irenilson Barbosa. <br><a href="' . esc_url(home_url('/privacidade/')) . '">Política de Privacidade</a></p>'
 			. '</body></html>';
 
 		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
-		return wp_mail($email, $subject, $body, $headers);
+
+		$success = true;
+		foreach ($subs as $email) {
+			if (!wp_mail(trim($email), 'Novo ' . $type_name . ': ' . $title, $body, $headers)) {
+				$success = false;
+			}
+		}
+		return $success;
+	}
+
+	public static function ajax_preview_post() {
+		$id = (int) ($_GET['id'] ?? 0);
+		$post = get_post($id);
+		if (!$post) { wp_send_json_error(); return; }
+
+		$type_name = mb_strtolower(get_post_type_object($post->post_type)->labels->singular_name ?? 'post');
+		$permalink = get_permalink($post->ID);
+		$title = $post->post_title;
+		$excerpt = wp_trim_words(wp_strip_all_tags($post->post_content), 30);
+		$thumb = get_the_post_thumbnail_url($post->ID, 'medium');
+		$date = get_the_date('j F Y', $post->ID);
+
+		$html = '<div style="font-family:Georgia,serif;color:#3E2C1B">'
+			. '<h4 style="font-size:17px;margin:0 0 4px">' . esc_html($title) . '</h4>'
+			. '<p style="font-size:12px;color:#6D5940;margin:0 0 8px">' . esc_html($type_name) . ' &middot; ' . esc_html($date) . '</p>'
+			. ($thumb ? '<img src="' . esc_url($thumb) . '" style="max-width:100%;border-radius:4px;margin-bottom:8px">' : '')
+			. '<p style="font-size:13px;color:#6D5940;line-height:1.5;margin:0">' . esc_html($excerpt) . '</p>'
+			. '<p style="margin:8px 0 0"><span style="display:inline-block;padding:6px 16px;background:#4A5D3E;color:#fff;border-radius:4px;font-size:12px">Ver completo no Blog</span></p>'
+			. '</div>';
+		wp_send_json_success(['html' => $html]);
 	}
 }
 
