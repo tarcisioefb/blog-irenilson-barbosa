@@ -175,6 +175,10 @@ class AdminSettings {
 	}
 
 	public static function register_menus() {
+		global $submenu;
+		if (isset($submenu["ib-ajustes"][0][0])) {
+			$submenu["ib-ajustes"][0][0] = "Ajustes";
+		}
 		add_menu_page(
 			'Irenilson Barbosa — Configurações',
 			'Irenilson Barbosa',
