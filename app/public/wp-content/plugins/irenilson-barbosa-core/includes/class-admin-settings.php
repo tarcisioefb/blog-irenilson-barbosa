@@ -99,7 +99,7 @@ class AdminSettings {
 			unset($subs[$key]);
 			update_option('ib_newsletter_subscribers', array_values($subs), false);
 		}
-		wp_die('Você foi removido da newsletter. Seu e-mail <strong>' . esc_html($email) . '</strong> não receberá mais nossas atualizações.');
+		wp_die('<p>Você foi removido da newsletter.</p><p>Seu e-mail <strong>' . esc_html($email) . '</strong> não receberá mais nossas atualizações.</p><p><a href="' . esc_url(home_url('/')) . '">Voltar para o site</a></p>', 'Newsletter — Cancelamento confirmado');
 	}
 
 	public static function configure_smtp($phpmailer) {
