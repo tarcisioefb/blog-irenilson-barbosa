@@ -3,14 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <aside class="eh-aside">
-	<?php if ( ! is_singular( 'post' ) ) : ?>
-	<div class="eh-widget">
-		<span class="eh-widget__head">Sobre</span>
-		<div style="font-size:var(--text-base);color:var(--tx-2);line-height:1.7">
-			<p><strong style="color:var(--ink)">Irenilson Barbosa</strong> <?php echo esc_html( ib_opt( 'sidebar_bio' ) ?: 'Professor universitário, escritor e pesquisador.' ); ?></p>
-		</div>
-	</div>
-	<?php endif; ?>
+	<?php if ( ! is_singular( 'post' ) ) : endif; ?>
 
 	<?php if ( is_singular( 'post' ) ) :
 		$rel_ids = \IrenilsonBarbosa\Core\RelatedPosts::get_ids( get_the_ID(), 4 );
