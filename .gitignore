@@ -12,3 +12,4 @@ app/public/wp-content/updraft/
 *.pyc
 __pycache__/
 
+*.bak

@@ -11,6 +11,21 @@ class AdminSettings {
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_ib_preview_post', [__CLASS__, 'ajax_preview_post']);
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
+		add_action('init', [__CLASS__, 'handle_unsubscribe']);
+	}
+
+	public static function handle_unsubscribe() {
+		if (!isset($_GET['ib_unsubscribe'])) return;
+		$email = sanitize_email($_GET['ib_unsubscribe']);
+		if (!$email) { wp_die('Link invalido.'); return; }
+
+		$subs = (array) get_option('ib_newsletter_subscribers', []);
+		$key = array_search($email, $subs, true);
+		if ($key !== false) {
+			unset($subs[$key]);
+			update_option('ib_newsletter_subscribers', array_values($subs), false);
+		}
+		wp_die('Voce foi removido da newsletter. Seu e-mail <strong>' . esc_html($email) . '</strong> nao recebera mais nossas atualizacoes.');
 	}
 
 	public static function configure_smtp($phpmailer) {
@@ -590,20 +605,38 @@ if (accepted === '1') {
 		$excerpt = wp_trim_words(wp_strip_all_tags($post->post_content), 40);
 		$thumb = get_the_post_thumbnail_url($post->ID, 'large');
 		$date = get_the_date('j F Y', $post->ID);
+		$unsub_url = home_url('/?ib_unsubscribe=');
 
-		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;color:#3E2C1B;max-width:600px;margin:0 auto;padding:20px}h1{font-size:22px;color:#3E2C1B;line-height:1.3}a{color:#4A5D3E}.excerpt{color:#6D5940;line-height:1.7;margin:16px 0;font-size:15px}.meta{color:#6D5940;font-size:14px;margin:8px 0 16px}.btn{display:inline-block;padding:12px 28px;background:#4A5D3E;color:#fff!important;text-decoration:none;border-radius:6px;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600}.footer{font-size:12px;color:#9E8A68;border-top:1px solid #E5E5E5;padding-top:12px;margin-top:24px}.footer a{color:#9E8A68}img{max-width:100%;height:auto;border-radius:6px}</style></head><body>'
-			. '<h1>' . esc_html($title) . '</h1>'
-			. '<p class="meta">' . esc_html($type_name) . ' &middot; ' . esc_html($date) . '</p>'
-			. ($thumb ? '<p><img src="' . esc_url($thumb) . '" alt="' . esc_attr($title) . '"></p>' : '')
-			. '<p class="excerpt">' . esc_html($excerpt) . '</p>'
-			. '<p><a href="' . esc_url($permalink) . '" class="btn">Ver completo no Blog</a></p>'
-			. '<p class="footer">Voce recebeu este email porque se inscreveu na newsletter do portal Irenilson Barbosa. <br><a href="' . esc_url(home_url('/privacidade/')) . '">Politica de Privacidade</a></p>'
-			. '</body></html>';
+		$body = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>'
+			. 'body{margin:0;padding:0;background-color:#F5F0E8;font-family:Georgia,"Times New Roman",serif}'
+			. '.wrapper{max-width:600px;margin:0 auto;background:#FFFFFF;border-radius:8px;overflow:hidden}'
+			. '.header{padding:32px 40px 0;text-align:center;border-bottom:3px solid #4A5D3E}'
+			. '.header h1{font-size:22px;color:#3E2C1B;margin:0 0 4px;line-height:1.3}'
+			. '.meta{font-size:13px;color:#6D5940;margin:0 0 24px}'
+			. '.body{padding:0 40px 32px}'
+			. '.body p{font-size:15px;line-height:1.7;color:#3E2C1B;margin:0 0 20px}'
+			. '.btn-wrap{text-align:center;margin:28px 0 0}'
+			. '.btn{display:inline-block;padding:14px 36px;background:#4A5D3E;color:#FFFFFF!important;text-decoration:none;border-radius:6px;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:.3px}'
+			. '.footer{background:#F5F0E8;padding:24px 40px;text-align:center;font-size:12px;color:#9E8A68;line-height:1.6}'
+			. '.footer a{color:#6D5940;text-decoration:underline}'
+			. 'img{max-width:100%;height:auto;border-radius:6px;display:block;margin:0 auto 24px}'
+			. '@media(max-width:480px){.header{padding:24px 20px 0}.body{padding:0 20px 24px}.btn{display:block;text-align:center}}</style></head><body>'
+			. '<div class="wrapper">'
+			. '<div class="header"><h1>' . esc_html($title) . '</h1><p class="meta">' . esc_html($type_name) . ' &middot; ' . esc_html($date) . '</p></div>'
+			. '<div class="body">'
+			. ($thumb ? '<img src="' . esc_url($thumb) . '" alt="' . esc_attr($title) . '">' : '')
+			. '<p>' . nl2br(esc_html($excerpt)) . '</p>'
+			. '<div class="btn-wrap"><a href="' . esc_url($permalink) . '" class="btn">Ver completo no Blog</a></div>'
+			. '</div>'
+			. '<div class="footer">'
+			. '<p style="margin:0 0 8px">Voce esta recebendo este email porque se inscreveu na newsletter do portal Irenilson Barbosa.</p>'
+			. '<p style="margin:0"><a href="' . esc_url($unsub_url) . '">Cancelar inscricao</a> &nbsp;|&nbsp; <a href="' . esc_url(home_url('/privacidade/')) . '">Politica de Privacidade</a></p>'
+			. '</div></div></body></html>';
 
 		$headers = ['Content-Type: text/html; charset=UTF-8', 'From: Irenilson Barbosa <contato@irenilsonbarbosa.com>'];
 		$success = true;
 		foreach ($subs as $email) {
-			if (!wp_mail(trim($email), 'Novo ' . $type_name . ': ' . $title, $body, $headers)) {
+			if (!wp_mail(trim($email), $title, $body, $headers)) {
 				$success = false;
 			}
 		}
