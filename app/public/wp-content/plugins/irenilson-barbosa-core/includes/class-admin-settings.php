@@ -7,12 +7,48 @@ class AdminSettings {
 		add_action('admin_init', [__CLASS__, 'register_settings']);
 		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 		add_action('wp_dashboard_setup', [__CLASS__, 'dashboard_widgets']);
+		add_action('wp_before_admin_bar_render', [__CLASS__, 'admin_bar_cache']);
 		add_action('wp_head', [__CLASS__, 'output_google_analytics'], 0);
 		add_action('wp_ajax_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_nopriv_ib_newsletter', [__CLASS__, 'ajax_newsletter']);
 		add_action('wp_ajax_ib_preview_post', [__CLASS__, 'ajax_preview_post']);
+		add_action('wp_ajax_ib_purge_cache', [__CLASS__, 'ajax_purge_cache']);
 		add_action('phpmailer_init', [__CLASS__, 'configure_smtp']);
 		add_action('init', [__CLASS__, 'handle_unsubscribe']);
+		add_action('admin_init', [__CLASS__, 'remove_tools_menu']);
+	}
+
+	public static function remove_tools_menu() {
+		if (current_user_can('editor')) {
+			remove_menu_page('tools.php');
+		}
+	}
+
+	public static function admin_bar_cache() {
+		if (!current_user_can('publish_pages')) return;
+		global $wp_admin_bar;
+		$wp_admin_bar->add_node([
+			'id' => 'ib-purge-cache',
+			'title' => '⚡ Limpar cache',
+			'href' => admin_url('admin-ajax.php?action=ib_purge_cache&_wpnonce=' . wp_create_nonce('ib_purge')),
+			'meta' => ['class' => 'ib-cache-btn'],
+		]);
+	}
+
+	public static function ajax_purge_cache() {
+		if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'ib_purge')) wp_die('Falha de seguranca.');
+		if (!current_user_can('publish_pages')) wp_die('Sem permissao.');
+
+		if (function_exists('LiteSpeed_Cache_API')) {
+			LiteSpeed_Cache_API::purge_all();
+		} elseif (has_action('litespeed_purge_all')) {
+			do_action('litespeed_purge_all');
+		} else {
+			wp_cache_flush();
+		}
+
+		wp_redirect(wp_get_referer() ?: admin_url());
+		exit;
 	}
 
 	public static function dashboard_widgets() {
