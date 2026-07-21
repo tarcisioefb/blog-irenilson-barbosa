@@ -51,10 +51,9 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 			<nav class="nav" aria-label="Menu principal">
 				<?php wp_nav_menu( $ib_menu ); ?>
 			</nav>
-			<button class="search-btn" type="button" aria-label="Buscar" data-elite-search-open style="display:none">
+			<button class="search-btn" type="button" aria-label="Buscar" data-elite-search-open>
 				<svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
 			</button>
-			<span class="search-placeholder" style="width:44px;flex-shrink:0;display:none"></span>
 		</div>
 	</div>
 </header>
@@ -69,7 +68,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 </div>
 <div class="scrim" data-elite-scrim hidden></div>
 
-<div class="search-overlay" data-elite-search aria-hidden="true" style="display:none">
+<div class="search-overlay" data-elite-search aria-hidden="true">
 	<form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 		<input type="search" name="s" placeholder="Buscar…" aria-label="Buscar" autocomplete="off">
 		<button type="submit" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg></button>
