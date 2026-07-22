@@ -161,7 +161,7 @@ class SEODashboard {
 				$issues['no_thumb'][] = $post_obj;
 			}
 
-			if (empty($post_obj->post_excerpt)) {
+			if ($type !== 'page' && empty($post_obj->post_excerpt)) {
 				$issues['no_excerpt'][] = $post_obj;
 			}
 
