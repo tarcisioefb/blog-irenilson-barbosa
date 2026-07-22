@@ -11,13 +11,16 @@ class Security {
 		add_action('login_head', [__CLASS__, 'custom_login_logo']);
 		add_filter('login_headerurl', [__CLASS__, 'custom_login_url']);
 		add_filter('login_headertext', [__CLASS__, 'custom_login_title']);
-		add_filter('wp_headers', [__CLASS__, 'image_cache_headers']);
+		add_action('send_headers', [__CLASS__, 'send_security_headers']);
 	}
 
-	public static function image_cache_headers($headers) {
-		if (is_admin()) return $headers;
-		$headers['X-Content-Type-Options'] = 'nosniff';
-		return $headers;
+	public static function send_security_headers() {
+		if (is_admin()) return;
+		header('X-Content-Type-Options: nosniff');
+		header('X-Frame-Options: SAMEORIGIN');
+		header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+		header('Cross-Origin-Opener-Policy: same-origin');
+		header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'");
 	}
 
 	public static function custom_login_logo() {
