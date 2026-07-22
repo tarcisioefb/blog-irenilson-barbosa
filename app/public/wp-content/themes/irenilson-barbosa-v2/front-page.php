@@ -127,9 +127,6 @@ if ( empty( $editorias ) ) {
 				<?php foreach ( $poems as $pid ) : ?>
 					<a class="eh-poem-card" href="<?php echo esc_url( get_permalink( $pid ) ); ?>">
 						<h3 class="eh-poem-card__t"><?php echo esc_html( get_the_title( $pid ) ); ?></h3>
-						<?php if ( has_excerpt( $pid ) ) : ?>
-							<p class="eh-poem-card__ex"><?php echo esc_html( get_the_excerpt( $pid ) ); ?></p>
-						<?php endif; ?>
 						<span class="eh-poem-card__meta">Poema</span>
 					</a>
 				<?php endforeach; ?>
