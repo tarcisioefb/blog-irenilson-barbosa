@@ -53,8 +53,7 @@ class SEO {
 	public static function auto_description($post_id, $post) {
 		if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 		if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
-		$existing = \get_post_meta($post_id, '_ib_description', true);
-		if (!empty($existing)) return;
+		if (\metadata_exists('post', $post_id, '_ib_description')) return;
 		$desc = self::generate_description($post);
 		if ($desc) {
 			\update_post_meta($post_id, '_ib_description', $desc);
@@ -184,7 +183,12 @@ class SEO {
 			update_post_meta($post_id, '_ib_title', sanitize_text_field($_POST['ib_title']));
 		}
 		if (isset($_POST['ib_description'])) {
-			update_post_meta($post_id, '_ib_description', sanitize_textarea_field($_POST['ib_description']));
+			$desc = trim($_POST['ib_description']);
+			if ($desc) {
+				update_post_meta($post_id, '_ib_description', sanitize_textarea_field($desc));
+			} else {
+				delete_post_meta($post_id, '_ib_description');
+			}
 		}
 	}
 
