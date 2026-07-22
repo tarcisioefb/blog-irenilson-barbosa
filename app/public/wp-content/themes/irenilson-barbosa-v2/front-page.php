@@ -24,7 +24,7 @@ if ( empty( $editorias ) ) {
 		<div class="wrap eh-hero__grid">
 			<!-- Lead: col 1, rows 1-2 -->
 			<a class="eh-lead<?php echo $lt_id ? '' : ' is-empty'; ?>" href="<?php echo esc_url( get_permalink( $lead ) ); ?>">
-				<?php if ( $lt_id ) : ?><?php echo wp_get_attachment_image( $lt_id, 'full', false, ['class' => 'eh-lead__img', 'alt' => '', 'loading' => false, 'fetchpriority' => 'high', 'data-no-lazy' => '1'] ); ?><?php endif; ?>
+				<?php if ( $lt_id ) : ?><?php echo wp_get_attachment_image( $lt_id, 'large', false, ['class' => 'eh-lead__img', 'alt' => '', 'loading' => false, 'fetchpriority' => 'high', 'data-no-lazy' => '1'] ); ?><?php endif; ?>
 				<span class="eh-lead__body">
 					<?php if ( $lc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $lc->name ); ?></span><br><?php endif; ?>
 					<h1 class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></h1>
@@ -56,7 +56,7 @@ if ( empty( $editorias ) ) {
 						?>
 							<a class="eh-h-item" href="<?php echo esc_url( get_permalink( $bid ) ); ?>">
 								<?php if ( $bthumb_id ) : ?>
-									<span class="eh-h-item__img"><?php echo wp_get_attachment_image( $bthumb_id, 'ib-book-thumb', false, ['alt' => '', 'loading' => 'lazy'] ); ?></span>
+									<span class="eh-h-item__img"><?php echo wp_get_attachment_image( $bthumb_id, 'ib-book-thumb', false, ['alt' => '', 'loading' => 'lazy', 'sizes' => '24px'] ); ?></span>
 								<?php endif; ?>
 								<span class="eh-h-item__body">
 									<span class="eh-h-item__t"><?php echo esc_html( get_the_title( $bid ) ); ?></span>

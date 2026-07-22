@@ -209,7 +209,7 @@ a{color:inherit;text-decoration:none}
 
 /* ==================== POIÉSIS HOME ==================== */
 .eh-poem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5)}
-.eh-poem-card{display:block;text-align:center;padding:var(--space-6) var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);text-decoration:none;color:inherit;transition:all .25s;min-height:180px}
+.eh-poem-card{display:block;text-align:center;padding:var(--space-6) var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);text-decoration:none;color:inherit;transition:all .25s;min-height:180px;contain:layout}
 .eh-poem-card:hover{box-shadow:var(--shadow-card);transform:translateY(-2px)}
 .eh-poem-card__t{font-family:var(--font-heading);font-size:clamp(1rem,2.5vw,var(--text-lg));font-weight:700;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight);text-wrap:balance}
 .eh-poem-card:hover .eh-poem-card__t{color:var(--accent)}

@@ -11,6 +11,13 @@ class Security {
 		add_action('login_head', [__CLASS__, 'custom_login_logo']);
 		add_filter('login_headerurl', [__CLASS__, 'custom_login_url']);
 		add_filter('login_headertext', [__CLASS__, 'custom_login_title']);
+		add_filter('wp_headers', [__CLASS__, 'image_cache_headers']);
+	}
+
+	public static function image_cache_headers($headers) {
+		if (is_admin()) return $headers;
+		$headers['X-Content-Type-Options'] = 'nosniff';
+		return $headers;
 	}
 
 	public static function custom_login_logo() {
