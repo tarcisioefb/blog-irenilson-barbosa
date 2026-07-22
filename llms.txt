@@ -1,61 +1,23 @@
 # Irenilson Barbosa
-> Portal editorial de Irenilson Barbosa — professor universitário, escritor e pesquisador. Ensaios sobre filosofia, educação, política e cultura; poemas; publicações acadêmicas; livros; materiais educacionais.
+
+> Portal editorial do Professor Irenilson Barbosa — ensaios, poemas, publicações acadêmicas, livros e materiais educacionais. Temas: educação, filosofia, política, religião, cultura e cotidiano.
+
+## Conteúdo principal
+- [Artigos](https://irenilsonbarbosa.com/artigos/) — ensaios e reflexões sobre filosofia, educação, política, cultura, cotidiano e religião
+- [Poiésis](https://irenilsonbarbosa.com/poiesis/) — poemas e criações literárias
+- [Publicações acadêmicas](https://irenilsonbarbosa.com/publicacoes/) — artigos científicos, capítulos de livros
+- [Livros](https://irenilsonbarbosa.com/livros/) — obras publicadas (autor, organizador, coautor)
+- [Materiais](https://irenilsonbarbosa.com/materiais/) — recursos educacionais para download
+
+## Navegação
+- Início, Artigos, Publicações, Livros, Materiais, Poiésis, [Sobre](https://irenilsonbarbosa.com/sobre/), [Contato](https://irenilsonbarbosa.com/contato/)
+- [Política de Privacidade](https://irenilsonbarbosa.com/privacidade/)
 
 ## Sobre o autor
-- [Sobre](https://irenilsonbarbosa.com/sobre/) — biografia, formação acadêmica (Doutor em Educação pela UFBA, Pós-Doutor pela Universidade do Porto), ORCID, currículo Lattes, publicações
-- [Contato](https://irenilsonbarbosa.com/contato/) — formulário de contato com checkbox LGPD, honeypot anti-spam e time trap
+Doutor em Educação pela UFBA, Pós-Doutor pela Universidade do Porto. Professor Adjunto da UFRB. Coordenador do PROFEI. Pesquisa educação inclusiva, direitos humanos, teologia.
+- [Currículo Lattes](http://lattes.cnpq.br/1666550999462374)
+- [ORCID](https://orcid.org/0000-0001-6638-3620)
+- [Google Scholar](https://scholar.google.com/citations?user=YKHWTRsAAAAJ)
 
-## Conteúdo
-- [Artigos](https://irenilsonbarbosa.com/artigos/) — ensaios e reflexões (categorias: filosofia, educação, política, cultura, cotidiano)
-- [Publicações acadêmicas](https://irenilsonbarbosa.com/publicacoes/) — artigos científicos, capítulos de livros (taxonomia: tipo-de-publicacao)
-- [Livros](https://irenilsonbarbosa.com/livros/) — livros do autor (taxonomia: participacao: autor, organizador, coautor)
-- [Poiésis](https://irenilsonbarbosa.com/poiesis/) — poemas e criações literárias (autor personalizável por poema, notas)
-- [Materiais](https://irenilsonbarbosa.com/materiais/) — recursos educacionais para download (taxonomia: tipo-de-material: slides, apostila, guia)
-- [Política de Privacidade](https://irenilsonbarbosa.com/privacidade/) — LGPD compliance
-
-## Navegação principal
-- Início, Artigos, Publicações, Livros, Materiais, Poiésis, Sobre, Contato
-
-## Funcionalidades
-- **TTS (Text-to-Speech)** — botão "Ouvir" em artigos, livros e poemas. Lê título, autor, conteúdo e bio de encerramento. Controles play/pause/stop. Suporte a vozes PT-BR.
-- **SEO completo** — meta description, Open Graph, Twitter Cards, schema BlogPosting/Article/ScholarlyArticle/Book/BreadcrumbList/WebSite/Person/Organization. Sitemap nativo com imagens. robots.txt dinâmico. FAQ schema para posts com pergunta/resposta. articleSection (categorias) e keywords (tags) no schema.
-- **Tabela de Conteúdos (ToC)** — índice collapsível extraído automaticamente de H2/H3 do artigo. Aparece entre o TTS e o conteúdo. Links âncora com scroll suave.
-- **Google Analytics (GA4)** — carregamento condicional após consentimento do banner de cookies. UTM parameters em links da newsletter.
-- **Newsletter** — cadastro via AJAX, envio manual de posts com preview (título, imagem destacada, excerto, CTA), unsubscribe link, export CSV.
-- **LGPD** — banner de cookies com opt-in/opt-out, checkbox de consentimento no formulário de contato, política de privacidade, direito de exclusão.
-- **Imagens responsivas** — srcset nativo, WebP/AVIF via GD na upload, fallback GD para AVIF. Lazy loading com exceção para LCP. Image sizes: ib-card (640x400), ib-thumb (220x150), ib-book-thumb (150x225). Otimização CLI: `wp ib-convert`, `wp ib-thumb-avif`.
-- **Breadcrumbs** — navegação hierárquica em todas as páginas com schema BreadcrumbList.
-- **Banner publicitário** — responsivo (desktop/tablet/mobile) configurável na Central do Site.
-- **Cache** — botão "Limpar cache" na admin bar (LiteSpeed). TTL do navegador controlado por ETag — visitantes sempre veem versão atualizada após purge.
-- **Audit Log** — registro de alterações em posts, configurações, anexos e login. Visível apenas para admin. Export CSV. Filtros por ação e usuário.
-
-## Segurança
-- **CSP** — Content-Security-Policy com `upgrade-insecure-requests` (via LiteSpeed)
-- **HSTS** — Strict-Transport-Security com `max-age=31536000; includeSubDomains`
-- **X-Frame-Options** — `SAMEORIGIN` (proteção contra clickjacking)
-- **X-Content-Type-Options** — `nosniff`
-- **Cross-Origin-Opener-Policy** — `same-origin`
-- **XML-RPC** — desativado
-- **REST API** — restrita a usuários autenticados (exceto oembed, posts/pages/categories públicas e callbacks do LiteSpeed)
-- **Login** — rate limit de 5 tentativas por IP/usuário em 15 min, com lockout temporário
-- **SMTP** — senha criptografada (AES-256-CBC) no banco de dados
-- **Tela de login** — logo do site, fundo bege, botão verde, links personalizados
-
-## Admin
-- **Irenilson Barbosa** (menu principal) — configurações de redes sociais, logo, GA4, SMTP, fontes, banner, home categories (reordenável com ▲▼), descrição dos arquivos, e-mail de contato
-- **Newsletter** — envio manual de posts para assinantes com preview AJAX
-- **Logs** — audit log com filtros e exportação CSV
-- **Tutoriais** — guia de publicação para cada tipo de conteúdo
-- **Dashboard widget** — botões de ação rápida para criar conteúdo
-- **Role Editor** — acesso a configs, tutoriais e logs; sem Tools/Comentários/Páginas; profile simplificado
-- **Admin bar** — "Limpar cache" e "Reindexar Google"
-
-## Observações técnicas
-- WordPress 7.0.2 com tema "Blog do Irenilson" e plugin "Irenilson Barbosa Core" v1.1.0
-- Tipografia: Literata (títulos) e Inter (corpo) — configuráveis via admin
-- Paleta: marrom (#3E2C1B), bege (#F5F0E8), verde militar (#4A5D3E)
-- Cache: LiteSpeed Cache + Hostinger CDN. TTL navegador: 0 (revalidação via ETag)
-- Imagens: GD library com suporte a AVIF (PHP 8.3). CLI: `wp ib-convert`, `wp ib-thumb-avif`
-- Deploy: rsync via SSH (deploy.sh) para `domains/irenilsonbarbosa.com/public_html/`
-- Contato: contato@irenilsonbarbosa.com / tarcisioefbarbosa@gmail.com
-- LGPD: encarregado via contato@, dados retidos conforme política de privacidade
+## Categorias
+filosofia, educação, política, cultura, cotidiano, religião
