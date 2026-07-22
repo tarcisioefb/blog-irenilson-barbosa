@@ -22,10 +22,10 @@ class AuditLog {
 
 	public static function log_post_save($post_id, $post_after, $post_before) {
 		try {
-			if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
+			if (\wp_is_post_revision($post_id) || \wp_is_autosave($post_id)) return;
 			if (empty($post_after) || $post_after->post_status === 'auto-draft' || $post_after->post_status === 'trash') return;
-			$type = get_post_type($post_id);
-			$title = get_the_title($post_id);
+			$type = \get_post_type($post_id);
+			$title = \get_the_title($post_id);
 			if (empty($post_before) || $post_before->post_status === 'auto-draft') {
 				self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
 				return;
@@ -81,8 +81,8 @@ class AuditLog {
 		global $wpdb;
 		$table = $wpdb->prefix . self::$table;
 		$data = [
-			'user_id'      => get_current_user_id(),
-			'user_name'    => wp_get_current_user()->display_name ?? '',
+			'user_id'      => \get_current_user_id(),
+			'user_name'    => \wp_get_current_user()->display_name ?? '',
 			'action'       => $action,
 			'object_type'  => $object_type,
 			'object_id'    => (int) $object_id,
@@ -95,38 +95,38 @@ class AuditLog {
 
 	public static function log_post_delete($post_id) {
 		try {
-			$type = get_post_type($post_id);
-			$title = get_the_title($post_id);
+			$type = \get_post_type($post_id);
+			$title = \get_the_title($post_id);
 			self::log('deleted', $type, $post_id, $title, "Deletou {$type}: {$title}");
 		} catch (\Throwable $e) {}
 	}
 
 	public static function log_post_trash($post_id) {
 		try {
-			$type = get_post_type($post_id);
-			$title = get_the_title($post_id);
+			$type = \get_post_type($post_id);
+			$title = \get_the_title($post_id);
 			self::log('trashed', $type, $post_id, $title, "Moveu {$type} para lixeira: {$title}");
 		} catch (\Throwable $e) {}
 	}
 
 	public static function log_post_untrash($post_id) {
 		try {
-			$type = get_post_type($post_id);
-			$title = get_the_title($post_id);
+			$type = \get_post_type($post_id);
+			$title = \get_the_title($post_id);
 			self::log('untrashed', $type, $post_id, $title, "Restaurou {$type} da lixeira: {$title}");
 		} catch (\Throwable $e) {}
 	}
 
 	public static function log_attachment_add($post_id) {
 		try {
-			$title = get_the_title($post_id);
+			$title = \get_the_title($post_id);
 			self::log('uploaded', 'attachment', $post_id, $title, "Enviou anexo: {$title}");
 		} catch (\Throwable $e) {}
 	}
 
 	public static function log_attachment_delete($post_id) {
 		try {
-			$title = get_the_title($post_id);
+			$title = \get_the_title($post_id);
 			self::log('deleted', 'attachment', $post_id, $title, "Deletou anexo: {$title}");
 		} catch (\Throwable $e) {}
 	}
@@ -148,14 +148,14 @@ class AuditLog {
 
 	public static function log_profile_update($user_id, $old_user_data) {
 		try {
-			$user = get_userdata($user_id);
+			$user = \get_userdata($user_id);
 			self::log('profile_updated', 'user', $user_id, $user->display_name, "Atualizou perfil: {$user->display_name}");
 		} catch (\Throwable $e) {}
 	}
 
 	public static function log_user_register($user_id) {
 		try {
-			$user = get_userdata($user_id);
+			$user = \get_userdata($user_id);
 			self::log('user_registered', 'user', $user_id, $user->display_name, "Novo usuário: {$user->display_name}");
 		} catch (\Throwable $e) {}
 	}
