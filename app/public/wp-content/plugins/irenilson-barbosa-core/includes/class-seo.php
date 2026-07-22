@@ -122,7 +122,8 @@ class SEO {
 	public static function cli_batch_seo() {
 		if (!\defined('WP_CLI') || !\WP_CLI) return;
 		$desc = 0; $excerpt = 0;
-		$posts = \get_posts(['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids']);
+		$types = \get_post_types(['public' => true, 'show_ui' => true], 'names');
+		$posts = \get_posts(['post_type' => $types, 'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids']);
 		foreach ($posts as $pid) {
 			$post = \get_post($pid);
 			if (!\get_post_meta($pid, '_ib_description', true)) {
@@ -141,8 +142,9 @@ class SEO {
 		if (!\wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ib_batch_seo')) \wp_die('Falha de segurança.');
 		if (!\current_user_can('edit_pages')) \wp_die('Sem permissão.');
 
+		$types = \get_post_types(['public' => true, 'show_ui' => true], 'names');
 		$posts = \get_posts([
-			'post_type' => 'post',
+			'post_type' => $types,
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'fields' => 'ids',
