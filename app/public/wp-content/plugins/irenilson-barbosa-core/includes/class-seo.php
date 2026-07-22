@@ -61,6 +61,19 @@ class SEO {
 		}
 	}
 
+	private static function generate_excerpt($post) {
+		if (!empty($post->post_excerpt)) return $post->post_excerpt;
+		if (empty($post->post_content)) return '';
+
+		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
+		if ($key) {
+			$ds = self::deepseek_summarize_excerpt($post->post_content, $key);
+			if ($ds) return $ds;
+		}
+
+		return \wp_trim_words(\wp_strip_all_tags($post->post_content), 30);
+	}
+
 	private static function generate_description($post) {
 		$content = trim($post->post_content ?? '');
 		if (empty($content) && $post->post_type === 'page') {
@@ -91,6 +104,34 @@ class SEO {
 
 		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
 		return self::local_summarize($content);
+	}
+
+	private static function deepseek_summarize_excerpt($content, $key) {
+		$text = \wp_strip_all_tags($content);
+		$text = \mb_substr($text, 0, 3000);
+
+		$resp = \wp_remote_post('https://api.deepseek.com/chat/completions', [
+			'headers' => [
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ' . $key,
+			],
+			'body' => \json_encode([
+				'model' => 'deepseek-v4-flash',
+				'messages' => [
+					['role' => 'system', 'content' => 'Resuma o artigo abaixo em 2 a 3 frases (20 a 40 palavras) para ser o resumo (excerpt) do post. Deve despertar interesse e resumir o conteudo de forma atraente. Responda APENAS com o resumo, sem formatacao.'],
+					['role' => 'user', 'content' => $text],
+				],
+				'max_tokens' => 300,
+				'temperature' => 0.3,
+			]),
+			'timeout' => 30,
+		]);
+
+		if (\is_wp_error($resp)) return '';
+		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
+		if (!empty($body['error'])) return '';
+		$result = $body['choices'][0]['message']['content'] ?? '';
+		return $result ? trim($result) : '';
 	}
 
 	private static function deepseek_summarize($content, $key) {
@@ -147,8 +188,8 @@ class SEO {
 				if ($d) { \update_post_meta($pid, '_ib_description', $d); $desc++; }
 			}
 			if (empty($post->post_excerpt) && !empty($post->post_content)) {
-				\wp_update_post(['ID' => $pid, 'post_excerpt' => \wp_trim_words(\wp_strip_all_tags($post->post_content), 30)]);
-				$excerpt++;
+				$ex = self::generate_excerpt($post);
+				if ($ex) { \wp_update_post(['ID' => $pid, 'post_excerpt' => $ex]); $excerpt++; }
 			}
 		}
 		\WP_CLI::success("Geradas $desc meta descriptions e $excerpt excerpts.");
@@ -168,7 +209,8 @@ class SEO {
 			\update_post_meta($pid, '_ib_description', $desc);
 		}
 		if (empty($post->post_excerpt) && !empty($post->post_content)) {
-			\wp_update_post(['ID' => $pid, 'post_excerpt' => \wp_trim_words(\wp_strip_all_tags($post->post_content), 30)]);
+			$ex = self::generate_excerpt($post);
+			if ($ex) \wp_update_post(['ID' => $pid, 'post_excerpt' => $ex]);
 		}
 		\wp_redirect(\add_query_arg('page', 'ib-seo-dashboard', \admin_url('admin.php')));
 		exit;
@@ -220,7 +262,8 @@ class SEO {
 				if ($desc) \update_post_meta($item['id'], '_ib_description', $desc);
 			}
 			if ($item['excerpt']) {
-				\wp_update_post(['ID' => $item['id'], 'post_excerpt' => \wp_trim_words(\wp_strip_all_tags($post->post_content), 30)]);
+				$ex = self::generate_excerpt($post);
+				if ($ex) \wp_update_post(['ID' => $item['id'], 'post_excerpt' => $ex]);
 			}
 		}
 
