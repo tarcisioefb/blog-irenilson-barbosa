@@ -147,18 +147,27 @@ class SEODashboard {
 		$issues['posts'] = $all_posts;
 
 		foreach ($all_posts as $pid) {
-			$meta_desc = \get_post_meta($pid, '_ib_description', true);
-			if (!$meta_desc) $issues['no_description'][] = \get_post($pid);
-
-			if (!\has_post_thumbnail($pid)) $issues['no_thumb'][] = \get_post($pid);
-
 			$post_obj = \get_post($pid);
-			if (empty($post_obj->post_excerpt)) $issues['no_excerpt'][] = $post_obj;
+			$type = $post_obj->post_type;
 
-			$words = \str_word_count(\wp_strip_all_tags($post_obj->post_content));
-			if ($words < 300) {
-				$post_obj->word_count = $words;
-				$issues['short_content'][] = $post_obj;
+			if (!\get_post_meta($pid, '_ib_description', true)) {
+				$issues['no_description'][] = $post_obj;
+			}
+
+			if ($type !== 'page' && !\has_post_thumbnail($pid)) {
+				$issues['no_thumb'][] = $post_obj;
+			}
+
+			if (empty($post_obj->post_excerpt)) {
+				$issues['no_excerpt'][] = $post_obj;
+			}
+
+			if (!in_array($type, ['page', 'poiesis'], true)) {
+				$words = \str_word_count(\wp_strip_all_tags($post_obj->post_content));
+				if ($words < 300) {
+					$post_obj->word_count = $words;
+					$issues['short_content'][] = $post_obj;
+				}
 			}
 		}
 
