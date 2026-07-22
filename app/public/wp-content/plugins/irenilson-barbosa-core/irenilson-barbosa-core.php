@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Irenilson Barbosa Core
  * Plugin URI:  https://irenilsonbarbosa.com.br
- * Description: Funcionalidades do portal editorial — CPTs (livro, poiesis, publicacao, material), taxonomias, SEO completo (schema BlogPosting/Article/Book/BreadcrumbList, OG, Twitter Cards, sitemap com imagens, robots.txt), LGPD (cookie consent, privacidade), TTS (Text-to-Speech), newsletter, audit log, segurança (CSP, HSTS, XML-RPC off, REST restrita, rate limit login, SMTP criptografado), cache, admin customizado. Desenvolvido por Zucatech (zucatech.com).
+ * Description: Gerencia CPTs, SEO, LGPD, TTS, newsletter e segurança do portal editorial. Desenvolvido por Zucatech (zucatech.com).
  * Version:     1.1.0
  * Author:      Zucatech
  * Author URI:  https://zucatech.com
