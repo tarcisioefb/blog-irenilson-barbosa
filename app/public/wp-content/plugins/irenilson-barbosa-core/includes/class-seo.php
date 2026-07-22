@@ -16,6 +16,7 @@ class SEO {
 		add_action('add_meta_boxes', [__CLASS__, 'add_faq_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_faq_meta']);
 		add_action('wp_ajax_ib_batch_seo', [__CLASS__, 'ajax_batch_seo']);
+		add_action('wp_ajax_ib_gen_desc', [__CLASS__, 'ajax_gen_desc']);
 	}
 
 	public static function robots_txt($output, $public) {
@@ -151,6 +152,26 @@ class SEO {
 			}
 		}
 		\WP_CLI::success("Geradas $desc meta descriptions e $excerpt excerpts.");
+	}
+
+	public static function ajax_gen_desc() {
+		if (!\wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ib_gen_desc')) \wp_die('Falha de segurança.');
+		if (!\current_user_can('edit_pages')) \wp_die('Sem permissão.');
+		$pid = (int) ($_POST['post_id'] ?? 0);
+		if (!$pid) \wp_die('ID inválido.');
+		$post = \get_post($pid);
+		if (!$post) \wp_die('Post não encontrado.');
+
+		\delete_post_meta($pid, '_ib_description');
+		$desc = self::generate_description($post);
+		if ($desc) {
+			\update_post_meta($pid, '_ib_description', $desc);
+		}
+		if (empty($post->post_excerpt) && !empty($post->post_content)) {
+			\wp_update_post(['ID' => $pid, 'post_excerpt' => \wp_trim_words(\wp_strip_all_tags($post->post_content), 30)]);
+		}
+		\wp_redirect(\add_query_arg('page', 'ib-seo-dashboard', \admin_url('admin.php')));
+		exit;
 	}
 
 	public static function ajax_batch_seo() {

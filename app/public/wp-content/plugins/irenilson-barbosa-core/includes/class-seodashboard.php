@@ -32,10 +32,10 @@ class SEODashboard {
 		<div class="wrap">
 			<h1>🔍 Diagnóstico de SEO</h1>
 			<p style="color:var(--tx-2)">Visão geral da saúde de SEO do blog. Última verificação: <?php echo date('d/m/Y H:i'); ?></p>
-			<form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="margin-bottom:20px">
+			<form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="margin-bottom:12px;display:inline-block">
 				<?php wp_nonce_field('ib_batch_seo'); ?>
 				<input type="hidden" name="action" value="ib_batch_seo">
-				<button type="submit" class="button button-primary" style="background:#4a5d3e;border-color:#4a5d3e">⚡ Gerar meta descriptions e excerpts automáticos</button>
+				<button type="submit" class="button button-primary" style="background:#4a5d3e;border-color:#4a5d3e">⚡ Gerar todos</button>
 			</form>
 
 			<div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0">
@@ -53,7 +53,7 @@ class SEODashboard {
 					<thead><tr><th>Post</th><th>Ação</th></tr></thead>
 					<tbody>
 					<?php foreach ($issues['no_description'] as $p) : ?>
-						<tr><td><a href="<?php echo get_edit_post_link($p->ID); ?>"><?php echo esc_html($p->post_title); ?></a></td><td><a href="<?php echo get_edit_post_link($p->ID); ?>">Editar</a></td></tr>
+						<tr><td><a href="<?php echo get_edit_post_link($p->ID); ?>"><?php echo esc_html($p->post_title); ?></a></td><td><a href="<?php echo get_edit_post_link($p->ID); ?>">Editar</a> | <form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="display:inline"><?php wp_nonce_field('ib_gen_desc'); ?><input type="hidden" name="action" value="ib_gen_desc"><input type="hidden" name="post_id" value="<?php echo (int) $p->ID; ?>"><button type="submit" style="background:none;border:none;color:#2271b1;cursor:pointer;padding:0;font:inherit;text-decoration:underline">⚡ Gerar</button></form></td></tr>
 					<?php endforeach; ?>
 					</tbody>
 				</table>
@@ -83,7 +83,7 @@ class SEODashboard {
 					<thead><tr><th>Post</th><th>Ação</th></tr></thead>
 					<tbody>
 					<?php foreach ($issues['no_excerpt'] as $p) : ?>
-						<tr><td><a href="<?php echo get_edit_post_link($p->ID); ?>"><?php echo esc_html($p->post_title); ?></a></td><td><a href="<?php echo get_edit_post_link($p->ID); ?>">Editar</a></td></tr>
+						<tr><td><a href="<?php echo get_edit_post_link($p->ID); ?>"><?php echo esc_html($p->post_title); ?></a></td><td><a href="<?php echo get_edit_post_link($p->ID); ?>">Editar</a> | <form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="display:inline"><?php wp_nonce_field('ib_gen_desc'); ?><input type="hidden" name="action" value="ib_gen_desc"><input type="hidden" name="post_id" value="<?php echo (int) $p->ID; ?>"><button type="submit" style="background:none;border:none;color:#2271b1;cursor:pointer;padding:0;font:inherit;text-decoration:underline">⚡ Gerar</button></form></td></tr>
 					<?php endforeach; ?>
 					</tbody>
 				</table>
