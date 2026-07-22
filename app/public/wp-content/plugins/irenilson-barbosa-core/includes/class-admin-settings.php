@@ -6,6 +6,7 @@ class AdminSettings {
 		add_action('admin_menu', [__CLASS__, 'register_menus']);
 		add_action('admin_init', [__CLASS__, 'register_settings']);
 		add_filter('user_has_cap', [__CLASS__, 'grant_editor_cap'], 10, 3);
+		add_action('admin_init', [__CLASS__, 'migrate_smtp_password']);
 		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 		add_action('wp_dashboard_setup', [__CLASS__, 'dashboard_widgets']);
 		add_action('wp_before_admin_bar_render', [__CLASS__, 'admin_bar_cache']);
@@ -158,7 +159,7 @@ class AdminSettings {
 		$phpmailer->Port = self::opt('smtp_port') ?: 587;
 		$phpmailer->SMTPAuth = true;
 		$phpmailer->Username = self::opt('smtp_user');
-		$phpmailer->Password = self::opt('smtp_pass');
+		$phpmailer->Password = self::opt_decrypted('smtp_pass');
 		$phpmailer->SMTPSecure = self::opt('smtp_encrypt') ?: 'tls';
 		$phpmailer->From = self::opt('smtp_user') ?: 'contato@irenilsonbarbosa.com';
 		$phpmailer->FromName = get_bloginfo('name');
@@ -304,9 +305,51 @@ class AdminSettings {
 		if (array_key_exists('smtp_host', $in)) $out['smtp_host'] = sanitize_text_field(trim($in['smtp_host']));
 		if (array_key_exists('smtp_port', $in)) $out['smtp_port'] = sanitize_text_field(trim($in['smtp_port']));
 		if (array_key_exists('smtp_user', $in)) $out['smtp_user'] = sanitize_email(trim($in['smtp_user']));
-		if (array_key_exists('smtp_pass', $in)) $out['smtp_pass'] = $in['smtp_pass']; // raw — senha
+		if (array_key_exists('smtp_pass', $in)) {
+			$pass = $in['smtp_pass'];
+			if ($pass !== '' && !self::is_encrypted($pass)) {
+				$out['smtp_pass'] = self::encrypt($pass);
+			}
+		}
 		if (array_key_exists('smtp_encrypt', $in)) $out['smtp_encrypt'] = in_array($in['smtp_encrypt'], ['tls', 'ssl', ''], true) ? $in['smtp_encrypt'] : 'tls';
 		return $out;
+	}
+
+	private static function enc_key() {
+		return defined('AUTH_KEY') ? AUTH_KEY . AUTH_SALT : 'ib-fallback-key';
+	}
+
+	private static function is_encrypted($val) {
+		return is_string($val) && strpos($val, 'ib_enc:') === 0;
+	}
+
+	private static function encrypt($plain) {
+		$iv = openssl_random_pseudo_bytes(16);
+		$cipher = openssl_encrypt($plain, 'aes-256-cbc', self::enc_key(), OPENSSL_RAW_DATA, $iv);
+		return 'ib_enc:' . base64_encode($iv) . ':' . base64_encode($cipher);
+	}
+
+	private static function decrypt($val) {
+		if (!self::is_encrypted($val)) return $val;
+		$parts = explode(':', $val, 3);
+		if (count($parts) < 3) return '';
+		$iv = base64_decode($parts[1]);
+		$cipher = base64_decode($parts[2]);
+		$decrypted = openssl_decrypt($cipher, 'aes-256-cbc', self::enc_key(), OPENSSL_RAW_DATA, $iv);
+		return $decrypted !== false ? $decrypted : '';
+	}
+
+	public static function opt_decrypted($key) {
+		$val = self::opt($key);
+		return self::is_encrypted($val) ? self::decrypt($val) : $val;
+	}
+
+	public static function migrate_smtp_password() {
+		$opts = (array) get_option('ib_opts', []);
+		if (!empty($opts['smtp_pass']) && !self::is_encrypted($opts['smtp_pass'])) {
+			$opts['smtp_pass'] = self::encrypt($opts['smtp_pass']);
+			update_option('ib_opts', $opts, false);
+		}
 	}
 
 	public static function enqueue_assets($hook) {
@@ -451,7 +494,7 @@ if (accepted === '1') {
 			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_host" style="color:#3E2C1B;font-weight:600;font-size:12px">Host</label></th><td style="padding:6px 0"><input type="text" id="smtp_host" name="ib_opts[smtp_host]" value="<?php echo esc_attr(self::opt('smtp_host')); ?>" class="regular-text" placeholder="smtp.hostinger.com" style="border-color:#e0d5c3;border-radius:4px"></td></tr>
 			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_port" style="color:#3E2C1B;font-weight:600;font-size:12px">Porta</label></th><td style="padding:6px 0"><input type="text" id="smtp_port" name="ib_opts[smtp_port]" value="<?php echo esc_attr(self::opt('smtp_port')); ?>" class="small-text" placeholder="587" style="border-color:#e0d5c3;border-radius:4px"></td></tr>
 			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_user" style="color:#3E2C1B;font-weight:600;font-size:12px">Usuário</label></th><td style="padding:6px 0"><input type="text" id="smtp_user" name="ib_opts[smtp_user]" value="<?php echo esc_attr(self::opt('smtp_user')); ?>" class="regular-text" placeholder="contato@..." style="border-color:#e0d5c3;border-radius:4px"></td></tr>
-			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_pass" style="color:#3E2C1B;font-weight:600;font-size:12px">Senha</label></th><td style="padding:6px 0"><input type="password" id="smtp_pass" name="ib_opts[smtp_pass]" value="<?php echo esc_attr(self::opt('smtp_pass')); ?>" class="regular-text" style="border-color:#e0d5c3;border-radius:4px"></td></tr>
+			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_pass" style="color:#3E2C1B;font-weight:600;font-size:12px">Senha</label></th><td style="padding:6px 0"><input type="password" id="smtp_pass" name="ib_opts[smtp_pass]" value="" class="regular-text" style="border-color:#e0d5c3;border-radius:4px" placeholder="Deixe vazio para manter a atual"></td></tr>
 			<tr><th scope="row" style="width:80px;padding:6px 0"><label for="smtp_encrypt" style="color:#3E2C1B;font-weight:600;font-size:12px">Criptografia</label></th><td style="padding:6px 0"><select id="smtp_encrypt" name="ib_opts[smtp_encrypt]" style="border-color:#e0d5c3;border-radius:4px"><option value="tls" <?php selected(self::opt('smtp_encrypt'), 'tls'); ?>>TLS</option><option value="ssl" <?php selected(self::opt('smtp_encrypt'), 'ssl'); ?>>SSL</option><option value="" <?php selected(self::opt('smtp_encrypt'), ''); ?>>Nenhuma</option></select></td></tr>
 		<?php
 		self::card_table_close();
