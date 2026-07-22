@@ -2,7 +2,7 @@
 Contributors: zucatech
 Tags: seo, lgpd, tts, newsletter, audit, security
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.0.2
 Stable tag: 1.1.0
 License: GPLv2 or later
 

@@ -83,7 +83,7 @@ add_filter('plugins_api', function ($result, $action, $args) {
 		'version'         => $ver[1] ?? IRENILSON_CORE_VERSION,
 		'author'          => '<a href="https://zucatech.com">Zucatech</a>',
 		'requires'        => '6.0',
-		'tested'          => '7.0',
+		'tested'          => '7.0.2',
 		'last_updated'    => gmdate('Y-m-d'),
 		'sections'        => $sections,
 		'short_description' => 'Gerencia CPTs, SEO, LGPD, TTS, newsletter e segurança do portal editorial.',
