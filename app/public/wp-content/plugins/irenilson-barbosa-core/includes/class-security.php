@@ -12,6 +12,12 @@ class Security {
 		add_filter('login_headerurl', [__CLASS__, 'custom_login_url']);
 		add_filter('login_headertext', [__CLASS__, 'custom_login_title']);
 		add_filter('wp_headers', [__CLASS__, 'security_headers']);
+		add_action('send_headers', [__CLASS__, 'send_cache_headers']);
+	}
+
+	public static function send_cache_headers() {
+		if (is_admin() || is_user_logged_in()) return;
+		header('Cache-Control: no-cache, must-revalidate');
 	}
 
 	public static function security_headers($headers) {
