@@ -61,19 +61,17 @@ class AuditLog {
 	public static function log($action, $object_type, $object_id = 0, $object_title = '', $summary = '') {
 		global $wpdb;
 		$table = $wpdb->prefix . self::$table;
-		if ($wpdb->get_var("SHOW TABLES LIKE '$table'") !== $table) return;
-		$uid = get_current_user_id();
-		$user = wp_get_current_user();
-		$wpdb->insert($table, [
-			'user_id'      => $uid,
-			'user_name'    => $user ? $user->display_name : '',
+		$data = [
+			'user_id'      => get_current_user_id(),
+			'user_name'    => wp_get_current_user()->display_name ?? '',
 			'action'       => $action,
 			'object_type'  => $object_type,
 			'object_id'    => (int) $object_id,
-			'object_title' => $object_title,
-			'summary'      => $summary,
+			'object_title' => $object_title ?: '',
+			'summary'      => $summary ?: '',
 			'ip'           => $_SERVER['REMOTE_ADDR'] ?? '',
-		]);
+		];
+		$wpdb->insert($table, $data);
 	}
 
 	public static function log_post_update($post_id, $post_after, $post_before) {
