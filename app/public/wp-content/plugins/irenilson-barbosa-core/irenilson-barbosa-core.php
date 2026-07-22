@@ -48,6 +48,7 @@ add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\SEO::init();
 	\IrenilsonBarbosa\Core\TTS::init();
 	\IrenilsonBarbosa\Core\ImageOptimizer::init();
+	\IrenilsonBarbosa\Core\AuditLog::init();
 });
 
 if (defined('WP_CLI') && WP_CLI) {
