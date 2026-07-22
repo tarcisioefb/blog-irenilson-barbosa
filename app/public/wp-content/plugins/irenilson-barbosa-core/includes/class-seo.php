@@ -62,6 +62,20 @@ class SEO {
 
 	private static function generate_description($post) {
 		$content = trim($post->post_content ?? '');
+		if (empty($content) && $post->post_type === 'page') {
+			$url = \get_permalink($post);
+			if ($url) {
+				$resp = \wp_remote_get($url, ['timeout' => 10]);
+				if (!\is_wp_error($resp)) {
+					$html = \wp_remote_retrieve_body($resp);
+					$html = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $html);
+					$html = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $html);
+					$html = \wp_strip_all_tags($html);
+					$html = trim(preg_replace('/\s+/', ' ', $html));
+					$content = \mb_substr($html, 0, 3000);
+				}
+			}
+		}
 		if (empty($content) && !empty($post->post_title)) {
 			$name = \get_bloginfo('name');
 			return $post->post_title . ' — ' . $name . '. Acesse para mais informações.';
