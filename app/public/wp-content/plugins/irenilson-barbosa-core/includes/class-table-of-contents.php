@@ -14,39 +14,28 @@ class TableOfContents {
 		if ($done) return $content;
 		$done = true;
 
-		$headings = self::extract_headings($content);
+		$headings = [];
+		$content = preg_replace_callback('/<h([23])(\s[^>]*?)?>(.*?)<\/h[23]>/is', function($m) use (&$headings) {
+			$level = (int) $m[1];
+			$attrs = $m[2] ?? '';
+			$inner = $m[3];
+			$title = wp_strip_all_tags($inner);
+			$id = 'toc-' . sanitize_title($title);
+			$headings[] = ['level' => $level, 'title' => $title, 'id' => $id];
+			if (preg_match('/\bid\s*=\s*["\']/', $attrs)) {
+				return $m[0];
+			}
+			return "<h{$level}{$attrs} id=\"{$id}\">{$inner}</h{$level}>";
+		}, $content);
+
 		if (count($headings) < 2) return $content;
 
-		$content = self::add_anchors($content, $headings);
 		$toc = self::render_toc($headings);
 
 		if (strpos($content, '<!--/IB_TTS-->') !== false) {
 			$content = str_replace('<!--/IB_TTS-->', $toc . '<!--/IB_TTS-->', $content);
 		} else {
 			$content = $toc . $content;
-		}
-		return $content;
-	}
-
-	private static function extract_headings($content) {
-		$pattern = '/<h([23])\s*[^>]*?>(.*?)<\/h[23]>/is';
-		preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
-		$headings = [];
-		foreach ($matches as $m) {
-			$headings[] = [
-				'level' => (int) $m[1],
-				'title' => wp_strip_all_tags($m[2]),
-			];
-		}
-		return $headings;
-	}
-
-	private static function add_anchors($content, $headings) {
-		foreach ($headings as $h) {
-			$id = 'toc-' . sanitize_title($h['title']);
-			$pattern = '/<h[' . $h['level'] . ']\s*([^>]*?)>' . preg_quote($h['title'], '/') . '<\/h[' . $h['level'] . ']>/i';
-			$replacement = '<h' . $h['level'] . ' $1 id="' . esc_attr($id) . '">' . $h['title'] . '</h' . $h['level'] . '>';
-			$content = preg_replace($pattern, $replacement, $content, 1);
 		}
 		return $content;
 	}
@@ -59,11 +48,10 @@ class TableOfContents {
 		$html .= '</div>';
 		$html .= '<nav class="ib-toc__body"><ul class="ib-toc__list">';
 		foreach ($headings as $h) {
-			$id = 'toc-' . sanitize_title($h['title']);
-			$html .= '<li class="ib-toc__item ib-toc__item--h' . $h['level'] . '"><a href="#' . esc_attr($id) . '" class="ib-toc__link">' . esc_html($h['title']) . '</a></li>';
+			$html .= '<li class="ib-toc__item ib-toc__item--h' . $h['level'] . '"><a href="#' . esc_attr($h['id']) . '" class="ib-toc__link">' . esc_html($h['title']) . '</a></li>';
 		}
 		$html .= '</ul></nav></div>';
-		$html .= '<script>(function(){var e=document.querySelector("[data-ib-toc]");if(!e)return;var h=e.querySelector("[data-ib-toc-head]");h.addEventListener("click",function(){e.classList.toggle("is-open");});})();</script>';
+		$html .= '<script>(function(){var e=document.querySelector("[data-ib-toc]");if(!e)return;var h=e.querySelector("[data-ib-toc-head]");h.addEventListener("click",function(){e.classList.toggle("is-open");})})();</script>';
 		return $html;
 	}
 }
