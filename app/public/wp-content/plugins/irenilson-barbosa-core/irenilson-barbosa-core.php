@@ -67,10 +67,15 @@ add_filter('plugins_api', function ($result, $action, $args) {
 	$content = file_get_contents($readme);
 	preg_match('/^=== (.+?) ===/m', $content, $name);
 	preg_match('/^Stable tag: (.+)/m', $content, $ver);
-	preg_match('/^Contributors: (.+)/m', $content, $contrib);
-	preg_match('/^== Description ==\n(.+?)(?=\n== (Installation|Changelog) )/ms', $content, $desc);
-	preg_match('/^== Installation ==\n(.+?)(?=\n== (Custom|Description|Changelog|Screenshots|Upgrade|Frequently|Authors|Contributors) )/ms', $content, $install);
-	preg_match('/^== Changelog ==\n(.+?)$/ms', $content, $changelog);
+
+	$sections = [];
+	$parts = preg_split('/\n(?=== )/', $content);
+	foreach ($parts as $part) {
+		if (preg_match('/^== (.+?) ==\n(.+)/s', $part, $m)) {
+			$key = sanitize_title($m[1]);
+			$sections[$key] = readme_to_html($m[2]);
+		}
+	}
 
 	return (object) [
 		'name'            => $name[1] ?? 'Irenilson Barbosa Core',
@@ -80,15 +85,40 @@ add_filter('plugins_api', function ($result, $action, $args) {
 		'requires'        => '6.0',
 		'tested'          => '7.0',
 		'last_updated'    => gmdate('Y-m-d'),
-		'sections'        => [
-			'description' => nl2br($desc[1] ?? ''),
-			'installation' => nl2br($install[1] ?? ''),
-			'changelog'    => nl2br($changelog[1] ?? ''),
-		],
+		'sections'        => $sections,
 		'short_description' => 'Gerencia CPTs, SEO, LGPD, TTS, newsletter e segurança do portal editorial.',
 		'banners'         => [],
 	];
 }, 10, 3);
+
+function readme_to_html($text) {
+	$text = preg_replace('/^= (.+?) =$/m', '<h4>$1</h4>', $text);
+	$text = preg_replace('/^\* (.+)$/m', '<li>$1</li>', $text);
+	$text = preg_replace('/(<li>.*<\/li>)/s', '<ul>$1</ul>', trim($text));
+	$text = preg_replace('/<\/ul>\n<ul>/', '', $text);
+	$text = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text);
+	$lines = explode("\n", $text);
+	$html = '';
+	$in_list = false;
+	foreach ($lines as $line) {
+		if (strpos($line, '<h4>') === 0 || strpos($line, '<ul>') === 0 || strpos($line, '</ul>') === 0) {
+			if ($in_list) { $html .= "</ul>\n"; $in_list = false; }
+			$html .= $line . "\n";
+			continue;
+		}
+		if (strpos($line, '<li>') === 0) {
+			if (!$in_list) { $html .= "<ul>\n"; $in_list = true; }
+			$html .= $line . "\n";
+			continue;
+		}
+		if ($in_list) { $html .= "</ul>\n"; $in_list = false; }
+		$line = trim($line);
+		if ($line === '') continue;
+		$html .= '<p>' . $line . "</p>\n";
+	}
+	if ($in_list) $html .= "</ul>\n";
+	return $html;
+}
 
 add_filter('plugin_row_meta', function ($meta, $file) {
 	if ($file !== plugin_basename(IRENILSON_CORE_PATH . 'irenilson-barbosa-core.php')) return $meta;
