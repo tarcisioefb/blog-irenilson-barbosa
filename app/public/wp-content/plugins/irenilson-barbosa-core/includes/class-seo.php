@@ -88,7 +88,7 @@ class SEO {
 			<td><?php \wp_editor($desc, 'ib_sobre_descricao', ['textarea_rows' => 4, 'media_buttons' => false, 'teeny' => true, 'quicktags' => false]); ?></td></tr>
 		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Formação acadêmica</label></th>
 			<td><div id="ib-formacao-list">
-				<?php $items = $formacao ? array_filter(array_map('trim', explode("\n", $formacao))) : ['|']; foreach ($items as $i => $item) : $parts = explode('|', $item, 2); ?>
+				<?php $items = $formacao ? array_filter(array_map('trim', explode("\n", $formacao))) : ['|']; foreach ($items as $i => $item) : $parts = explode('|', $item, 3); ?>
 				<div class="ib-formacao-row" style="display:flex;gap:6px;margin-bottom:6px;align-items:flex-start">
 					<span class="ib-drag" style="cursor:grab;color:#bbb;font-size:16px;user-select:none;padding-top:4px">⠿</span>
 					<div><input type="text" name="ib_formacao_periodo[]" value="<?php echo esc_attr(trim($parts[0] ?? '')); ?>" placeholder="Período" style="width:90px;font-size:12px"></div>
