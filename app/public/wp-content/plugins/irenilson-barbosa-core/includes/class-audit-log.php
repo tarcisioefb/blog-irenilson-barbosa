@@ -22,16 +22,11 @@ class AuditLog {
 
 	public static function log_post_save($post_id, $post_after, $post_before) {
 		try {
-			self::debug_log("log_post_save called: post_id=$post_id");
-			self::debug_log("is_revision=" . (\wp_is_post_revision($post_id) ? 'yes' : 'no') . " is_autosave=" . (\wp_is_autosave($post_id) ? 'yes' : 'no'));
-			if (\wp_is_post_revision($post_id) || \wp_is_autosave($post_id)) { self::debug_log("skipped: revision/autosave"); return; }
-			if (empty($post_after)) { self::debug_log("skipped: empty post_after"); return; }
-			if ($post_after->post_status === 'auto-draft' || $post_after->post_status === 'trash') { self::debug_log("skipped: status={$post_after->post_status}"); return; }
+			if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
+			if (empty($post_after) || $post_after->post_status === 'auto-draft' || $post_after->post_status === 'trash') return;
 			$type = \get_post_type($post_id);
 			$title = \get_the_title($post_id);
-			self::debug_log("type=$type title=$title update=" . (empty($post_before) ? 'new' : 'existing') . " before_status=" . ($post_before->post_status ?? 'none'));
 			if (empty($post_before) || $post_before->post_status === 'auto-draft') {
-				self::debug_log("logging as created");
 				self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
 				return;
 			}
@@ -40,18 +35,8 @@ class AuditLog {
 			if ($post_before->post_status !== $post_after->post_status) $changes[] = "status: {$post_after->post_status}";
 			if ($post_before->post_date !== $post_after->post_date) $changes[] = 'data';
 			if (empty($changes)) $changes[] = 'outros';
-			self::debug_log("changes: " . implode(', ', $changes));
 			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
-			self::debug_log("logged successfully");
-		} catch (\Throwable $e) {
-			self::debug_log("ERROR: " . $e->getMessage());
-		}
-	}
-
-	private static function debug_log($msg) {
-		$debug = (array) \get_option('ib_audit_debug', []);
-		$debug[] = date('H:i:s') . ' ' . $msg;
-		\update_option('ib_audit_debug', \array_slice($debug, -50), false);
+		} catch (\Throwable $e) {}
 	}
 
 	public static function register_menu() {
@@ -110,6 +95,7 @@ class AuditLog {
 
 	public static function log_post_delete($post_id) {
 		try {
+			if (\wp_is_post_revision($post_id)) return;
 			$type = \get_post_type($post_id);
 			$title = \get_the_title($post_id);
 			self::log('deleted', $type, $post_id, $title, "Deletou {$type}: {$title}");
