@@ -50,6 +50,7 @@ add_action('plugins_loaded', function () {
 	\IrenilsonBarbosa\Core\ImageOptimizer::init();
 	\IrenilsonBarbosa\Core\AuditLog::init();
 	\IrenilsonBarbosa\Core\Security::init();
+	\IrenilsonBarbosa\Core\TableOfContents::init();
 });
 
 if (defined('WP_CLI') && WP_CLI) {

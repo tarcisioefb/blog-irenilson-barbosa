@@ -50,6 +50,6 @@ class TTS {
 		if ($done) return $content;
 		$done = true;
 		ob_start(); self::render_button(); $btn = ob_get_clean();
-		return $btn . $content;
+		return $btn . '<!--/IB_TTS-->' . $content;
 	}
 }
