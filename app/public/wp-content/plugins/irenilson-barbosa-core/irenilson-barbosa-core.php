@@ -59,7 +59,8 @@ if (defined('WP_CLI') && WP_CLI) {
 }
 
 add_filter('plugins_api', function ($result, $action, $args) {
-	if ($action !== 'plugin_information' || ($args->slug ?? '') !== 'irenilson-barbosa-core') return $result;
+	$slug = is_object($args) ? ($args->slug ?? '') : ($args['slug'] ?? '');
+	if ($action !== 'plugin_information' || $slug !== 'irenilson-barbosa-core') return $result;
 	$readme = IRENILSON_CORE_PATH . 'readme.txt';
 	if (!file_exists($readme)) return $result;
 
@@ -67,8 +68,8 @@ add_filter('plugins_api', function ($result, $action, $args) {
 	preg_match('/^=== (.+?) ===/m', $content, $name);
 	preg_match('/^Stable tag: (.+)/m', $content, $ver);
 	preg_match('/^Contributors: (.+)/m', $content, $contrib);
-	preg_match('/^== Description ==\n(.+?)\n==/ms', $content, $desc);
-	preg_match('/^== Installation ==\n(.+?)\n==/ms', $content, $install);
+	preg_match('/^== Description ==\n(.+?)(?=\n== )/ms', $content, $desc);
+	preg_match('/^== Installation ==\n(.+?)(?=\n== )/ms', $content, $install);
 	preg_match('/^== Changelog ==\n(.+?)$/ms', $content, $changelog);
 
 	return (object) [
