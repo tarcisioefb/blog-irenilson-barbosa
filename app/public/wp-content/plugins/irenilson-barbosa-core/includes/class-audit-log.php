@@ -40,7 +40,9 @@ class AuditLog {
 			if ($post_before->post_date !== $post->post_date) $changes[] = 'data';
 			if (empty($changes)) $changes[] = 'outros';
 			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
-		} catch (\Throwable $e) {}
+		} catch (\Throwable $e) {
+			error_log('IB AuditLog post_save: ' . $e->getMessage());
+		}
 	}
 
 	public static function register_menu() {
