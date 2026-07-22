@@ -57,12 +57,12 @@ class TableOfContents {
 		$html .= '<span class="ib-toc__head-inner"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg> <span class="ib-toc__title">Índice do artigo</span></span>';
 		$html .= '<span class="ib-toc__toggle" aria-label="Alternar índice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>';
 		$html .= '</div>';
-		$html .= '<nav class="ib-toc__body"><ol class="ib-toc__list">';
+		$html .= '<nav class="ib-toc__body"><ul class="ib-toc__list">';
 		foreach ($headings as $h) {
 			$id = 'toc-' . sanitize_title($h['title']);
 			$html .= '<li class="ib-toc__item ib-toc__item--h' . $h['level'] . '"><a href="#' . esc_attr($id) . '" class="ib-toc__link">' . esc_html($h['title']) . '</a></li>';
 		}
-		$html .= '</ol></nav></div>';
+		$html .= '</ul></nav></div>';
 		$html .= '<script>(function(){var e=document.querySelector("[data-ib-toc]");if(!e)return;var h=e.querySelector("[data-ib-toc-head]");h.addEventListener("click",function(){e.classList.toggle("is-open");});})();</script>';
 		return $html;
 	}
