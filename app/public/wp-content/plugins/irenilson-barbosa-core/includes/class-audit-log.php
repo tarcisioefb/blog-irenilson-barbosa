@@ -20,10 +20,14 @@ class AuditLog {
 		add_action('wp_ajax_ib_export_logs', [__CLASS__, 'ajax_export']);
 	}
 
+	private static $saved_post_ids = [];
+
 	public static function log_post_save($post_id, $post_after, $post_before) {
 		try {
 			if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
 			if (empty($post_after) || $post_after->post_status === 'auto-draft' || $post_after->post_status === 'trash') return;
+			if (isset(self::$saved_post_ids[$post_id])) return;
+			self::$saved_post_ids[$post_id] = true;
 			$type = \get_post_type($post_id);
 			$title = \get_the_title($post_id);
 			if (empty($post_before) || $post_before->post_status === 'auto-draft') {
