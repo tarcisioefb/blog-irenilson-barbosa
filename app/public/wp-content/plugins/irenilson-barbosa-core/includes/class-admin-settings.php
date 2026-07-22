@@ -19,12 +19,13 @@ class AdminSettings {
 		add_action('init', [__CLASS__, 'handle_unsubscribe']);
 		add_action('admin_init', [__CLASS__, 'remove_tools_menu']);
 		add_action('admin_head', [__CLASS__, 'admin_head_editor']);
+		add_action('admin_post_ib_save_settings', [__CLASS__, 'handle_save_settings']);
 		add_action('admin_notices', [__CLASS__, 'admin_notices']);
 	}
 
 	public static function grant_editor_cap($allcaps, $caps, $args) {
-		if (!empty($allcaps['edit_pages'])) {
-			$allcaps['publish_pages'] = true;
+		if (!empty($allcaps['edit_others_posts'])) {
+			$allcaps['edit_pages'] = true;
 		}
 		return $allcaps;
 	}
@@ -48,7 +49,7 @@ class AdminSettings {
 	}
 
 	public static function admin_bar_cache() {
-		if (!current_user_can('publish_pages')) return;
+		if (!current_user_can('edit_pages')) return;
 		global $wp_admin_bar;
 		$wp_admin_bar->remove_node("comments");
 		$wp_admin_bar->add_node([
@@ -67,7 +68,7 @@ class AdminSettings {
 
 	public static function ajax_purge_cache() {
 		if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'ib_purge')) wp_die('Falha de segurança.');
-		if (!current_user_can('publish_pages')) wp_die('Sem permissão.');
+		if (!current_user_can('edit_pages')) wp_die('Sem permissão.');
 
 		if (function_exists('LiteSpeed_Cache_API')) {
 			LiteSpeed_Cache_API::purge_all();
@@ -83,13 +84,26 @@ class AdminSettings {
 
 	public static function ajax_reindex() {
 		if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'ib_reindex')) wp_die('Falha de segurança.');
-		if (!current_user_can('publish_pages')) wp_die('Sem permissão.');
+		if (!current_user_can('edit_pages')) wp_die('Sem permissão.');
 		$sitemap = urlencode(home_url('/wp-sitemap.xml'));
 		$resp = wp_remote_get("https://www.google.com/ping?sitemap=$sitemap", ['timeout' => 15]);
 		if (is_wp_error($resp)) {
 			wp_die('Erro ao notificar Google: ' . $resp->get_error_message());
 		}
 		wp_redirect(add_query_arg('ib_reindexed', '1', wp_get_referer() ?: admin_url()));
+		exit;
+	}
+
+	public static function handle_save_settings() {
+		if (!wp_verify_nonce($_POST['ib_settings_nonce'] ?? '', 'ib_save_settings')) {
+			wp_die('Falha de segurança.');
+		}
+		if (!current_user_can('edit_pages')) {
+			wp_die('Sem permissão.');
+		}
+		$in = isset($_POST['ib_opts']) && is_array($_POST['ib_opts']) ? $_POST['ib_opts'] : [];
+		update_option('ib_opts', self::sanitize($in), false);
+		wp_redirect(add_query_arg('settings-updated', '1', wp_get_referer() ?: admin_url('admin.php?page=ib-ajustes')));
 		exit;
 	}
 
@@ -216,7 +230,7 @@ class AdminSettings {
 		add_menu_page(
 			'Irenilson Barbosa — Configurações',
 			'Irenilson Barbosa',
-			'publish_pages',
+			'edit_pages',
 			'ib-ajustes',
 			[__CLASS__, 'render_page'],
 			'dashicons-admin-site-alt3',
@@ -227,7 +241,7 @@ class AdminSettings {
 			'ib-ajustes',
 			'Newsletter',
 			'Newsletter',
-			'publish_pages',
+			'edit_pages',
 			'ib-newsletter',
 			[__CLASS__, 'render_newsletter']
 		);
@@ -236,7 +250,7 @@ class AdminSettings {
 			'ib-ajustes',
 			'Tutoriais — Irenilson Barbosa',
 			'Tutoriais',
-			'publish_pages',
+			'edit_pages',
 			'ib-tutoriais',
 			[__CLASS__, 'render_tutoriais']
 		);
@@ -245,12 +259,12 @@ class AdminSettings {
 	public static function register_settings() {
 		$args = [
 			'type'              => 'array',
-			'capability'        => 'publish_pages',
+			'capability'        => 'edit_pages',
 			'sanitize_callback' => [__CLASS__, 'sanitize'],
 			'default'           => self::defaults(),
 		];
 		register_setting('ib_group', 'ib_opts', $args);
-		add_filter('option_page_capability_ib_group', function() { return 'publish_pages'; });
+		add_filter('option_page_capability_ib_group', function() { return 'edit_pages'; });
 	}
 
 	public static function sanitize($in) {
@@ -318,7 +332,7 @@ if (accepted === '1') {
 	}
 
 	public static function render_page() {
-		if (!current_user_can('publish_pages')) return;
+		if (!current_user_can('edit_pages')) return;
 		$tab = $_GET['tab'] ?? 'geral';
 		?>
 		<div class="wrap">
@@ -338,8 +352,9 @@ if (accepted === '1') {
 				<a href="?page=ib-ajustes&amp;tab=aparencia" class="nav-tab <?php echo $tab === 'aparencia' ? 'nav-tab-active' : ''; ?>">Aparência</a>
 			</nav>
 
-			<form method="post" action="options.php">
-				<?php settings_fields('ib_group'); ?>
+			<form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+				<?php wp_nonce_field('ib_save_settings', 'ib_settings_nonce'); ?>
+				<input type="hidden" name="action" value="ib_save_settings">
 
 				<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
 				<?php if ($tab === 'geral') : ?>
@@ -623,7 +638,7 @@ jQuery(function($){
 	}
 
 	public static function render_newsletter() {
-		if (!current_user_can('publish_pages')) return;
+		if (!current_user_can('edit_pages')) return;
 		$subs = (array) get_option('ib_newsletter_subscribers', []);
 
 		if (!empty($_GET['export'])) {
@@ -795,7 +810,7 @@ jQuery(function($){
 	}
 
 	public static function render_tutoriais() {
-		if (!current_user_can('publish_pages')) return;
+		if (!current_user_can('edit_pages')) return;
 		$types = [
 			'post' => ['Artigos', 'Artigos (posts) são o conteúdo principal do blog. Use para ensaios, reflexões e notícias. O editor de blocos permite adicionar imagens, citações, galerias e muito mais.', 'Artigos', 'artigos', true],
 			'publicacao' => ['Publicacoes', 'Publicações acadêmicas: artigos científicos, capítulos de livros e ensaios acadêmicos. Preencha os campos de ano, periódico/veículo, DOI e citação ABNT nos metadados abaixo do editor.', 'Publicacoes', 'publicacoes', false],
