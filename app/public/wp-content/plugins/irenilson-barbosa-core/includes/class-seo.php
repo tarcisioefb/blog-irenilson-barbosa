@@ -224,9 +224,9 @@ class SEO {
 	}
 
 	private static function get_image() {
-		if (is_singular()) {
+		if (is_singular() || is_front_page()) {
 			$post_type = get_post_type();
-			if (in_array($post_type, ['post', 'publicacao', 'livro', 'poiesis', 'material'], true)) {
+			if (in_array($post_type, ['post', 'page', 'publicacao', 'livro', 'poiesis', 'material'], true)) {
 				$thumb_id = get_post_thumbnail_id(get_queried_object_id());
 				if ($thumb_id) {
 					$src = wp_get_attachment_image_url($thumb_id, 'large');
