@@ -105,7 +105,7 @@ class SEO {
 			'body' => \json_encode([
 				'model' => 'deepseek-v4-flash',
 				'messages' => [
-					['role' => 'system', 'content' => 'Resuma o artigo abaixo em ate 160 caracteres para ser uma meta description do Google. Responda APENAS com a descricao, sem aspas nem formatacao.'],
+					['role' => 'system', 'content' => 'Gere uma meta description em portugues seguindo boas praticas de SEO: 1) entre 120 e 160 caracteres 2) que desperte curiosidade e clique 3) contenha a palavra-chave principal do artigo 4) seja um resumo atraente e completo em uma ou duas frases 5) nao use aspas, barras ou caracteres especiais no inicio/fim. Responda APENAS com a meta description.'],
 					['role' => 'user', 'content' => $text],
 				],
 				'max_tokens' => 500,
