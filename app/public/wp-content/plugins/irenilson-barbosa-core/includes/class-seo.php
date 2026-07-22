@@ -515,7 +515,14 @@ class SEO {
 			if (!empty($post->post_excerpt)) return wp_trim_words($post->post_excerpt, 30);
 			if (!empty($post->post_content)) return wp_trim_words(wp_strip_all_tags($post->post_content), 30);
 		}
-		if (is_home() || is_front_page()) {
+		if (is_home()) {
+			$custom = \get_post_meta(\get_queried_object_id(), '_ib_description', true);
+			if ($custom) return $custom;
+			$arch_desc = \IrenilsonBarbosa\Core\AdminSettings::opt('arch_desc_artigos');
+			if ($arch_desc) return $arch_desc;
+			return 'Artigos, notícias e reflexões — ' . \get_bloginfo('name');
+		}
+		if (is_front_page()) {
 			return 'Irenilson Barbosa — Professor universitário, escritor e pesquisador. Ensaios sobre filosofia, educação, política e cultura, poemas, publicações acadêmicas e livros.';
 		}
 		if (is_archive()) {
