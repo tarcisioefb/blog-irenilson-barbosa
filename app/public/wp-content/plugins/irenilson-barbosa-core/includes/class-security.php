@@ -26,6 +26,9 @@ class Security {
 		} else {
 			$headers['Content-Security-Policy'] = $csp;
 		}
+		if (!is_user_logged_in()) {
+			$headers['Cache-Control'] = 'no-cache, must-revalidate';
+		}
 		return $headers;
 	}
 
