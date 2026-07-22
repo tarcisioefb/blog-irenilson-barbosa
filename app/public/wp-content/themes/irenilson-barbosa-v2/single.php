@@ -22,6 +22,7 @@ while ( have_posts() ) : the_post();
 				<div class="article__meta">
 					<span>por <b><?php echo esc_html( get_the_author() ); ?></b></span>
 					<span><?php echo esc_html( get_the_date() ); ?></span>
+					<?php if ( get_the_modified_time( 'U' ) > get_the_time( 'U' ) + 86400 ) : ?><span>Atualizado em <?php echo esc_html( get_the_modified_date() ); ?></span><?php endif; ?>
 					<?php if ( $cat ) : ?><span>em <b><?php echo esc_html( $cat->name ); ?></b></span><?php endif; ?>
 					<span><?php echo (int) $mins; ?> min de leitura</span>
 	

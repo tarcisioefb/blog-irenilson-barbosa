@@ -5,10 +5,16 @@ class SEO {
 	public static function init() {
 		add_action('add_meta_boxes', [__CLASS__, 'add_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_meta_box']);
+		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
 		add_filter('pre_get_document_title', [__CLASS__, 'filter_title']);
 		add_filter('wp_title', [__CLASS__, 'filter_wp_title'], 10, 2);
 		add_filter('robots_txt', [__CLASS__, 'robots_txt'], 10, 2);
+		add_filter('wp_sitemaps_posts_entry', [__CLASS__, 'sitemap_image'], 10, 2);
+		add_filter('the_excerpt_rss', [__CLASS__, 'rss_thumbnail']);
+		add_filter('the_content_feed', [__CLASS__, 'rss_thumbnail']);
+		add_action('add_meta_boxes', [__CLASS__, 'add_faq_meta_box']);
+		add_action('save_post', [__CLASS__, 'save_faq_meta']);
 	}
 
 	public static function robots_txt($output, $public) {
@@ -41,6 +47,22 @@ class SEO {
 		<p><label for="ib-description" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Meta description</label>
 		<textarea id="ib-description" name="ib_description" rows="3" style="width:100%;padding:5px 6px;font-size:12px" placeholder="Resumo para mecanismos de busca (máx. 160 caracteres)"><?php echo esc_textarea($description); ?></textarea></p>
 		<?php
+	}
+
+	public static function auto_description($post_id, $post) {
+		if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+		if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
+		$existing = \get_post_meta($post_id, '_ib_description', true);
+		if (!empty($existing)) return;
+		$desc = '';
+		if (!empty($post->post_excerpt)) {
+			$desc = \wp_trim_words($post->post_excerpt, 25);
+		} elseif (!empty($post->post_content)) {
+			$desc = \wp_trim_words(\wp_strip_all_tags($post->post_content), 25);
+		}
+		if ($desc) {
+			\update_post_meta($post_id, '_ib_description', $desc);
+		}
 	}
 
 	public static function save_meta_box($post_id) {
@@ -141,13 +163,16 @@ class SEO {
 		if (!$logo) { $uploads = wp_upload_dir(); $logo = $uploads['baseurl'] . '/2026/07/logo-irenilson.png'; }
 		$name = get_bloginfo('name');
 		$url  = home_url('/');
+		$fb = \IrenilsonBarbosa\Core\AdminSettings::opt('social_facebook') ?: 'https://facebook.com/';
+		$ig = \IrenilsonBarbosa\Core\AdminSettings::opt('social_instagram') ?: 'https://instagram.com/';
+		$yt = \IrenilsonBarbosa\Core\AdminSettings::opt('social_youtube') ?: 'https://youtube.com/';
 		?>
 <script type="application/ld+json">
 {
 "@context":"https://schema.org",
 "@graph":[
 {"@type":"WebSite","name":"<?php echo esc_js($name); ?>","url":"<?php echo esc_js($url); ?>","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"<?php echo esc_js($url); ?>?s={search_term_string}"},"query-input":"required name=search_term_string"}},
-{"@type":"Person","name":"Irenilson Barbosa","url":"<?php echo esc_js(home_url('/sobre/')); ?>","sameAs":["https://facebook.com/","https://instagram.com/","https://youtube.com/"],"jobTitle":"Professor universitário, escritor e pesquisador","description":"Doutor em Educação pela UFBA. Professor Adjunto da UFRB.","knowsAbout":["Educação","Filosofia","Teologia","Poesia","Inclusão"]},
+{"@type":"Person","name":"Irenilson Barbosa","url":"<?php echo esc_js(home_url('/sobre/')); ?>","sameAs":["<?php echo esc_js($fb); ?>","<?php echo esc_js($ig); ?>","<?php echo esc_js($yt); ?>"],"jobTitle":"Professor universitário, escritor e pesquisador","description":"Doutor em Educação pela UFBA. Professor Adjunto da UFRB.","knowsAbout":["Educação","Filosofia","Teologia","Poesia","Inclusão"]},
 {"@type":"Organization","name":"<?php echo esc_js($name); ?>","url":"<?php echo esc_js($url); ?>","logo":{"@type":"ImageObject","url":"<?php echo esc_js($logo); ?>"},"foundingDate":"2023"}
 ]
 }
@@ -252,6 +277,9 @@ class SEO {
 		} elseif ('livro' === $post_type) {
 			self::schema_book($post);
 		}
+		if ('post' === $post_type) {
+			self::schema_faq($post);
+		}
 	}
 
 	private static function schema_article($post) {
@@ -267,7 +295,12 @@ class SEO {
 		}
 		$pub  = get_the_date('c', $post->ID);
 		$mod  = get_the_modified_date('c', $post->ID);
-		$type = in_array($post->post_type, ['publicacao', 'material'], true) ? 'ScholarlyArticle' : 'Article';
+		$type = 'Article';
+		if ('post' === $post->post_type) $type = 'BlogPosting';
+		elseif ('publicacao' === $post->post_type) $type = 'ScholarlyArticle';
+		elseif ('material' === $post->post_type) $type = 'ScholarlyArticle';
+		$cats = $post->post_type === 'post' ? \wp_get_post_categories($post->ID, ['fields' => 'names']) : [];
+		$tags = $post->post_type === 'post' ? \wp_get_post_tags($post->ID, ['fields' => 'names']) : [];
 		?>
 <script type="application/ld+json">
 {
@@ -281,12 +314,82 @@ class SEO {
 "author":{"@type":"Person","name":"<?php echo esc_js($author_name); ?>","url":"<?php echo esc_js($author_url); ?>"},
 "publisher":{"@type":"Person","name":"Irenilson Barbosa","url":"<?php echo esc_js(home_url('/sobre/')); ?>"},
 "mainEntityOfPage":{"@type":"WebPage","@id":"<?php echo esc_js($url); ?>"}
-<?php if ($img) : ?>,
+<?php if (!empty($cats)) : ?>,
+"articleSection":<?php echo json_encode($cats); ?>
+<?php endif; if (!empty($tags)) : ?>,
+"keywords":<?php echo json_encode($tags); ?>
+<?php endif; if ($img) : ?>,
 "image":{"@type":"ImageObject","url":"<?php echo esc_js($img); ?>","width":1200,"height":630}
 <?php endif; ?>
 }
 </script>
 		<?php
+	}
+
+	public static function sitemap_image($entry, $post) {
+		$thumb_id = \get_post_thumbnail_id($post->ID);
+		if ($thumb_id) {
+			$src = \wp_get_attachment_image_url($thumb_id, 'large');
+			if ($src) {
+				$entry['images'] = [$src];
+			}
+		}
+		return $entry;
+	}
+
+	private static function schema_faq($post) {
+		$question = \get_post_meta($post->ID, '_ib_faq_question', true);
+		if (!$question) return;
+		$answer = \get_post_meta($post->ID, '_ib_faq_answer', true) ?: \get_the_excerpt($post);
+		if (!$answer) $answer = \wp_trim_words(\wp_strip_all_tags($post->post_content), 40);
+		?>
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[{
+"@type":"Question",
+"name":"<?php echo esc_js($question); ?>",
+"acceptedAnswer":{"@type":"Answer","text":"<?php echo esc_js($answer); ?>"}
+}]
+}
+</script>
+		<?php
+	}
+
+	public static function rss_thumbnail($content) {
+		if (!\is_feed()) return $content;
+		$post_id = \get_the_ID();
+		$thumb = \get_the_post_thumbnail($post_id, 'medium', ['loading' => false]);
+		if ($thumb) {
+			$content = '<figure>' . $thumb . '</figure>' . $content;
+		}
+		return $content;
+	}
+
+	public static function add_faq_meta_box() {
+		\add_meta_box('ib-faq', 'FAQ — Pergunta e Resposta', [__CLASS__, 'render_faq_meta'], 'post', 'side', 'low');
+	}
+
+	public static function render_faq_meta($post) {
+		\wp_nonce_field('ib_faq_save', 'ib_faq_nonce');
+		$question = \get_post_meta($post->ID, '_ib_faq_question', true);
+		$answer   = \get_post_meta($post->ID, '_ib_faq_answer', true);
+		?>
+		<p style="font-size:12px;color:#666">Marque perguntas que este post responde diretamente. Aparece como rich snippet no Google.</p>
+		<p><label for="ib-faq-q" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Pergunta</label>
+		<input type="text" id="ib-faq-q" name="ib_faq_question" value="<?php echo esc_attr($question); ?>" style="width:100%;padding:5px 6px;font-size:12px" placeholder="Ex: O que é educação inclusiva?"></p>
+		<p><label for="ib-faq-a" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Resposta (opcional — se vazio, usa o resumo do post)</label>
+		<textarea id="ib-faq-a" name="ib_faq_answer" rows="3" style="width:100%;padding:5px 6px;font-size:12px" placeholder="Resposta direta para o rich snippet"><?php echo esc_textarea($answer); ?></textarea></p>
+		<?php
+	}
+
+	public static function save_faq_meta($post_id) {
+		if (!isset($_POST['ib_faq_nonce']) || !\wp_verify_nonce($_POST['ib_faq_nonce'], 'ib_faq_save')) return;
+		if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+		if (!\current_user_can('edit_post', $post_id)) return;
+		\update_post_meta($post_id, '_ib_faq_question', \sanitize_text_field($_POST['ib_faq_question'] ?? ''));
+		\update_post_meta($post_id, '_ib_faq_answer', \sanitize_textarea_field($_POST['ib_faq_answer'] ?? ''));
 	}
 
 	private static function schema_book($post) {
