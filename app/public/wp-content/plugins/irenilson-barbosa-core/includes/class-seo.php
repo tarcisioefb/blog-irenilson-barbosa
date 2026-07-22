@@ -15,6 +15,7 @@ class SEO {
 		add_filter('the_content_feed', [__CLASS__, 'rss_thumbnail']);
 		add_action('add_meta_boxes', [__CLASS__, 'add_faq_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_faq_meta']);
+		add_action('wp_ajax_ib_batch_seo', [__CLASS__, 'ajax_batch_seo']);
 	}
 
 	public static function robots_txt($output, $public) {
@@ -54,15 +55,75 @@ class SEO {
 		if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
 		$existing = \get_post_meta($post_id, '_ib_description', true);
 		if (!empty($existing)) return;
-		$desc = '';
-		if (!empty($post->post_excerpt)) {
-			$desc = \wp_trim_words($post->post_excerpt, 25);
-		} elseif (!empty($post->post_content)) {
-			$desc = \wp_trim_words(\wp_strip_all_tags($post->post_content), 25);
-		}
+		$desc = self::generate_description($post);
 		if ($desc) {
 			\update_post_meta($post_id, '_ib_description', $desc);
 		}
+	}
+
+	private static function generate_description($post) {
+		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
+		if (!empty($post->post_content)) return \wp_trim_words(\wp_strip_all_tags($post->post_content), 25);
+		return '';
+	}
+
+	public static function cli_batch_seo() {
+		if (!\defined('WP_CLI') || !\WP_CLI) return;
+		$desc = 0; $excerpt = 0;
+		$posts = \get_posts(['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids']);
+		foreach ($posts as $pid) {
+			$post = \get_post($pid);
+			if (!\get_post_meta($pid, '_ib_description', true)) {
+				$d = self::generate_description($post);
+				if ($d) { \update_post_meta($pid, '_ib_description', $d); $desc++; }
+			}
+			if (empty($post->post_excerpt) && !empty($post->post_content)) {
+				\wp_update_post(['ID' => $pid, 'post_excerpt' => \wp_trim_words(\wp_strip_all_tags($post->post_content), 30)]);
+				$excerpt++;
+			}
+		}
+		\WP_CLI::success("Geradas $desc meta descriptions e $excerpt excerpts.");
+	}
+
+	public static function ajax_batch_seo() {
+		if (!\wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ib_batch_seo')) \wp_die('Falha de segurança.');
+		if (!\current_user_can('edit_pages')) \wp_die('Sem permissão.');
+
+		$posts = \get_posts([
+			'post_type' => 'post',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'fields' => 'ids',
+			'suppress_filters' => false,
+		]);
+
+		$desc_filled = 0;
+		$excerpt_filled = 0;
+
+		foreach ($posts as $pid) {
+			$post = \get_post($pid);
+			$meta = \get_post_meta($pid, '_ib_description', true);
+			if (!$meta) {
+				$desc = self::generate_description($post);
+				if ($desc) {
+					\update_post_meta($pid, '_ib_description', $desc);
+					$desc_filled++;
+				}
+			}
+			if (empty($post->post_excerpt) && !empty($post->post_content)) {
+				$excerpt = \wp_trim_words(\wp_strip_all_tags($post->post_content), 30);
+				\wp_update_post(['ID' => $pid, 'post_excerpt' => $excerpt]);
+				$excerpt_filled++;
+			}
+		}
+
+		\wp_redirect(\add_query_arg([
+			'page' => 'ib-seo-dashboard',
+			'generated' => $desc_filled + $excerpt_filled,
+			'desc_filled' => $desc_filled,
+			'excerpt_filled' => $excerpt_filled,
+		], \admin_url('admin.php')));
+		exit;
 	}
 
 	public static function save_meta_box($post_id) {

@@ -22,10 +22,21 @@ class SEODashboard {
 		$issues = self::scan();
 		$total = count($issues);
 		$score = self::calc_score($issues);
+
+		if (!empty($_GET['generated'])) {
+			$desc = (int) ($_GET['desc_filled'] ?? 0);
+			$excerpt = (int) ($_GET['excerpt_filled'] ?? 0);
+			echo '<div class="notice notice-success is-dismissible"><p>✅ ' . $desc . ' meta descriptions e ' . $excerpt . ' excerpts gerados automaticamente.</p></div>';
+		}
 		?>
 		<div class="wrap">
 			<h1>🔍 Diagnóstico de SEO</h1>
 			<p style="color:var(--tx-2)">Visão geral da saúde de SEO do blog. Última verificação: <?php echo date('d/m/Y H:i'); ?></p>
+			<form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="margin-bottom:20px">
+				<?php wp_nonce_field('ib_batch_seo'); ?>
+				<input type="hidden" name="action" value="ib_batch_seo">
+				<button type="submit" class="button button-primary" style="background:#4a5d3e;border-color:#4a5d3e">⚡ Gerar meta descriptions e excerpts automáticos</button>
+			</form>
 
 			<div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0">
 				<?php self::stat_card($score['icon'], $score['label'], $score['desc'], $score['color']); ?>

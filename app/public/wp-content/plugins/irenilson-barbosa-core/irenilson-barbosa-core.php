@@ -57,6 +57,7 @@ add_action('plugins_loaded', function () {
 if (defined('WP_CLI') && WP_CLI) {
 	\WP_CLI::add_command('ib-convert', ['\IrenilsonBarbosa\Core\ImageOptimizer', 'cli_convert']);
 	\WP_CLI::add_command('ib-thumb-avif', ['\IrenilsonBarbosa\Core\ImageOptimizer', 'cli_thumb_avif']);
+	\WP_CLI::add_command('ib-batch-seo', ['\IrenilsonBarbosa\Core\SEO', 'cli_batch_seo']);
 }
 
 add_filter('plugins_api', function ($result, $action, $args) {
