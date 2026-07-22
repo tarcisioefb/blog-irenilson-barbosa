@@ -65,54 +65,22 @@ class SEO {
 		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
 		if (empty($post->post_content)) return '';
 
-		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('gemini_key');
-		if ($key) {
-			$gemini = self::gemini_summarize($post->post_content, $key);
-			if ($gemini) return $gemini;
-		}
+		$text = \wp_strip_all_tags($post->post_content);
+		$text = preg_replace('/\s+/', ' ', $text);
+		$sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
 
-		return self::local_summarize($post->post_content);
-	}
-
-	private static function gemini_summarize($content, $key) {
-		$text = \wp_strip_all_tags($content);
-		$text = \mb_substr($text, 0, 2000);
-
-		$prompt = "Resuma o artigo abaixo em até 160 caracteres para ser uma meta description do Google. Seja direto e atraente. Responda APENAS com a descrição, sem aspas ou formatacao:\n\n$text";
-
-		$resp = \wp_remote_post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $key, [
-			'headers' => ['Content-Type' => 'application/json'],
-			'body' => \json_encode(['contents' => [['parts' => [['text' => $prompt]]]]]),
-			'timeout' => 15,
-		]);
-
-		if (\is_wp_error($resp)) {
-			\error_log('Gemini API error: ' . $resp->get_error_message());
-			return '';
-		}
-		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
-		if (!empty($body['error'])) {
-			\error_log('Gemini API error: ' . ($body['error']['message'] ?? 'unknown'));
-			return '';
-		}
-		$text = $body['candidates'][0]['content']['parts'][0]['text'] ?? '';
-		$text = trim($text);
-		return $text ? \mb_substr($text, 0, 160) : '';
-	}
-
-	private static function local_summarize($content) {
-		if (preg_match('/<p[^>]*>\s*(.{50,}?)\s*<\/p>/is', $content, $m)) {
-			$text = \wp_strip_all_tags($m[1]);
-			if (\str_word_count($text) >= 10) {
-				return \wp_trim_words($text, 25);
+		$best = '';
+		foreach ($sentences as $s) {
+			$s = trim($s);
+			$len = \str_word_count($s);
+			if ($len >= 8 && $len < 40) {
+				$best = $s;
+				break;
 			}
 		}
-		if (preg_match('/<h2[^>]*>(.+?)<\/h2>/i', $content, $m)) {
-			$h2 = \wp_strip_all_tags($m[1]);
-			$rest = \wp_trim_words(\wp_strip_all_tags($content), 20);
-			return \mb_substr("$h2: $rest", 0, 160);
-		}
-		return \wp_trim_words(\wp_strip_all_tags($content), 25);
+
+		if ($best) return \mb_substr($best, 0, 160);
+		return \wp_trim_words($text, 25);
 	}
 
 	public static function cli_batch_seo() {
