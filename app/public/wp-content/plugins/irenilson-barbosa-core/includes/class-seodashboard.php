@@ -30,13 +30,14 @@ class SEODashboard {
 		}
 		?>
 		<div class="wrap">
-			<h1>🔍 Diagnóstico de SEO</h1>
+			<h1 style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">🔍 Diagnóstico de SEO
+				<form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="display:inline">
+					<?php wp_nonce_field('ib_batch_seo'); ?>
+					<input type="hidden" name="action" value="ib_batch_seo">
+					<button type="submit" class="button button-primary" style="background:#4a5d3e;border-color:#4a5d3e">⚡ Gerar todos</button>
+				</form>
+			</h1>
 			<p style="color:var(--tx-2)">Visão geral da saúde de SEO do blog. Última verificação: <?php echo date('d/m/Y H:i'); ?></p>
-			<form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="margin-bottom:12px;display:inline-block">
-				<?php wp_nonce_field('ib_batch_seo'); ?>
-				<input type="hidden" name="action" value="ib_batch_seo">
-				<button type="submit" class="button button-primary" style="background:#4a5d3e;border-color:#4a5d3e">⚡ Gerar todos</button>
-			</form>
 
 			<div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0">
 				<?php self::stat_card($score['icon'], $score['label'], $score['desc'], $score['color']); ?>
