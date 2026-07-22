@@ -507,11 +507,21 @@ class SEO {
 	}
 
 	private static function get_description() {
+		$page_descs = [
+			'inicio' => 'Portal do Professor Irenilson Barbosa — Ensaios, poemas, publicações acadêmicas, livros e materiais educacionais sobre educação, filosofia, política e cultura.',
+			'contato' => 'Entre em contato com o Professor Irenilson Barbosa. Envie sua mensagem, dúvida ou sugestão através do formulário.',
+			'privacidade' => 'Política de Privacidade do portal Irenilson Barbosa. Saiba como seus dados são coletados, armazenados e protegidos conforme a LGPD.',
+			'sobre' => 'Saiba mais sobre o Professor Irenilson Barbosa — formação acadêmica, atuação profissional, livros publicados e áreas de pesquisa.',
+		];
+
 		if (is_singular()) {
 			$custom = get_post_meta(get_queried_object_id(), '_ib_description', true);
 			if ($custom) return $custom;
 
 			$post = get_queried_object();
+			$slug = $post->post_name;
+			if (isset($page_descs[$slug])) return $page_descs[$slug];
+
 			if (!empty($post->post_excerpt)) return wp_trim_words($post->post_excerpt, 30);
 			if (!empty($post->post_content)) return wp_trim_words(wp_strip_all_tags($post->post_content), 30);
 		}
@@ -523,29 +533,34 @@ class SEO {
 			return 'Artigos, notícias e reflexões — ' . \get_bloginfo('name');
 		}
 		if (is_front_page()) {
-			return 'Irenilson Barbosa — Professor universitário, escritor e pesquisador. Ensaios sobre filosofia, educação, política e cultura, poemas, publicações acadêmicas e livros.';
+			return 'Portal do Professor Irenilson Barbosa — Ensaios, poemas, publicações acadêmicas, livros e materiais educacionais sobre educação, filosofia, política e cultura.';
 		}
 		if (is_archive()) {
-			$arch_desc_map = [
+			$arch_map = [
 				'publicacao' => 'arch_desc_publicacoes',
 				'livro' => 'arch_desc_livros',
 				'poiesis' => 'arch_desc_poiesis',
 				'material' => 'arch_desc_materiais',
 			];
-			foreach ($arch_desc_map as $pt => $opt) {
+			foreach ($arch_map as $pt => $opt) {
 				if (is_post_type_archive($pt)) {
-					$custom = \IrenilsonBarbosa\Core\AdminSettings::opt($opt);
-					if ($custom) return $custom;
+					$d = \IrenilsonBarbosa\Core\AdminSettings::opt($opt);
+					if ($d) return $d;
 				}
 			}
-			if (is_post_type_archive('publicacao')) return 'Publicações acadêmicas de Irenilson Barbosa — artigos científicos, capítulos de livros e ensaios.';
-			if (is_post_type_archive('livro')) return 'Livros de Irenilson Barbosa — obras publicadas sobre educação, inclusão, filosofia e ficção.';
-			if (is_post_type_archive('poiesis')) return 'Poemas e criações literárias de Irenilson Barbosa.';
-			if (is_post_type_archive('material')) return 'Materiais educacionais para download — slides, apostilas e guias.';
+			$fallbacks = [
+				'publicacao' => 'Publicações acadêmicas de Irenilson Barbosa — artigos científicos, capítulos de livros e ensaios.',
+				'livro' => 'Livros de Irenilson Barbosa — obras publicadas sobre educação, inclusão, filosofia e ficção.',
+				'poiesis' => 'Poemas e criações literárias de Irenilson Barbosa.',
+				'material' => 'Materiais educacionais para download — slides, apostilas e guias.',
+			];
+			foreach ($fallbacks as $pt => $text) {
+				if (is_post_type_archive($pt)) return $text;
+			}
 			if (is_category()) {
 				$desc = category_description();
 				if ($desc) return wp_trim_words(wp_strip_all_tags($desc), 30);
-				return 'Artigos sobre ' . single_cat_title('', false) . ' — Irenilson Barbosa';
+				return 'Artigos sobre ' . single_cat_title('', false) . ' — ' . \get_bloginfo('name');
 			}
 		}
 		return '';
