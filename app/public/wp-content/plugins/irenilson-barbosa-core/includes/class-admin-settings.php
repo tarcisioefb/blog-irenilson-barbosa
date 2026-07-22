@@ -23,7 +23,7 @@ class AdminSettings {
 	}
 
 	public static function grant_editor_cap($allcaps, $caps, $args) {
-		if (!empty($args) && $args[0] === 'publish_pages' && isset($allcaps['edit_pages']) && $allcaps['edit_pages']) {
+		if (!empty($allcaps['edit_pages'])) {
 			$allcaps['publish_pages'] = true;
 		}
 		return $allcaps;
