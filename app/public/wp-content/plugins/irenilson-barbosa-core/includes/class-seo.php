@@ -42,6 +42,7 @@ class SEO {
 	public static function render_sobre_meta($post) {
 		if ($post->post_name !== 'sobre') return;
 		\wp_nonce_field('ib_sobre_save', 'ib_sobre_nonce');
+		\wp_enqueue_media();
 
 		$foto = \get_post_meta($post->ID, 'ib_sobre_foto', true);
 		$desc = \get_post_meta($post->ID, 'ib_sobre_descricao', true);
@@ -52,10 +53,33 @@ class SEO {
 		?>
 		<p style="font-size:12px;color:#666;margin:0 0 12px">Campos editáveis da página Sobre. Deixe vazio para usar o valor padrão.</p>
 		<table class="form-table">
-		<tr><th scope="row"><label for="ib_sobre_foto" style="font-weight:600;font-size:12px">Foto (URL)</label></th>
-			<td><input type="text" id="ib_sobre_foto" name="ib_sobre_foto" value="<?php echo esc_attr($foto); ?>" style="width:100%;font-size:12px" placeholder="https://..."></td></tr>
+		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Foto</label></th>
+			<td><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+				<div id="ib-foto-preview" style="width:80px;height:80px;border-radius:8px;overflow:hidden;background:#f0f0f1;flex-shrink:0"><?php if ($foto) : ?><img src="<?php echo esc_url($foto); ?>" style="width:100%;height:100%;object-fit:cover"><?php endif; ?></div>
+				<div>
+					<input type="hidden" id="ib_sobre_foto" name="ib_sobre_foto" value="<?php echo esc_attr($foto); ?>">
+					<button type="button" class="button" id="ib-foto-btn" style="font-size:11px">Selecionar imagem</button>
+					<button type="button" class="button" id="ib-foto-remove" style="font-size:11px;color:#b32d2e"<?php echo $foto ? '' : ' hidden'; ?>>Remover</button>
+				</div>
+			</div>
+			<script>
+			document.getElementById('ib-foto-btn')?.addEventListener('click',function(e){
+				e.preventDefault(); var frame=wp.media({title:'Selecionar foto',button:{text:'Usar esta foto'},multiple:false});
+				frame.on('select',function(){
+					var url=frame.state().get('selection').first().toJSON().url;
+					document.getElementById('ib_sobre_foto').value=url;
+					document.getElementById('ib-foto-preview').innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';
+					document.getElementById('ib-foto-remove').hidden=false;
+				}); frame.open();
+			});
+			document.getElementById('ib-foto-remove')?.addEventListener('click',function(){
+				document.getElementById('ib_sobre_foto').value='';
+				document.getElementById('ib-foto-preview').innerHTML='';
+				this.hidden=true;
+			});
+			</script></td></tr>
 		<tr><th scope="row"><label for="ib_sobre_descricao" style="font-weight:600;font-size:12px">Descrição principal</label></th>
-			<td><textarea id="ib_sobre_descricao" name="ib_sobre_descricao" rows="3" style="width:100%;font-size:12px"><?php echo esc_textarea($desc); ?></textarea></td></tr>
+			<td><?php \wp_editor($desc, 'ib_sobre_descricao', ['textarea_rows' => 4, 'media_buttons' => false, 'teeny' => true, 'quicktags' => false]); ?></td></tr>
 		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Formação acadêmica</label></th>
 			<td><div id="ib-formacao-list">
 				<?php $items = $formacao ? array_filter(array_map('trim', explode("\n", $formacao))) : ['|']; foreach ($items as $i => $item) : $parts = explode('|', $item, 2); ?>
@@ -92,8 +116,7 @@ class SEO {
 			});
 			</script></td></tr>
 		<tr><th scope="row"><label for="ib_sobre_publicacoes" style="font-weight:600;font-size:12px">Pesquisa e publicações</label></th>
-			<td><textarea id="ib_sobre_publicacoes" name="ib_sobre_publicacoes" rows="4" style="width:100%;font-size:12px"><?php echo esc_textarea($pub); ?></textarea>
-			<p style="font-size:11px;color:#666;margin:2px 0 0">HTML permitido. Deixe vazio para usar o texto padrão.</p></td></tr>
+			<td><?php \wp_editor($pub, 'ib_sobre_publicacoes', ['textarea_rows' => 6, 'media_buttons' => false, 'teeny' => true, 'quicktags' => false]); ?></td></tr>
 		<tr><th scope="row"><label for="ib_sobre_email" style="font-weight:600;font-size:12px">E-mail de contato</label></th>
 			<td><input type="email" id="ib_sobre_email" name="ib_sobre_email" value="<?php echo esc_attr($email); ?>" style="width:100%;font-size:12px" placeholder="email@exemplo.com"></td></tr>
 		<tr><th scope="row" style="padding-top:20px"><label style="font-weight:600;font-size:12px">Mais informações</label></th>
