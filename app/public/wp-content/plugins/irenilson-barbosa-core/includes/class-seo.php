@@ -45,6 +45,8 @@ class SEO {
 		\wp_enqueue_media();
 
 		$foto = \get_post_meta($post->ID, 'ib_sobre_foto', true);
+		$nome = \get_post_meta($post->ID, 'ib_sobre_nome', true);
+		$subtitulo = \get_post_meta($post->ID, 'ib_sobre_subtitulo', true);
 		$desc = \get_post_meta($post->ID, 'ib_sobre_descricao', true);
 		$formacao = \get_post_meta($post->ID, 'ib_sobre_formacao', true);
 		$grupos = \get_post_meta($post->ID, 'ib_sobre_grupos', true);
@@ -53,6 +55,10 @@ class SEO {
 		?>
 		<p style="font-size:12px;color:#666;margin:0 0 12px">Campos editáveis da página Sobre. Deixe vazio para usar o valor padrão.</p>
 		<table class="form-table">
+		<tr><th scope="row"><label for="ib_sobre_nome" style="font-weight:600;font-size:12px">Nome</label></th>
+			<td><input type="text" id="ib_sobre_nome" name="ib_sobre_nome" value="<?php echo esc_attr($nome); ?>" style="width:100%;font-size:12px" placeholder="Irenilson Barbosa"></td></tr>
+		<tr><th scope="row"><label for="ib_sobre_subtitulo" style="font-weight:600;font-size:12px">Subtítulo</label></th>
+			<td><input type="text" id="ib_sobre_subtitulo" name="ib_sobre_subtitulo" value="<?php echo esc_attr($subtitulo); ?>" style="width:100%;font-size:12px" placeholder="Professor, escritor e pesquisador"></td></tr>
 		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Foto</label></th>
 			<td><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
 				<div id="ib-foto-preview" style="width:80px;height:80px;border-radius:8px;overflow:hidden;background:#f0f0f1;flex-shrink:0"><?php if ($foto) : ?><img src="<?php echo esc_url($foto); ?>" style="width:100%;height:100%;object-fit:cover"><?php endif; ?></div>
@@ -83,7 +89,8 @@ class SEO {
 		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Formação acadêmica</label></th>
 			<td><div id="ib-formacao-list">
 				<?php $items = $formacao ? array_filter(array_map('trim', explode("\n", $formacao))) : ['|']; foreach ($items as $i => $item) : $parts = explode('|', $item, 2); ?>
-				<div class="ib-formacao-row" style="display:flex;gap:6px;margin-bottom:4px">
+				<div class="ib-formacao-row" style="display:flex;gap:6px;margin-bottom:4px;align-items:center">
+					<span class="ib-drag" style="cursor:grab;color:#bbb;font-size:16px;user-select:none">⠿</span>
 					<input type="text" name="ib_formacao_periodo[]" value="<?php echo esc_attr(trim($parts[0] ?? '')); ?>" placeholder="Período" style="width:100px;font-size:12px">
 					<input type="text" name="ib_formacao_curso[]" value="<?php echo esc_attr(trim($parts[1] ?? $parts[0] ?? '')); ?>" placeholder="Curso / Instituição" style="flex:1;font-size:12px">
 					<button type="button" class="button ib-formacao-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>
@@ -92,6 +99,7 @@ class SEO {
 			</div>
 			<button type="button" class="button" id="ib-formacao-add" style="font-size:11px;margin-top:2px">+ Adicionar formação</button>
 			<script>
+			jQuery(function($){$('#ib-formacao-list').sortable({handle:'.ib-drag',axis:'y',placeholder:'ui-state-highlight',cursor:'grabbing'});});
 			document.getElementById('ib-formacao-add')?.addEventListener('click',function(){
 				var d=document.createElement('div');d.className='ib-formacao-row';d.style.cssText='display:flex;gap:6px;margin-bottom:4px';
 				d.innerHTML='<input type="text" name="ib_formacao_periodo[]" placeholder="Período" style="width:100px;font-size:12px"> <input type="text" name="ib_formacao_curso[]" placeholder="Curso / Instituição" style="flex:1;font-size:12px"> <button type="button" class="button ib-formacao-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>';
@@ -101,7 +109,8 @@ class SEO {
 		<tr><th scope="row"><label for="ib_sobre_grupos" style="font-weight:600;font-size:12px">Grupos de pesquisa</label></th>
 			<td><div id="ib-grupos-list">
 				<?php $gitems = $grupos ? array_filter(array_map('trim', explode("\n", $grupos))) : ['']; foreach ($gitems as $g) : ?>
-				<div class="ib-grupo-row" style="display:flex;gap:6px;margin-bottom:4px">
+				<div class="ib-grupo-row" style="display:flex;gap:6px;margin-bottom:4px;align-items:center">
+					<span class="ib-drag" style="cursor:grab;color:#bbb;font-size:16px;user-select:none">⠿</span>
 					<input type="text" name="ib_sobre_grupos[]" value="<?php echo esc_attr($g); ?>" placeholder="Nome do grupo (instituição)" style="flex:1;font-size:12px">
 					<button type="button" class="button ib-grupo-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>
 				</div>
@@ -109,6 +118,7 @@ class SEO {
 			</div>
 			<button type="button" class="button" id="ib-grupos-add" style="font-size:11px;margin-top:2px">+ Adicionar grupo</button>
 			<script>
+			jQuery(function($){$('#ib-grupos-list').sortable({handle:'.ib-drag',axis:'y',placeholder:'ui-state-highlight',cursor:'grabbing'});});
 			document.getElementById('ib-grupos-add')?.addEventListener('click',function(){
 				var d=document.createElement('div');d.className='ib-grupo-row';d.style.cssText='display:flex;gap:6px;margin-bottom:4px';
 				d.innerHTML='<input type="text" name="ib_sobre_grupos[]" placeholder="Nome do grupo (instituição)" style="flex:1;font-size:12px"> <button type="button" class="button ib-grupo-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>';
@@ -136,6 +146,8 @@ class SEO {
 		if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
 		if (isset($_POST['ib_sobre_foto'])) \update_post_meta($post_id, 'ib_sobre_foto', \esc_url_raw($_POST['ib_sobre_foto']));
+		if (isset($_POST['ib_sobre_nome'])) \update_post_meta($post_id, 'ib_sobre_nome', \sanitize_text_field($_POST['ib_sobre_nome']));
+		if (isset($_POST['ib_sobre_subtitulo'])) \update_post_meta($post_id, 'ib_sobre_subtitulo', \sanitize_text_field($_POST['ib_sobre_subtitulo']));
 		if (isset($_POST['ib_sobre_descricao'])) \update_post_meta($post_id, 'ib_sobre_descricao', \sanitize_textarea_field($_POST['ib_sobre_descricao']));
 		if (isset($_POST['ib_sobre_publicacoes'])) \update_post_meta($post_id, 'ib_sobre_publicacoes', \sanitize_textarea_field($_POST['ib_sobre_publicacoes']));
 		if (isset($_POST['ib_sobre_email'])) \update_post_meta($post_id, 'ib_sobre_email', \sanitize_email($_POST['ib_sobre_email']));

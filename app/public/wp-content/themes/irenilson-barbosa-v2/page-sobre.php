@@ -4,6 +4,8 @@ defined('ABSPATH') || exit;
 $pid = get_queried_object_id();
 
 $sobre_foto        = get_post_meta($pid, 'ib_sobre_foto', true) ?: wp_upload_dir()['baseurl'] . '/2026/07/Irenilson-Barbosa-Retrato.avif-square.jpg';
+$sobre_nome        = get_post_meta($pid, 'ib_sobre_nome', true) ?: 'Irenilson Barbosa';
+$sobre_subtitulo   = get_post_meta($pid, 'ib_sobre_subtitulo', true) ?: 'Professor, escritor e pesquisador';
 $sobre_descricao   = get_post_meta($pid, 'ib_sobre_descricao', true) ?: 'Professor Adjunto da UFRB. Pós-Doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra. Doutor e Mestre em Educação pela UFBA. Licenciado em Pedagogia (UFBA) e Bacharel em Teologia. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI).';
 $sobre_formacao    = get_post_meta($pid, 'ib_sobre_formacao', true) ?: "2024–2025|Pós-Doutorando — Democracia e Direitos Humanos, Ius Gentium Conimbrigae, Universidade de Coimbra\n2023–2024|Pós-Doutorado — Ciências da Educação, FPCEUP/Universidade do Porto\n2012–2016|Doutorado — Educação, UFBA\n2002–2004|Mestrado — Educação, UFBA\n2001|Licenciatura — Pedagogia, UFBA\n1990|Bacharelado — Teologia, STBSB";
 $sobre_grupos      = get_post_meta($pid, 'ib_sobre_grupos', true) ?: 'Educação, Sociedade e Diversidade (UFRB); Educação Especial, Diversidade e Contemporaneidade (UFRB); Currículo, Avaliação, Formação e Tecnologias em Educação (CAFTe) — CIIE/FPCEUP (Portugal).';
@@ -31,8 +33,8 @@ while (have_posts()) : the_post(); ?>
 				</div>
 			</div>
 			<div>
-				<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight)">Irenilson Barbosa</h1>
-				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)">Professor, escritor e pesquisador</p>
+				<h1 style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight)"><?php echo esc_html($sobre_nome); ?></h1>
+				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)"><?php echo esc_html($sobre_subtitulo); ?></p>
 
 				<div style="padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);margin-bottom:var(--space-8);border-left:3px solid var(--accent)">
 					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)"><?php echo esc_html($sobre_descricao); ?></p>
