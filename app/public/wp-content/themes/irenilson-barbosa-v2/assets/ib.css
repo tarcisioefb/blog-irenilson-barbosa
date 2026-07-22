@@ -354,8 +354,8 @@ a{color:inherit;text-decoration:none}
 .ib-toc__toggle{flex-shrink:0;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;border:0;background:var(--line);border-radius:50%;cursor:pointer;color:var(--ink);transition:transform .2s,background .15s;line-height:1}
 .ib-toc.is-open .ib-toc__toggle{transform:rotate(180deg)}
 .ib-toc__toggle:hover{background:var(--accent);color:#fff}
-.ib-toc__list,.ib-toc__sublist{margin:0;padding:0;list-style:none!important}
-.ib-toc__list li,.ib-toc__sublist li{list-style:none!important}
+.ib-toc__list,.ib-toc__sublist{margin:0;padding:0 0 0 var(--space-4)}
+.ib-toc__list li,.ib-toc__sublist li{list-style:disc}
 .ib-toc__title{font-weight:700;font-size:var(--text-13);color:var(--ink)}
 .ib-toc__body{display:none;margin-top:var(--space-3);padding-top:var(--space-3);border-top:var(--border-w) solid var(--border-c)}
 .ib-toc.is-open .ib-toc__body{display:block}
