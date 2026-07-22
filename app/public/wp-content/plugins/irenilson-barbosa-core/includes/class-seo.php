@@ -89,8 +89,8 @@ class SEO {
 					['role' => 'system', 'content' => 'Resuma o artigo abaixo em ate 160 caracteres para ser uma meta description do Google. Responda APENAS com a descricao, sem aspas nem formatacao.'],
 					['role' => 'user', 'content' => $text],
 				],
-				'max_tokens' => 100,
-				'temperature' => 0.3,
+				'max_tokens' => 500,
+				'temperature' => 0.1,
 			]),
 			'timeout' => 30,
 		]);
