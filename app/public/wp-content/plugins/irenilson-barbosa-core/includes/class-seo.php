@@ -65,21 +65,54 @@ class SEO {
 		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
 		if (empty($post->post_content)) return '';
 
-		$text = \wp_strip_all_tags($post->post_content);
+		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
+		if ($key) {
+			$ds = self::deepseek_summarize($post->post_content, $key);
+			if ($ds) return $ds;
+		}
+
+		return self::local_summarize($post->post_content);
+	}
+
+	private static function deepseek_summarize($content, $key) {
+		$text = \wp_strip_all_tags($content);
+		$text = \mb_substr($text, 0, 2000);
+
+		$resp = \wp_remote_post('https://api.deepseek.com/v1/chat/completions', [
+			'headers' => [
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ' . $key,
+			],
+			'body' => \json_encode([
+				'model' => 'deepseek-chat',
+				'messages' => [
+					['role' => 'system', 'content' => 'Resuma o artigo abaixo em até 160 caracteres para ser uma meta description do Google. Responda APENAS com a descrição, sem aspas nem formatação.'],
+					['role' => 'user', 'content' => $text],
+				],
+				'max_tokens' => 100,
+				'temperature' => 0.3,
+			]),
+			'timeout' => 15,
+		]);
+
+		if (\is_wp_error($resp)) return '';
+		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
+		if (!empty($body['error'])) return '';
+		$text = $body['choices'][0]['message']['content'] ?? '';
+		return trim($text) ? \mb_substr(trim($text), 0, 160) : '';
+	}
+
+	private static function local_summarize($content) {
+		$text = \wp_strip_all_tags($content);
 		$text = preg_replace('/\s+/', ' ', $text);
 		$sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
-
-		$best = '';
 		foreach ($sentences as $s) {
 			$s = trim($s);
 			$len = \str_word_count($s);
 			if ($len >= 8 && $len < 40) {
-				$best = $s;
-				break;
+				return \mb_substr($s, 0, 160);
 			}
 		}
-
-		if ($best) return \mb_substr($best, 0, 160);
 		return \wp_trim_words($text, 25);
 	}
 

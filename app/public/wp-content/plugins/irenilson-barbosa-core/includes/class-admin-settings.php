@@ -196,6 +196,7 @@ class AdminSettings {
 			'banner_image_mobile' => '',
 			'banner_link'         => '',
 			'google_analytics_id' => '',
+			'deepseek_key'    => '',
 			'contact_email'    => '',
 			'arch_desc_artigos' => 'Ensaios, reflexões e artigos sobre filosofia, educação, política, cultura e cotidiano.',
 			'arch_desc_publicacoes' => 'Publicações acadêmicas de Irenilson Barbosa — artigos científicos, capítulos de livros e ensaios.',
@@ -298,6 +299,10 @@ class AdminSettings {
 		if (array_key_exists('banner_image_mobile', $in)) $out['banner_image_mobile'] = esc_url_raw(trim($in['banner_image_mobile']));
 		if (array_key_exists('banner_link', $in)) $out['banner_link'] = esc_url_raw(trim($in['banner_link']));
 		if (array_key_exists('google_analytics_id', $in)) $out['google_analytics_id'] = sanitize_text_field(trim($in['google_analytics_id']));
+		if (array_key_exists('deepseek_key', $in)) {
+			$key = trim($in['deepseek_key']);
+			if ($key !== '') $out['deepseek_key'] = sanitize_text_field($key);
+		}
 		if (array_key_exists("contact_email", $in)) $out["contact_email"] = sanitize_email(trim($in["contact_email"]));
 		foreach (['arch_desc_artigos', 'arch_desc_publicacoes', 'arch_desc_livros', 'arch_desc_materiais', 'arch_desc_poiesis'] as $k) {
 			if (array_key_exists($k, $in)) $out[$k] = sanitize_textarea_field($in[$k]);
@@ -484,6 +489,16 @@ if (accepted === '1') {
 			<tr>
 				<th scope="row" style="width:80px;padding:6px 0"><label for="google_analytics_id" style="color:#3E2C1B;font-weight:600;font-size:12px">GA4 ID</label></th>
 				<td style="padding:6px 0"><input type="text" id="google_analytics_id" name="ib_opts[google_analytics_id]" value="<?php echo esc_attr(self::opt('google_analytics_id')); ?>" class="regular-text" placeholder="G-XXXXXXXXXX" style="border-color:#e0d5c3;border-radius:4px"></td>
+			</tr>
+		<?php
+		self::card_table_close();
+		self::card_close();
+
+		self::card_open('🤖', 'DeepSeek API', 'Chave da API DeepSeek para gerar meta descriptions inteligentes. <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color:var(--accent)">Crie sua chave</a> (créditos necessários). Se vazio, usa método local (frase mais relevante).');
+		self::card_table_open(); ?>
+			<tr>
+				<th scope="row" style="width:80px;padding:6px 0"><label for="deepseek_key" style="color:#3E2C1B;font-weight:600;font-size:12px">API Key</label></th>
+				<td style="padding:6px 0"><input type="password" id="deepseek_key" name="ib_opts[deepseek_key]" value="" class="regular-text" style="border-color:#e0d5c3;border-radius:4px" placeholder="Deixe vazio para manter a atual"></td>
 			</tr>
 		<?php
 		self::card_table_close();
