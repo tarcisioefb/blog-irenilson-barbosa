@@ -40,8 +40,8 @@ class SEODashboard {
 
 			<div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0">
 				<?php self::stat_card($score['icon'], $score['label'], $score['desc'], $score['color']); ?>
-				<?php self::stat_card('📄', 'Artigos', count($issues['posts'] ?? []), '#3E2C1B'); ?>
-				<?php self::stat_card('📋', 'Problemas encontrados', $total - 4, '#991B1B'); ?>
+				<?php self::stat_card('📄', 'Conteúdos', count($issues['posts'] ?? []), '#3E2C1B'); ?>
+				<?php self::stat_card('📋', 'Problemas encontrados', count($issues['no_description']) + count($issues['no_thumb']) + count($issues['no_excerpt']) + count($issues['short_content']), '#991B1B'); ?>
 				<?php self::stat_card('✅', 'OK', count($issues['ok'] ?? []), '#2E7D32'); ?>
 			</div>
 
@@ -125,36 +125,33 @@ class SEODashboard {
 		<?php
 	}
 
-	private static function get_scan_types() {
-		return \get_post_types(['public' => true, 'show_ui' => true], 'objects');
-	}
-
 	private static function scan() {
+		global $wpdb;
 		$issues = ['no_description' => [], 'no_thumb' => [], 'no_excerpt' => [], 'short_content' => [], 'ok' => [], 'posts' => []];
-		$all_posts = [];
 
-		foreach (self::get_scan_types() as $type) {
-			$ids = \get_posts([
-				'post_type' => $type->name,
-				'post_status' => 'publish',
-				'posts_per_page' => 200,
-				'fields' => 'ids',
-				'suppress_filters' => false,
-			]);
-			$all_posts = array_merge($all_posts, $ids);
-		}
+		$types = get_post_types(['public' => true, 'show_ui' => true], 'names');
+		$types = array_diff($types, ['attachment']);
+
+		$all_posts = $wpdb->get_col(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_status='publish' AND post_type IN ('" . implode("','", esc_sql($types)) . "')"
+		);
 
 		$issues['posts'] = $all_posts;
 
+		$desc_posts = $wpdb->get_col(
+			"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_ib_description' AND meta_value != ''"
+		);
+		$desc_map = array_flip($desc_posts);
+
 		foreach ($all_posts as $pid) {
-			$post_obj = \get_post($pid);
+			$post_obj = get_post($pid);
 			$type = $post_obj->post_type;
 
-			if (!\get_post_meta($pid, '_ib_description', true)) {
+			if (!isset($desc_map[$pid])) {
 				$issues['no_description'][] = $post_obj;
 			}
 
-			if ($type !== 'page' && !\has_post_thumbnail($pid)) {
+			if ($type !== 'page' && !has_post_thumbnail($pid)) {
 				$issues['no_thumb'][] = $post_obj;
 			}
 
@@ -162,8 +159,8 @@ class SEODashboard {
 				$issues['no_excerpt'][] = $post_obj;
 			}
 
-			if (!in_array($type, ['page', 'poiesis'], true)) {
-				$words = \str_word_count(\wp_strip_all_tags($post_obj->post_content));
+			if (!in_array($type, ['page', 'poiesis', 'livro'], true)) {
+				$words = str_word_count(wp_strip_all_tags($post_obj->post_content));
 				if ($words < 300) {
 					$post_obj->word_count = $words;
 					$issues['short_content'][] = $post_obj;
@@ -171,9 +168,7 @@ class SEODashboard {
 			}
 		}
 
-		$type_names = [];
-		foreach (self::get_scan_types() as $t) $type_names[] = $t->label;
-		$type_list = implode(', ', $type_names);
+		$type_list = implode(', ', array_keys(get_post_types(['public' => true, 'show_ui' => true], 'names')));
 
 		if (empty($issues['no_description'])) $issues['ok'][] = "Todos os $type_list têm meta description";
 		if (empty($issues['no_thumb'])) $issues['ok'][] = "Todos os $type_list têm imagem destacada";
