@@ -3,7 +3,7 @@
 <footer class="footer" role="contentinfo">
 	<div class="wrap">
 		<div class="footer__row">
-			<div class="footer__logo"><?php $logo = ib_opt('site_logo'); if ($logo) : $logo_id = attachment_url_to_postid($logo); if ($logo_id) : echo wp_get_attachment_image($logo_id, 'medium', false, ['alt' => esc_attr(get_bloginfo('name')), 'style' => 'height:36px;width:auto', 'loading' => false]); else : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" style="height:36px;width:auto"><?php endif; else : ?><span style="font-family:var(--serif);font-weight:700;color:var(--ink)"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php endif; ?></div>
+			<div class="footer__logo"><?php $logo = ib_opt('site_logo'); if ($logo) : $logo_id = attachment_url_to_postid($logo); if ($logo_id) : echo wp_get_attachment_image($logo_id, 'medium', false, ['alt' => esc_attr(get_bloginfo('name')), 'loading' => false]); else : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>"><?php endif; else : ?><span style="font-family:var(--serif);font-weight:700;color:var(--ink)"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php endif; ?></div>
 
 			<div class="footer__links">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Início</a>
