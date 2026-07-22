@@ -103,7 +103,7 @@ class Security {
 		if (!empty($result)) return $result;
 		if (is_user_logged_in()) return $result;
 		$route = $GLOBALS['wp']->query_vars['rest_route'] ?? '';
-		$public = ['/oembed/', '/wp/v2/posts', '/wp/v2/pages', '/wp/v2/categories', '/wp/v2/tags'];
+		$public = ['/oembed/', '/wp/v2/posts', '/wp/v2/pages', '/wp/v2/categories', '/wp/v2/tags', '/litespeed/'];
 		foreach ($public as $p) {
 			if (strpos($route, $p) === 0) return $result;
 		}
