@@ -5,7 +5,7 @@ class AdminSettings {
 	public static function init() {
 		add_action('admin_menu', [__CLASS__, 'register_menus']);
 		add_action('admin_init', [__CLASS__, 'register_settings']);
-		add_action('admin_init', [__CLASS__, 'ensure_editor_cap']);
+		add_filter('user_has_cap', [__CLASS__, 'grant_editor_cap'], 10, 3);
 		add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 		add_action('wp_dashboard_setup', [__CLASS__, 'dashboard_widgets']);
 		add_action('wp_before_admin_bar_render', [__CLASS__, 'admin_bar_cache']);
@@ -22,11 +22,11 @@ class AdminSettings {
 		add_action('admin_notices', [__CLASS__, 'admin_notices']);
 	}
 
-	public static function ensure_editor_cap() {
-		$role = get_role('editor');
-		if ($role && !$role->has_cap('publish_pages')) {
-			$role->add_cap('publish_pages');
+	public static function grant_editor_cap($allcaps, $caps, $args) {
+		if (!empty($args) && $args[0] === 'publish_pages' && isset($allcaps['edit_pages']) && $allcaps['edit_pages']) {
+			$allcaps['publish_pages'] = true;
 		}
+		return $allcaps;
 	}
 
 	public static function admin_head_editor() {
@@ -243,11 +243,13 @@ class AdminSettings {
 	}
 
 	public static function register_settings() {
-		register_setting('ib_group', 'ib_opts', [
+		$args = [
 			'type'              => 'array',
+			'capability'        => 'publish_pages',
 			'sanitize_callback' => [__CLASS__, 'sanitize'],
 			'default'           => self::defaults(),
-		]);
+		];
+		register_setting('ib_group', 'ib_opts', $args);
 		add_filter('option_page_capability_ib_group', function() { return 'publish_pages'; });
 	}
 
