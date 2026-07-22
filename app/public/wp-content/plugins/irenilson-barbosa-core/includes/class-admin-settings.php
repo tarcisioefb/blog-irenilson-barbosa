@@ -245,10 +245,10 @@ class AdminSettings {
 	public static function register_settings() {
 		register_setting('ib_group', 'ib_opts', [
 			'type'              => 'array',
-			'capability'        => 'publish_pages',
 			'sanitize_callback' => [__CLASS__, 'sanitize'],
 			'default'           => self::defaults(),
 		]);
+		add_filter('option_page_capability_ib_group', function() { return 'publish_pages'; });
 	}
 
 	public static function sanitize($in) {
