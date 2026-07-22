@@ -7,7 +7,7 @@ $sobre_foto        = get_post_meta($pid, 'ib_sobre_foto', true) ?: wp_upload_dir
 $sobre_nome        = get_post_meta($pid, 'ib_sobre_nome', true) ?: 'Irenilson Barbosa';
 $sobre_subtitulo   = get_post_meta($pid, 'ib_sobre_subtitulo', true) ?: 'Professor, escritor e pesquisador';
 $sobre_descricao   = get_post_meta($pid, 'ib_sobre_descricao', true) ?: 'Professor Adjunto da UFRB. Pós-Doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra. Doutor e Mestre em Educação pela UFBA. Licenciado em Pedagogia (UFBA) e Bacharel em Teologia. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI).';
-$sobre_formacao    = get_post_meta($pid, 'ib_sobre_formacao', true) ?: "2024–2025|Pós-Doutorando — Democracia e Direitos Humanos, Ius Gentium Conimbrigae, Universidade de Coimbra\n2023–2024|Pós-Doutorado — Ciências da Educação, FPCEUP/Universidade do Porto\n2012–2016|Doutorado — Educação, UFBA\n2002–2004|Mestrado — Educação, UFBA\n2001|Licenciatura — Pedagogia, UFBA\n1990|Bacharelado — Teologia, STBSB";
+$sobre_formacao    = get_post_meta($pid, 'ib_sobre_formacao', true) ?: "2024–2025|Pós-Doutorando|Democracia e Direitos Humanos, Ius Gentium Conimbrigae, Universidade de Coimbra\n2023–2024|Pós-Doutorado|Ciências da Educação, FPCEUP/Universidade do Porto\n2012–2016|Doutorado|Educação, UFBA\n2002–2004|Mestrado|Educação, UFBA\n2001|Licenciatura|Pedagogia, UFBA\n1990|Bacharelado|Teologia, STBSB";
 $sobre_grupos      = get_post_meta($pid, 'ib_sobre_grupos', true) ?: 'Educação, Sociedade e Diversidade (UFRB); Educação Especial, Diversidade e Contemporaneidade (UFRB); Currículo, Avaliação, Formação e Tecnologias em Educação (CAFTe) — CIIE/FPCEUP (Portugal).';
 $sobre_publicacoes = get_post_meta($pid, 'ib_sobre_publicacoes', true) ?: 'Autor de livros, capítulos de livros e artigos sobre educação inclusiva, educação especial, direitos humanos, teologia e interseccionalidades raciais, poemas e reflexões. <strong>"O Homem que Não Sabia Ser Santo"</strong> marca sua estreia na ficção, mesclando realismo mágico sertanejo com reflexões filosóficas e psicanalíticas sobre identidade, fé e humanidade — temperadas na filosofia de cozinha que brota do chão rachado da Bahia. Também autor de <strong>"Um Negro no Gólgota"</strong> (2015) e <strong>"A Vida em Poesia"</strong> (2015).';
 $sobre_email       = get_post_meta($pid, 'ib_sobre_email', true) ?: 'irenilsonjb@yahoo.com.br';
@@ -43,10 +43,10 @@ while (have_posts()) : the_post(); ?>
 				<?php if (!empty($formacao_items)) : ?>
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Formação acadêmica</h2>
 				<div class="ib-sobre-formacao" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-8)">
-					<?php foreach ($formacao_items as $item) : $parts = explode('|', $item, 2); $periodo = trim($parts[0] ?? ''); $curso = trim($parts[1] ?? $parts[0] ?? ''); ?>
+					<?php foreach ($formacao_items as $item) : $parts = explode('|', $item); $periodo = trim($parts[0] ?? ''); $grau = trim($parts[1] ?? ''); $instituicao = trim($parts[2] ?? ''); ?>
 					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
 						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600"><?php echo esc_html($periodo); ?></span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)"><?php echo esc_html($curso); ?></strong></p>
+						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><?php if ($grau) : ?><strong style="color:var(--ink)"><?php echo esc_html($grau); ?></strong><?php endif; ?><?php if ($grau && $instituicao) : ?><br><?php endif; ?><?php if ($instituicao) : ?><span style="color:var(--tx-2)"><?php echo esc_html($instituicao); ?></span><?php endif; ?></p>
 					</div>
 					<?php endforeach; ?>
 				</div>

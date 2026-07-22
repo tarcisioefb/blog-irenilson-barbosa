@@ -89,11 +89,14 @@ class SEO {
 		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Formação acadêmica</label></th>
 			<td><div id="ib-formacao-list">
 				<?php $items = $formacao ? array_filter(array_map('trim', explode("\n", $formacao))) : ['|']; foreach ($items as $i => $item) : $parts = explode('|', $item, 2); ?>
-				<div class="ib-formacao-row" style="display:flex;gap:6px;margin-bottom:4px;align-items:center">
-					<span class="ib-drag" style="cursor:grab;color:#bbb;font-size:16px;user-select:none">⠿</span>
-					<input type="text" name="ib_formacao_periodo[]" value="<?php echo esc_attr(trim($parts[0] ?? '')); ?>" placeholder="Período" style="width:100px;font-size:12px">
-					<input type="text" name="ib_formacao_curso[]" value="<?php echo esc_attr(trim($parts[1] ?? $parts[0] ?? '')); ?>" placeholder="Curso / Instituição" style="flex:1;font-size:12px">
-					<button type="button" class="button ib-formacao-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>
+				<div class="ib-formacao-row" style="display:flex;gap:6px;margin-bottom:6px;align-items:flex-start">
+					<span class="ib-drag" style="cursor:grab;color:#bbb;font-size:16px;user-select:none;padding-top:4px">⠿</span>
+					<div><input type="text" name="ib_formacao_periodo[]" value="<?php echo esc_attr(trim($parts[0] ?? '')); ?>" placeholder="Período" style="width:90px;font-size:12px"></div>
+					<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+						<input type="text" name="ib_formacao_grau[]" value="<?php echo esc_attr(trim($parts[1] ?? '')); ?>" placeholder="Grau (ex: Doutorado)" style="width:100%;font-size:12px;font-weight:700">
+						<input type="text" name="ib_formacao_instituicao[]" value="<?php echo esc_attr(trim($parts[2] ?? '')); ?>" placeholder="Instituição (ex: UFBA)" style="width:100%;font-size:12px">
+					</div>
+					<button type="button" class="button ib-formacao-remove" style="font-size:11px;margin-top:4px" onclick="this.parentElement.remove()">—</button>
 				</div>
 				<?php endforeach; ?>
 			</div>
@@ -101,8 +104,8 @@ class SEO {
 			<script>
 			jQuery(function($){$('#ib-formacao-list').sortable({handle:'.ib-drag',axis:'y',placeholder:'ui-state-highlight',cursor:'grabbing'});});
 			document.getElementById('ib-formacao-add')?.addEventListener('click',function(){
-				var d=document.createElement('div');d.className='ib-formacao-row';d.style.cssText='display:flex;gap:6px;margin-bottom:4px';
-				d.innerHTML='<input type="text" name="ib_formacao_periodo[]" placeholder="Período" style="width:100px;font-size:12px"> <input type="text" name="ib_formacao_curso[]" placeholder="Curso / Instituição" style="flex:1;font-size:12px"> <button type="button" class="button ib-formacao-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>';
+				var d=document.createElement('div');d.className='ib-formacao-row';d.style.cssText='display:flex;gap:6px;margin-bottom:6px;align-items:flex-start';
+				d.innerHTML='<span class="ib-drag" style="cursor:grab;color:#bbb;font-size:16px;user-select:none;padding-top:4px">⠿</span><div><input type="text" name="ib_formacao_periodo[]" placeholder="Período" style="width:90px;font-size:12px"></div><div style="flex:1;display:flex;flex-direction:column;gap:2px"><input type="text" name="ib_formacao_grau[]" placeholder="Grau (ex: Doutorado)" style="width:100%;font-size:12px;font-weight:700"><input type="text" name="ib_formacao_instituicao[]" placeholder="Instituição (ex: UFBA)" style="width:100%;font-size:12px"></div><button type="button" class="button ib-formacao-remove" style="font-size:11px;margin-top:4px" onclick="this.parentElement.remove()">—</button>';
 				document.getElementById('ib-formacao-list').appendChild(d);
 			});
 			</script></td></tr>
@@ -156,11 +159,13 @@ class SEO {
 		}
 
 		$periodos = $_POST['ib_formacao_periodo'] ?? [];
-		$cursos = $_POST['ib_formacao_curso'] ?? [];
+		$graus = $_POST['ib_formacao_grau'] ?? [];
+		$instituicoes = $_POST['ib_formacao_instituicao'] ?? [];
 		$linhas = [];
 		foreach ($periodos as $i => $p) {
-			$c = $cursos[$i] ?? '';
-			if (trim($p) || trim($c)) $linhas[] = trim($p) . '|' . trim($c);
+			$g = $graus[$i] ?? '';
+			$inst = $instituicoes[$i] ?? '';
+			if (trim($p) || trim($g) || trim($inst)) $linhas[] = trim($p) . '|' . trim($g) . '|' . trim($inst);
 		}
 		\update_post_meta($post_id, 'ib_sobre_formacao', implode("\n", $linhas));
 
