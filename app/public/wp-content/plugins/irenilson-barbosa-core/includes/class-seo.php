@@ -84,6 +84,12 @@ class SEO {
 					$html = \wp_remote_retrieve_body($resp);
 					$html = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $html);
 					$html = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $html);
+					$html = preg_replace('/<header[^>]*>.*?<\/header>/is', '', $html);
+					$html = preg_replace('/<footer[^>]*>.*?<\/footer>/is', '', $html);
+					$html = preg_replace('/<nav[^>]*>.*?<\/nav>/is', '', $html);
+					if (preg_match('/<(main|article)[^>]*>.*?<\/(main|article)>/is', $html, $m)) {
+						$html = $m[0];
+					}
 					$html = \wp_strip_all_tags($html);
 					$html = trim(preg_replace('/\s+/', ' ', $html));
 					$content = \mb_substr($html, 0, 3000);
