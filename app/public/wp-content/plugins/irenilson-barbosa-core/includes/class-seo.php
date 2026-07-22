@@ -86,30 +86,30 @@ class SEO {
 			'body' => \json_encode([
 				'model' => 'deepseek-chat',
 				'messages' => [
-					['role' => 'system', 'content' => 'Resuma o artigo abaixo em até 160 caracteres para ser uma meta description do Google. Responda APENAS com a descrição, sem aspas nem formatação.'],
+					['role' => 'system', 'content' => 'Resuma o artigo abaixo em ate 160 caracteres para ser uma meta description do Google. Responda APENAS com a descricao, sem aspas nem formatacao.'],
 					['role' => 'user', 'content' => $text],
 				],
 				'max_tokens' => 100,
 				'temperature' => 0.3,
 			]),
-			'timeout' => 15,
+			'timeout' => 30,
 		]);
 
 		if (\is_wp_error($resp)) {
-			\error_log('DeepSeek API wp_error: ' . $resp->get_error_message());
+			\file_put_contents(ABSPATH . '/deepseek_debug.txt', 'wp_error: ' . $resp->get_error_message());
 			return '';
 		}
 		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
 		if (!empty($body['error'])) {
-			\error_log('DeepSeek API error: ' . \print_r($body['error'], true));
+			\file_put_contents(ABSPATH . '/deepseek_debug.txt', 'api_error: ' . print_r($body['error'], true));
 			return '';
 		}
-		$text = $body['choices'][0]['message']['content'] ?? '';
-		if (!$text) {
-			\error_log('DeepSeek API: no content in response. Body: ' . \wp_remote_retrieve_body($resp));
+		$result = $body['choices'][0]['message']['content'] ?? '';
+		if (!$result) {
+			\file_put_contents(ABSPATH . '/deepseek_debug.txt', 'no_content. Body: ' . \wp_remote_retrieve_body($resp));
 			return '';
 		}
-		return \mb_substr(trim($text), 0, 160);
+		return \mb_substr(trim($result), 0, 160);
 	}
 
 	private static function local_summarize($content) {
