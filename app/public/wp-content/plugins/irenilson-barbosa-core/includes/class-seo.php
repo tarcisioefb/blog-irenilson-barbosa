@@ -8,6 +8,7 @@ class SEO {
 		add_action('save_post', [__CLASS__, 'save_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_sobre_meta']);
 		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
+		\remove_action('wp_head', 'rel_canonical');
 		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
 		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
