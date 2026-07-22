@@ -63,8 +63,25 @@ class SEO {
 
 	private static function generate_description($post) {
 		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
-		if (!empty($post->post_content)) return \wp_trim_words(\wp_strip_all_tags($post->post_content), 25);
-		return '';
+		if (empty($post->post_content)) return '';
+
+		$content = $post->post_content;
+
+		if (preg_match('/<p[^>]*>\s*(.{50,}?)\s*<\/p>/is', $content, $m)) {
+			$text = \wp_strip_all_tags($m[1]);
+			if (\str_word_count($text) >= 10) {
+				return \wp_trim_words($text, 25);
+			}
+		}
+
+		if (preg_match('/<h2[^>]*>(.+?)<\/h2>/i', $content, $m)) {
+			$h2 = \wp_strip_all_tags($m[1]);
+			$rest = \wp_trim_words(\wp_strip_all_tags($content), 20);
+			$combined = "$h2: $rest";
+			return \mb_substr($combined, 0, 160);
+		}
+
+		return \wp_trim_words(\wp_strip_all_tags($content), 25);
 	}
 
 	public static function cli_batch_seo() {
