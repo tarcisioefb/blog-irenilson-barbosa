@@ -21,24 +21,26 @@ class AuditLog {
 	}
 
 	public static function log_post_save($post_id, $post, $update, $post_before) {
-		if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
-		if ($post->post_status === 'auto-draft' || $post->post_status === 'trash') return;
-		$type = get_post_type($post_id);
-		$title = get_the_title($post_id);
-		if (! $update) {
-			self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
-			return;
-		}
-		if (! $post_before) {
-			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title}");
-			return;
-		}
-		$changes = [];
-		if ($post_before->post_title !== $post->post_title) $changes[] = 'título';
-		if ($post_before->post_status !== $post->post_status) $changes[] = "status: {$post->post_status}";
-		if ($post_before->post_date !== $post->post_date) $changes[] = 'data';
-		if (empty($changes)) $changes[] = 'outros';
-		self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
+		try {
+			if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
+			if (empty($post) || $post->post_status === 'auto-draft' || $post->post_status === 'trash') return;
+			$type = get_post_type($post_id);
+			$title = get_the_title($post_id);
+			if (! $update) {
+				self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
+				return;
+			}
+			if (empty($post_before)) {
+				self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title}");
+				return;
+			}
+			$changes = [];
+			if ($post_before->post_title !== $post->post_title) $changes[] = 'título';
+			if ($post_before->post_status !== $post->post_status) $changes[] = "status: {$post->post_status}";
+			if ($post_before->post_date !== $post->post_date) $changes[] = 'data';
+			if (empty($changes)) $changes[] = 'outros';
+			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
+		} catch (\Throwable $e) {}
 	}
 
 	public static function register_menu() {
