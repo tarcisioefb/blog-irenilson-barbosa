@@ -37,7 +37,7 @@ while (have_posts()) : the_post(); ?>
 				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)"><?php echo esc_html($sobre_subtitulo); ?></p>
 
 				<div style="padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);margin-bottom:var(--space-8);border-left:3px solid var(--accent)">
-					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)"><?php echo esc_html($sobre_descricao); ?></p>
+					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)"><?php echo wp_kses_post($sobre_descricao); ?></p>
 				</div>
 
 				<?php if (!empty($formacao_items)) : ?>
