@@ -66,12 +66,17 @@ class SEO {
 		if (empty($post->post_content)) return '';
 
 		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
+		\file_put_contents(ABSPATH . '/ds_gen.txt', "key=|$key| len=" . strlen($key) . " bool=" . ($key ? 'true' : 'false') . "\n", FILE_APPEND);
 		if ($key) {
+			\file_put_contents(ABSPATH . '/ds_gen.txt', "  calling deepseek...\n", FILE_APPEND);
 			$ds = self::deepseek_summarize($post->post_content, $key);
+			\file_put_contents(ABSPATH . '/ds_gen.txt', "  result=" . ($ds ? 'YES' : 'EMPTY') . " val=|$ds|\n", FILE_APPEND);
 			if ($ds) return $ds;
 		}
 
-		return self::local_summarize($post->post_content);
+		$result = self::local_summarize($post->post_content);
+		\file_put_contents(ABSPATH . '/ds_gen.txt', "  local result=|" . mb_substr($result, 0, 50) . "|\n", FILE_APPEND);
+		return $result;
 	}
 
 	private static function deepseek_summarize($content, $key) {
