@@ -54,4 +54,5 @@ add_action('plugins_loaded', function () {
 
 if (defined('WP_CLI') && WP_CLI) {
 	\WP_CLI::add_command('ib-convert', ['\IrenilsonBarbosa\Core\ImageOptimizer', 'cli_convert']);
+	\WP_CLI::add_command('ib-thumb-avif', ['\IrenilsonBarbosa\Core\ImageOptimizer', 'cli_thumb_avif']);
 }

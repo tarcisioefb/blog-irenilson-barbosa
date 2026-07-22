@@ -51,6 +51,7 @@ class ImageOptimizer {
 
 		$func = $format === 'webp' ? 'imagewebp' : 'imageavif';
 		$quality = $format === 'webp' ? 82 : 75;
+		$img = null;
 
 		switch ($info['mime']) {
 			case 'image/jpeg':
@@ -62,14 +63,90 @@ class ImageOptimizer {
 				imagealphablending($img, true);
 				imagesavealpha($img, true);
 				break;
-			default:
-				return;
+			case 'image/avif':
+				$img = imagecreatefromavif($src);
+				break;
+			case 'image/webp':
+				$img = imagecreatefromwebp($src);
+				break;
 		}
 
 		if ($img) {
-			$func($img, $dest, $quality);
+			if ($format === 'jpeg') {
+				imagejpeg($img, $dest, 85);
+			} else {
+				$func($img, $dest, $quality);
+			}
 			imagedestroy($img);
 		}
+	}
+
+	public static function cli_thumb_avif($args, $assoc) {
+		if (!defined('WP_CLI') || !WP_CLI) return;
+		$ids = get_posts([
+			'post_type' => 'attachment',
+			'post_mime_type' => 'image/avif',
+			'posts_per_page' => -1,
+			'fields' => 'ids',
+			'post_status' => 'inherit',
+		]);
+		$count = 0;
+		foreach ($ids as $id) {
+			if (\wp_attachment_is_image($id) && self::regenerate_from_avif($id)) $count++;
+		}
+		\WP_CLI::success("Regenerated thumbnails for $count AVIF images.");
+	}
+
+	private static function regenerate_from_avif($attachment_id) {
+		$meta = \wp_get_attachment_metadata($attachment_id);
+		if (!$meta || empty($meta['file'])) return false;
+		$ext = strtolower(pathinfo($meta['file'], PATHINFO_EXTENSION));
+		if ($ext !== 'avif') return false;
+
+		$uploads = \wp_upload_dir();
+		$src = $uploads['basedir'] . '/' . $meta['file'];
+		if (!file_exists($src)) return false;
+
+		$img = \imagecreatefromavif($src);
+		if (!$img) return false;
+
+		$w = (int) $meta['width'];
+		$h = (int) $meta['height'];
+		$sizes = \wp_get_registered_image_subsizes();
+		$new_sizes = [];
+		$base_dir = $uploads['basedir'] . '/' . \dirname($meta['file']);
+
+		foreach ($sizes as $name => $s) {
+			$sw = (int) $s['width'];
+			$sh = (int) $s['height'];
+			$crop = !empty($s['crop']);
+			$dims = \image_resize_dimensions($w, $h, $sw, $sh, $crop);
+			if (!$dims) continue;
+			$dst_w = $dims[4];
+			$dst_h = $dims[5];
+			$thumb = \imagescale($img, $dst_w, $dst_h);
+			if (!$thumb) continue;
+
+			$ext = 'jpg';
+			$filename = \wp_basename($meta['file'], '.avif') . "-{$sw}x{$sh}.{$ext}";
+			$filepath = $base_dir . '/' . $filename;
+			\imagejpeg($thumb, $filepath, 85);
+			\imagedestroy($thumb);
+
+			$new_sizes[$name] = [
+				'file' => $filename,
+				'width' => $dst_w,
+				'height' => $dst_h,
+				'mime-type' => 'image/jpeg',
+			];
+			self::convert_to($filepath, $filepath . '.webp', 'webp');
+			self::convert_to($filepath, $filepath . '.avif', 'avif');
+		}
+
+		\imagedestroy($img);
+		$meta['sizes'] = $new_sizes;
+		\wp_update_attachment_metadata($attachment_id, $meta);
+		return true;
 	}
 
 	public static function add_format_hint($attr, $attachment, $size) {
