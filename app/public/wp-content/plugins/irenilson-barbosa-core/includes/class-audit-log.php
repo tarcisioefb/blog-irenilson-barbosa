@@ -77,70 +77,90 @@ class AuditLog {
 	}
 
 	public static function log_post_update($post_id, $post_after, $post_before) {
-		if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
-		if (empty($post_after) || empty($post_before)) return;
-		if ($post_after->post_status === 'auto-draft') return;
-		$type = get_post_type($post_id);
-		$title = get_the_title($post_id);
-		if ($post_before->post_status === 'auto-draft') {
-			self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
-			return;
-		}
-		$changes = [];
-		if ($post_before->post_title !== $post_after->post_title) $changes[] = 'título';
-		if ($post_before->post_status !== $post_after->post_status) $changes[] = "status: {$post_after->post_status}";
-		if ($post_before->post_date !== $post_after->post_date) $changes[] = 'data';
-		if (empty($changes)) $changes[] = 'outros';
-		self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
+		try {
+			if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
+			if (empty($post_after) || empty($post_before)) return;
+			if ($post_after->post_status === 'auto-draft') return;
+			$type = get_post_type($post_id);
+			$title = get_the_title($post_id);
+			if ($post_before->post_status === 'auto-draft') {
+				self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
+				return;
+			}
+			$changes = [];
+			if ($post_before->post_title !== $post_after->post_title) $changes[] = 'título';
+			if ($post_before->post_status !== $post_after->post_status) $changes[] = "status: {$post_after->post_status}";
+			if ($post_before->post_date !== $post_after->post_date) $changes[] = 'data';
+			if (empty($changes)) $changes[] = 'outros';
+			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_post_delete($post_id) {
-		$type = get_post_type($post_id);
-		$title = get_the_title($post_id);
-		self::log('deleted', $type, $post_id, $title, "Deletou {$type}: {$title}");
+		try {
+			$type = get_post_type($post_id);
+			$title = get_the_title($post_id);
+			self::log('deleted', $type, $post_id, $title, "Deletou {$type}: {$title}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_post_trash($post_id) {
-		$type = get_post_type($post_id);
-		$title = get_the_title($post_id);
-		self::log('trashed', $type, $post_id, $title, "Moveu {$type} para lixeira: {$title}");
+		try {
+			$type = get_post_type($post_id);
+			$title = get_the_title($post_id);
+			self::log('trashed', $type, $post_id, $title, "Moveu {$type} para lixeira: {$title}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_post_untrash($post_id) {
-		$type = get_post_type($post_id);
-		$title = get_the_title($post_id);
-		self::log('untrashed', $type, $post_id, $title, "Restaurou {$type} da lixeira: {$title}");
+		try {
+			$type = get_post_type($post_id);
+			$title = get_the_title($post_id);
+			self::log('untrashed', $type, $post_id, $title, "Restaurou {$type} da lixeira: {$title}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_attachment_add($post_id) {
-		$title = get_the_title($post_id);
-		self::log('uploaded', 'attachment', $post_id, $title, "Enviou anexo: {$title}");
+		try {
+			$title = get_the_title($post_id);
+			self::log('uploaded', 'attachment', $post_id, $title, "Enviou anexo: {$title}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_attachment_delete($post_id) {
-		$title = get_the_title($post_id);
-		self::log('deleted', 'attachment', $post_id, $title, "Deletou anexo: {$title}");
+		try {
+			$title = get_the_title($post_id);
+			self::log('deleted', 'attachment', $post_id, $title, "Deletou anexo: {$title}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_option_change($option, $old_value, $value) {
-		$skip = ['_transient', '_site_transient', 'cron', 'rewrite_rules', 'ib_audit_log_version'];
-		foreach ($skip as $s) if (strpos($option, $s) !== false) return;
-		if (strpos($option, 'ib_opts') !== 0 && strpos($option, 'ib_') !== 0) return;
-		self::log('settings_changed', 'option', 0, $option, "Alterou configuração: {$option}");
+		try {
+			$skip = ['_transient', '_site_transient', 'cron', 'rewrite_rules', 'ib_audit_log_version'];
+			foreach ($skip as $s) if (strpos($option, $s) !== false) return;
+			if (strpos($option, 'ib_opts') !== 0 && strpos($option, 'ib_') !== 0) return;
+			self::log('settings_changed', 'option', 0, $option, "Alterou configuração: {$option}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_login($user_login, $user) {
-		self::log('login', 'user', $user->ID, $user_login, "Login: {$user_login}");
+		try {
+			self::log('login', 'user', $user->ID, $user_login, "Login: {$user_login}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_profile_update($user_id, $old_user_data) {
-		$user = get_userdata($user_id);
-		self::log('profile_updated', 'user', $user_id, $user->display_name, "Atualizou perfil: {$user->display_name}");
+		try {
+			$user = get_userdata($user_id);
+			self::log('profile_updated', 'user', $user_id, $user->display_name, "Atualizou perfil: {$user->display_name}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function log_user_register($user_id) {
-		$user = get_userdata($user_id);
-		self::log('user_registered', 'user', $user_id, $user->display_name, "Novo usuário: {$user->display_name}");
+		try {
+			$user = get_userdata($user_id);
+			self::log('user_registered', 'user', $user_id, $user->display_name, "Novo usuário: {$user->display_name}");
+		} catch (\Throwable $e) {}
 	}
 
 	public static function render_page() {
