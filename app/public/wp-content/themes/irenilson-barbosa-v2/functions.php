@@ -63,6 +63,11 @@ add_action('wp_head', function () {
 });
 
 // CSS + JS
+add_filter('use_block_editor_for_post', function ($enabled, $post) {
+	if ($post && $post->post_name === 'sobre') return false;
+	return $enabled;
+}, 10, 2);
+
 add_action('wp_enqueue_scripts', function () {
 	wp_enqueue_style('irenilson', get_template_directory_uri() . '/assets/ib.css', [], IRENILSON_VER);
 	wp_enqueue_script('irenilson', get_template_directory_uri() . '/assets/ib.js', [], IRENILSON_VER, true);

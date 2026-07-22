@@ -1,6 +1,18 @@
 <?php
 /** IRENILSON BARBOSA — Página Sobre. */
 defined('ABSPATH') || exit;
+$pid = get_queried_object_id();
+
+$sobre_foto        = get_post_meta($pid, 'ib_sobre_foto', true) ?: wp_upload_dir()['baseurl'] . '/2026/07/Irenilson-Barbosa-Retrato.avif-square.jpg';
+$sobre_descricao   = get_post_meta($pid, 'ib_sobre_descricao', true) ?: 'Professor Adjunto da UFRB. Pós-Doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra. Doutor e Mestre em Educação pela UFBA. Licenciado em Pedagogia (UFBA) e Bacharel em Teologia. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI).';
+$sobre_formacao    = get_post_meta($pid, 'ib_sobre_formacao', true) ?: "2024–2025|Pós-Doutorando — Democracia e Direitos Humanos, Ius Gentium Conimbrigae, Universidade de Coimbra\n2023–2024|Pós-Doutorado — Ciências da Educação, FPCEUP/Universidade do Porto\n2012–2016|Doutorado — Educação, UFBA\n2002–2004|Mestrado — Educação, UFBA\n2001|Licenciatura — Pedagogia, UFBA\n1990|Bacharelado — Teologia, STBSB";
+$sobre_grupos      = get_post_meta($pid, 'ib_sobre_grupos', true) ?: 'Educação, Sociedade e Diversidade (UFRB); Educação Especial, Diversidade e Contemporaneidade (UFRB); Currículo, Avaliação, Formação e Tecnologias em Educação (CAFTe) — CIIE/FPCEUP (Portugal).';
+$sobre_publicacoes = get_post_meta($pid, 'ib_sobre_publicacoes', true) ?: 'Autor de livros, capítulos de livros e artigos sobre educação inclusiva, educação especial, direitos humanos, teologia e interseccionalidades raciais, poemas e reflexões. <strong>"O Homem que Não Sabia Ser Santo"</strong> marca sua estreia na ficção, mesclando realismo mágico sertanejo com reflexões filosóficas e psicanalíticas sobre identidade, fé e humanidade — temperadas na filosofia de cozinha que brota do chão rachado da Bahia. Também autor de <strong>"Um Negro no Gólgota"</strong> (2015) e <strong>"A Vida em Poesia"</strong> (2015).';
+$sobre_contato     = get_post_meta($pid, 'ib_sobre_contato', true) ?: "irenilsonjb@yahoo.com.br\nirenilsonjb@ufrb.edu.br\nhttp://lattes.cnpq.br/1666550999462374\nhttps://scholar.google.com/citations?user=YKHWTRsAAAAJ\nhttps://orcid.org/0000-0001-6638-3620";
+
+$formacao_items = array_filter(array_map('trim', explode("\n", $sobre_formacao)));
+$contato_links  = array_filter(array_map('trim', explode("\n", $sobre_contato)));
+
 get_header();
 while (have_posts()) : the_post(); ?>
 <style>
@@ -13,7 +25,7 @@ while (have_posts()) : the_post(); ?>
 		<div class="ib-sobre-grid" style="display:grid;grid-template-columns:320px 1fr;gap:var(--space-10);align-items:start;margin-bottom:var(--space-10)">
 			<div class="ib-sobre-sticky" style="position:sticky;top:140px">
 				<div style="aspect-ratio:1/1;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card);background:var(--paper-2)">
-					<img src="<?php echo esc_url(wp_upload_dir()['baseurl']); ?>/2026/07/Irenilson-Barbosa-Retrato.avif-square.jpg" alt="Irenilson Barbosa" style="width:100%;height:100%;object-fit:cover;display:block">
+					<img src="<?php echo esc_url($sobre_foto); ?>" alt="Irenilson Barbosa" style="width:100%;height:100%;object-fit:cover;display:block">
 				</div>
 			</div>
 			<div>
@@ -21,55 +33,33 @@ while (have_posts()) : the_post(); ?>
 				<p style="font-size:var(--text-lg);color:var(--tx-dim);margin:0 0 var(--space-6)">Professor, escritor e pesquisador</p>
 
 				<div style="padding:var(--space-5);background:var(--paper-2);border-radius:var(--radius-md);margin-bottom:var(--space-8);border-left:3px solid var(--accent)">
-					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)">Professor Adjunto da UFRB. Pós-Doutor em Ciências da Educação pela Universidade do Porto. Pós-Doutorando em Democracia e Direitos Humanos pela Universidade de Coimbra. Doutor e Mestre em Educação pela UFBA. Licenciado em Pedagogia (UFBA) e Bacharel em Teologia. Coordenador do Mestrado Profissional em Educação Inclusiva em Rede (PROFEI).</p>
+					<p style="margin:0;font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2)"><?php echo esc_html($sobre_descricao); ?></p>
 				</div>
 
-				<!-- Formação -->
+				<?php if (!empty($formacao_items)) : ?>
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Formação acadêmica</h2>
 				<div class="ib-sobre-formacao" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-8)">
+					<?php foreach ($formacao_items as $item) : $parts = explode('|', $item, 2); $periodo = trim($parts[0] ?? ''); $curso = trim($parts[1] ?? $parts[0] ?? ''); ?>
 					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
-						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">2024–2025</span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Pós-Doutorando</strong> — Democracia e Direitos Humanos, Ius Gentium Conimbrigae, Universidade de Coimbra</p>
+						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600"><?php echo esc_html($periodo); ?></span>
+						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)"><?php echo esc_html($curso); ?></strong></p>
 					</div>
-					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
-						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">2023–2024</span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Pós-Doutorado</strong> — Ciências da Educação, FPCEUP/Universidade do Porto</p>
-					</div>
-					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
-						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">2012–2016</span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Doutorado</strong> — Educação, UFBA</p>
-					</div>
-					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
-						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">2002–2004</span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Mestrado</strong> — Educação, UFBA</p>
-					</div>
-					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
-						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">2001</span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Licenciatura</strong> — Pedagogia, UFBA</p>
-					</div>
-					<div style="padding:var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)">
-						<span style="font-size:var(--text-xs);color:var(--accent-2);text-transform:uppercase;letter-spacing:var(--track-wider);font-weight:600">1990</span>
-						<p style="margin:var(--space-1) 0 0;font-size:var(--text-13);color:var(--tx-2)"><strong style="color:var(--ink)">Bacharelado</strong> — Teologia, STBSB</p>
-					</div>
+					<?php endforeach; ?>
 				</div>
+				<?php endif; ?>
 
-				<!-- Grupos -->
 				<div style="padding:var(--space-4) var(--space-5);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);margin-bottom:var(--space-8);font-size:var(--text-13);line-height:var(--leading-relax);color:var(--tx-2)">
-					<strong style="color:var(--ink)">Grupos de pesquisa:</strong> Educação, Sociedade e Diversidade (UFRB); Educação Especial, Diversidade e Contemporaneidade (UFRB); Currículo, Avaliação, Formação e Tecnologias em Educação (CAFTe) — CIIE/FPCEUP (Portugal).
+					<strong style="color:var(--ink)">Grupos de pesquisa:</strong> <?php echo esc_html($sobre_grupos); ?>
 				</div>
 
-				<!-- Pesquisa -->
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Pesquisa e publicações</h2>
-				<p style="font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2);margin:0 0 var(--space-8)">Autor de livros, capítulos de livros e artigos sobre educação inclusiva, educação especial, direitos humanos, teologia e interseccionalidades raciais, poemas e reflexões. <strong style="color:var(--ink)">"O Homem que Não Sabia Ser Santo"</strong> marca sua estreia na ficção, mesclando realismo mágico sertanejo com reflexões filosóficas e psicanalíticas sobre identidade, fé e humanidade — temperadas na filosofia de cozinha que brota do chão rachado da Bahia. Também autor de <strong style="color:var(--ink)">"Um Negro no Gólgota"</strong> (2015) e <strong style="color:var(--ink)">"A Vida em Poesia"</strong> (2015).</p>
+				<p style="font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2);margin:0 0 var(--space-8)"><?php echo $sobre_publicacoes; ?></p>
 
-				<!-- Contato -->
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Contato</h2>
 				<div style="display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-8);font-size:var(--text-13);color:var(--tx-2)">
-					<span>✉️ <a href="mailto:irenilsonjb@yahoo.com.br" style="color:var(--ink);text-decoration:none">irenilsonjb@yahoo.com.br</a></span>
-					<span>✉️ <a href="mailto:irenilsonjb@ufrb.edu.br" style="color:var(--ink);text-decoration:none">irenilsonjb@ufrb.edu.br</a></span>
-					<span>📄 <a href="http://lattes.cnpq.br/1666550999462374" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Currículo Lattes</a></span>
-					<span>🎓 <a href="https://scholar.google.com/citations?user=YKHWTRsAAAAJ" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Google Scholar</a></span>
-					<span>🆔 <a href="https://orcid.org/0000-0001-6638-3620" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">ORCID: 0000-0001-6638-3620</a></span>
+					<?php foreach ($contato_links as $link) : $link = trim($link); if (!$link) continue; $is_email = filter_var($link, FILTER_VALIDATE_EMAIL); ?>
+					<span><?php echo $is_email ? '✉️' : '🔗'; ?> <a href="<?php echo $is_email ? 'mailto:' . esc_attr($link) : esc_url($link); ?>" style="color:var(--ink);text-decoration:none"><?php echo esc_html($link); ?></a></span>
+					<?php endforeach; ?>
 				</div>
 
 				<p style="font-size:var(--text-xs);color:var(--tx-dim);margin:0;padding-top:var(--space-4);border-top:var(--border-w) solid var(--border-c)">Informações compiladas do Currículo Lattes.</p>

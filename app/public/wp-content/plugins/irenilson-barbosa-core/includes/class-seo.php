@@ -4,7 +4,9 @@ namespace IrenilsonBarbosa\Core;
 class SEO {
 	public static function init() {
 		add_action('add_meta_boxes', [__CLASS__, 'add_meta_box']);
+		add_action('add_meta_boxes', [__CLASS__, 'add_sobre_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_meta_box']);
+		add_action('save_post', [__CLASS__, 'save_sobre_meta']);
 		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
 		add_filter('pre_get_document_title', [__CLASS__, 'filter_title']);
@@ -31,6 +33,49 @@ class SEO {
 
 	public static function filter_wp_title($title, $sep) {
 		return self::get_title();
+	}
+
+	public static function add_sobre_meta_box() {
+		\add_meta_box('ib-sobre', 'Sobre — Conteúdo da Página', [__CLASS__, 'render_sobre_meta'], 'page', 'normal', 'high');
+	}
+
+	public static function render_sobre_meta($post) {
+		if ($post->post_name !== 'sobre') return;
+		\wp_nonce_field('ib_sobre_save', 'ib_sobre_nonce');
+		$fields = [
+			'ib_sobre_foto' => ['Foto (URL)', 'text'],
+			'ib_sobre_descricao' => ['Descrição principal', 'textarea'],
+			'ib_sobre_formacao' => ['Formação acadêmica (uma por linha: período | curso)', 'textarea'],
+			'ib_sobre_grupos' => ['Grupos de pesquisa', 'text'],
+			'ib_sobre_publicacoes' => ['Texto de publicações (HTML permitido)', 'textarea'],
+			'ib_sobre_contato' => ['Contatos (um por linha: email ou URL)', 'textarea'],
+		];
+		?>
+		<p style="font-size:12px;color:#666;margin:0 0 12px">Campos editáveis da página Sobre. Substituem o conteúdo padrão do template.</p>
+		<table class="form-table">
+		<?php foreach ($fields as $key => $label) : $val = \get_post_meta($post->ID, $key, true); ?>
+		<tr>
+			<th scope="row"><label for="<?php echo $key; ?>" style="font-weight:600;font-size:12px"><?php echo esc_html($label[0]); ?></label></th>
+			<td><?php if ($label[1] === 'textarea') : ?>
+				<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" rows="5" style="width:100%;font-size:12px"><?php echo esc_textarea($val); ?></textarea>
+			<?php else : ?>
+				<input type="text" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo esc_attr($val); ?>" style="width:100%;font-size:12px">
+			<?php endif; ?></td>
+		</tr>
+		<?php endforeach; ?>
+		</table>
+		<?php
+	}
+
+	public static function save_sobre_meta($post_id) {
+		if (!isset($_POST['ib_sobre_nonce']) || !\wp_verify_nonce($_POST['ib_sobre_nonce'], 'ib_sobre_save')) return;
+		if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+		$keys = ['ib_sobre_foto', 'ib_sobre_descricao', 'ib_sobre_formacao', 'ib_sobre_grupos', 'ib_sobre_publicacoes', 'ib_sobre_contato'];
+		foreach ($keys as $k) {
+			if (isset($_POST[$k])) {
+				\update_post_meta($post_id, $k, \sanitize_textarea_field($_POST[$k]));
+			}
+		}
 	}
 
 	public static function add_meta_box() {
