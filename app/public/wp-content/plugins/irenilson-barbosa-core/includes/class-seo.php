@@ -17,6 +17,7 @@ class SEO {
 		add_action('save_post', [__CLASS__, 'save_faq_meta']);
 		add_action('wp_ajax_ib_batch_seo', [__CLASS__, 'ajax_batch_seo']);
 		add_action('wp_ajax_ib_gen_desc', [__CLASS__, 'ajax_gen_desc']);
+		add_action('wp_ajax_ib_gen_editor', [__CLASS__, 'ajax_gen_editor']);
 	}
 
 	public static function robots_txt($output, $public) {
@@ -47,8 +48,46 @@ class SEO {
 		<p><label for="ib-title" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Título personalizado</label>
 		<input type="text" id="ib-title" name="ib_title" value="<?php echo esc_attr($title); ?>" style="width:100%;padding:5px 6px;font-size:12px" placeholder="Deixe vazio para usar o título padrão"></p>
 		<p><label for="ib-description" style="display:block;font-weight:600;margin-bottom:4px;font-size:12px">Meta description</label>
-		<textarea id="ib-description" name="ib_description" rows="3" style="width:100%;padding:5px 6px;font-size:12px" placeholder="Resumo para mecanismos de busca (máx. 160 caracteres)"><?php echo esc_textarea($description); ?></textarea></p>
+		<textarea id="ib-description" name="ib_description" rows="3" style="width:100%;padding:5px 6px;font-size:12px" placeholder="Resumo para mecanismos de busca (máx. 160 caracteres)"><?php echo esc_textarea($description); ?></textarea>
+		<button type="button" class="button" id="ib-gen-desc" data-post-id="<?php echo (int) $post->ID; ?>" style="margin-top:6px;font-size:11px">⚡ Gerar com IA</button>
+		<span id="ib-gen-status" style="font-size:11px;color:#999;margin-left:6px"></span></p>
+		<script>
+		document.getElementById('ib-gen-desc')?.addEventListener('click', function(){
+			var btn = this, status = document.getElementById('ib-gen-status');
+			btn.disabled = true; status.textContent = 'Gerando…';
+			var fd = new FormData();
+			fd.append('action', 'ib_gen_editor');
+			fd.append('post_id', btn.getAttribute('data-post-id'));
+			fd.append('_wpnonce', '<?php echo wp_create_nonce('ib_gen_editor'); ?>');
+			fetch('<?php echo admin_url('admin-ajax.php'); ?>', {method:'POST',body:fd})
+			.then(function(r){return r.json()})
+			.then(function(d){
+				if(d.success && d.data.desc){
+					document.getElementById('ib-description').value = d.data.desc;
+					status.textContent = '✅';
+				} else {
+					status.textContent = '❌ ' + (d.data || 'Erro');
+				}
+				btn.disabled = false;
+			});
+		});
+		</script>
 		<?php
+	}
+
+	public static function ajax_gen_editor() {
+		if (!\wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ib_gen_editor')) \wp_die(json_encode(['success' => false, 'data' => 'Falha de segurança.']));
+		if (!\current_user_can('edit_pages')) \wp_die(json_encode(['success' => false, 'data' => 'Sem permissão.']));
+		$pid = (int) ($_POST['post_id'] ?? 0);
+		$post = \get_post($pid);
+		if (!$post) \wp_die(json_encode(['success' => false, 'data' => 'Post não encontrado.']));
+
+		\delete_post_meta($pid, '_ib_description');
+		$desc = self::generate_description($post);
+		if ($desc) {
+			\update_post_meta($pid, '_ib_description', $desc);
+		}
+		\wp_send_json_success(['desc' => $desc]);
 	}
 
 	public static function auto_description($post_id, $post) {
