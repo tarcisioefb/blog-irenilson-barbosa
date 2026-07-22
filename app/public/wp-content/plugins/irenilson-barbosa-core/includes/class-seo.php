@@ -129,11 +129,14 @@ class SEO {
 	public static function cli_batch_seo() {
 		if (!\defined('WP_CLI') || !\WP_CLI) return;
 		$desc = 0; $excerpt = 0;
+		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
+		\file_put_contents(ABSPATH . '/ds_debug.txt', "key_len=" . strlen($key) . "\n");
 		$posts = \get_posts(['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids']);
 		foreach ($posts as $pid) {
 			$post = \get_post($pid);
 			if (!\get_post_meta($pid, '_ib_description', true)) {
 				$d = self::generate_description($post);
+				\file_put_contents(ABSPATH . '/ds_debug.txt', "pid=$pid desc_len=" . strlen($d) . " first40=" . mb_substr($d, 0, 40) . "\n", FILE_APPEND);
 				if ($d) { \update_post_meta($pid, '_ib_description', $d); $desc++; }
 			}
 			if (empty($post->post_excerpt) && !empty($post->post_content)) {
