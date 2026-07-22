@@ -6,7 +6,7 @@ class AuditLog {
 
 	public static function init() {
 		self::create_table();
-		add_action('wp_after_insert_post', [__CLASS__, 'log_post_save'], 10, 4);
+		add_action('post_updated', [__CLASS__, 'log_post_save'], 10, 3);
 		add_action('before_delete_post', [__CLASS__, 'log_post_delete']);
 		add_action('wp_trash_post', [__CLASS__, 'log_post_trash']);
 		add_action('untrashed_post', [__CLASS__, 'log_post_untrash']);
@@ -20,29 +20,23 @@ class AuditLog {
 		add_action('wp_ajax_ib_export_logs', [__CLASS__, 'ajax_export']);
 	}
 
-	public static function log_post_save($post_id, $post, $update, $post_before) {
+	public static function log_post_save($post_id, $post_after, $post_before) {
 		try {
 			if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
-			if (empty($post) || $post->post_status === 'auto-draft' || $post->post_status === 'trash') return;
+			if (empty($post_after) || $post_after->post_status === 'auto-draft' || $post_after->post_status === 'trash') return;
 			$type = get_post_type($post_id);
 			$title = get_the_title($post_id);
-			if (! $update) {
+			if (empty($post_before) || $post_before->post_status === 'auto-draft') {
 				self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
 				return;
 			}
-			if (empty($post_before)) {
-				self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title}");
-				return;
-			}
 			$changes = [];
-			if ($post_before->post_title !== $post->post_title) $changes[] = 'título';
-			if ($post_before->post_status !== $post->post_status) $changes[] = "status: {$post->post_status}";
-			if ($post_before->post_date !== $post->post_date) $changes[] = 'data';
+			if ($post_before->post_title !== $post_after->post_title) $changes[] = 'título';
+			if ($post_before->post_status !== $post_after->post_status) $changes[] = "status: {$post_after->post_status}";
+			if ($post_before->post_date !== $post_after->post_date) $changes[] = 'data';
 			if (empty($changes)) $changes[] = 'outros';
 			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
-		} catch (\Throwable $e) {
-			error_log('IB AuditLog post_save: ' . $e->getMessage());
-		}
+		} catch (\Throwable $e) {}
 	}
 
 	public static function register_menu() {
