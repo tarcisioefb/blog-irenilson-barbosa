@@ -95,11 +95,21 @@ class SEO {
 			'timeout' => 15,
 		]);
 
-		if (\is_wp_error($resp)) return '';
+		if (\is_wp_error($resp)) {
+			\error_log('DeepSeek API wp_error: ' . $resp->get_error_message());
+			return '';
+		}
 		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
-		if (!empty($body['error'])) return '';
+		if (!empty($body['error'])) {
+			\error_log('DeepSeek API error: ' . \print_r($body['error'], true));
+			return '';
+		}
 		$text = $body['choices'][0]['message']['content'] ?? '';
-		return trim($text) ? \mb_substr(trim($text), 0, 160) : '';
+		if (!$text) {
+			\error_log('DeepSeek API: no content in response. Body: ' . \wp_remote_retrieve_body($resp));
+			return '';
+		}
+		return \mb_substr(trim($text), 0, 160);
 	}
 
 	private static function local_summarize($content) {
