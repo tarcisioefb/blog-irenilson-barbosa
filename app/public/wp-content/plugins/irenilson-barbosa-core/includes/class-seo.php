@@ -62,7 +62,6 @@ class SEO {
 	}
 
 	private static function generate_description($post) {
-		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
 		if (empty($post->post_content)) return '';
 
 		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
@@ -71,6 +70,7 @@ class SEO {
 			if ($ds) return $ds;
 		}
 
+		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
 		return self::local_summarize($post->post_content);
 	}
 
