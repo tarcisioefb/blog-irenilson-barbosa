@@ -5,7 +5,7 @@ class AuditLog {
 	private static $table = 'ib_audit_log';
 
 	public static function init() {
-		add_action('init', [__CLASS__, 'create_table']);
+		self::create_table();
 		add_action('post_updated', [__CLASS__, 'log_post_update'], 10, 3);
 		add_action('before_delete_post', [__CLASS__, 'log_post_delete']);
 		add_action('wp_trash_post', [__CLASS__, 'log_post_trash']);
@@ -60,9 +60,11 @@ class AuditLog {
 
 	public static function log($action, $object_type, $object_id = 0, $object_title = '', $summary = '') {
 		global $wpdb;
+		$table = $wpdb->prefix . self::$table;
+		if ($wpdb->get_var("SHOW TABLES LIKE '$table'") !== $table) return;
 		$uid = get_current_user_id();
 		$user = wp_get_current_user();
-		$wpdb->insert($wpdb->prefix . self::$table, [
+		$wpdb->insert($table, [
 			'user_id'      => $uid,
 			'user_name'    => $user ? $user->display_name : '',
 			'action'       => $action,
@@ -76,19 +78,19 @@ class AuditLog {
 
 	public static function log_post_update($post_id, $post_after, $post_before) {
 		if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
+		if (empty($post_after) || empty($post_before)) return;
+		if ($post_after->post_status === 'auto-draft') return;
 		$type = get_post_type($post_id);
 		$title = get_the_title($post_id);
-		if ($post_after->post_status === 'auto-draft') return;
-		if ($post_before->post_status === 'auto-draft' && $post_after->post_status !== 'auto-draft') {
+		if ($post_before->post_status === 'auto-draft') {
 			self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
 			return;
 		}
 		$changes = [];
 		if ($post_before->post_title !== $post_after->post_title) $changes[] = 'título';
-		if ($post_before->post_content !== $post_after->post_content) $changes[] = 'conteúdo';
 		if ($post_before->post_status !== $post_after->post_status) $changes[] = "status: {$post_after->post_status}";
 		if ($post_before->post_date !== $post_after->post_date) $changes[] = 'data';
-		if (empty($changes)) $changes[] = 'metadados';
+		if (empty($changes)) $changes[] = 'outros';
 		self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
 	}
 
