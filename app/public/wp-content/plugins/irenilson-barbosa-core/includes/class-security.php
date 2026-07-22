@@ -15,9 +15,46 @@ class Security {
 
 	public static function custom_login_logo() {
 		$logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo');
-		if (!$logo) return;
 		?>
 		<style>
+		body.login {
+			background: #f5f0e8;
+		}
+		body.login div#login form#loginform {
+			border: 1px solid #e0d5c3;
+			border-radius: 8px;
+			box-shadow: 0 4px 16px rgba(62,44,27,.08);
+			background: #fff;
+		}
+		body.login .wp-core-ui .button-primary {
+			background: #4a5d3e;
+			border-color: #4a5d3e;
+			box-shadow: none;
+			text-shadow: none;
+		}
+		body.login .wp-core-ui .button-primary:hover {
+			background: #3d4f33;
+			border-color: #3d4f33;
+		}
+		body.login .wp-core-ui .button-primary:focus {
+			box-shadow: 0 0 0 1px #fff, 0 0 0 3px #4a5d3e;
+		}
+		body.login input[type=text]:focus,
+		body.login input[type=password]:focus {
+			border-color: #4a5d3e;
+			box-shadow: 0 0 0 1px #4a5d3e;
+		}
+		body.login .message,
+		body.login #login_error {
+			border-left-color: #4a5d3e;
+		}
+		body.login .privacy-policy-page-link a,
+		body.login a {
+			color: #5d704f;
+		}
+		body.login a:hover {
+			color: #3d4f33;
+		}
 		#login h1 a {
 			background-image: url('<?php echo esc_url($logo); ?>') !important;
 			background-size: contain !important;
