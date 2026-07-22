@@ -526,15 +526,27 @@ class SEO {
 			return 'Irenilson Barbosa — Professor universitário, escritor e pesquisador. Ensaios sobre filosofia, educação, política e cultura, poemas, publicações acadêmicas e livros.';
 		}
 		if (is_archive()) {
-			if (is_category()) {
-				$desc = category_description();
-				if ($desc) return wp_trim_words(wp_strip_all_tags($desc), 30);
-				return 'Artigos sobre ' . single_cat_title('', false) . ' — Irenilson Barbosa';
+			$arch_desc_map = [
+				'publicacao' => 'arch_desc_publicacoes',
+				'livro' => 'arch_desc_livros',
+				'poiesis' => 'arch_desc_poiesis',
+				'material' => 'arch_desc_materiais',
+			];
+			foreach ($arch_desc_map as $pt => $opt) {
+				if (is_post_type_archive($pt)) {
+					$custom = \IrenilsonBarbosa\Core\AdminSettings::opt($opt);
+					if ($custom) return $custom;
+				}
 			}
 			if (is_post_type_archive('publicacao')) return 'Publicações acadêmicas de Irenilson Barbosa — artigos científicos, capítulos de livros e ensaios.';
 			if (is_post_type_archive('livro')) return 'Livros de Irenilson Barbosa — obras publicadas sobre educação, inclusão, filosofia e ficção.';
 			if (is_post_type_archive('poiesis')) return 'Poemas e criações literárias de Irenilson Barbosa.';
 			if (is_post_type_archive('material')) return 'Materiais educacionais para download — slides, apostilas e guias.';
+			if (is_category()) {
+				$desc = category_description();
+				if ($desc) return wp_trim_words(wp_strip_all_tags($desc), 30);
+				return 'Artigos sobre ' . single_cat_title('', false) . ' — Irenilson Barbosa';
+			}
 		}
 		return '';
 	}
