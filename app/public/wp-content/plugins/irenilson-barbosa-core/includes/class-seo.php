@@ -8,6 +8,8 @@ class SEO {
 		add_action('save_post', [__CLASS__, 'save_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_sobre_meta']);
 		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
+		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
+		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
 		add_filter('pre_get_document_title', [__CLASS__, 'filter_title']);
 		add_filter('wp_title', [__CLASS__, 'filter_wp_title'], 10, 2);
@@ -304,6 +306,120 @@ class SEO {
 
 		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
 		return self::local_summarize($content);
+	}
+
+	public static function ajax_gen_alt() {
+		if (!\wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ib_gen_alt')) \wp_die(json_encode(['success' => false, 'data' => 'Falha de segurança.']));
+		if (!\current_user_can('upload_files')) \wp_die(json_encode(['success' => false, 'data' => 'Sem permissão.']));
+		$att_id = (int) ($_POST['att_id'] ?? 0);
+		$alt = \get_post_meta($att_id, '_wp_attachment_image_alt', true);
+		if ($alt) \wp_send_json_success(['alt' => $alt]);
+
+		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
+		if (!$key) \wp_send_json_error('DeepSeek não configurado.');
+
+		$url = \wp_get_attachment_image_url($att_id, 'medium');
+		if (!$url) \wp_send_json_error('Imagem não encontrada.');
+
+		$resp = \wp_remote_post('https://api.deepseek.com/chat/completions', [
+			'headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $key],
+			'body' => \json_encode([
+				'model' => 'deepseek-v4-flash',
+				'messages' => [[
+					'role' => 'user',
+					'content' => [
+						['type' => 'text', 'text' => 'Descreva esta imagem em ate 120 caracteres em portugues para ser um texto alternativo (alt text) acessivel. Seja objetivo e descritivo. Responda APENAS com a descricao.'],
+						['type' => 'image_url', 'image_url' => ['url' => $url]],
+					],
+				]],
+				'max_tokens' => 200,
+			]),
+			'timeout' => 30,
+		]);
+
+		if (\is_wp_error($resp)) \wp_send_json_error('Erro de rede.');
+		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
+		if (!empty($body['error'])) \wp_send_json_error($body['error']['message'] ?? 'Erro da API.');
+		$alt_text = $body['choices'][0]['message']['content'] ?? '';
+		$alt_text = trim($alt_text);
+		if (!$alt_text) \wp_send_json_error('Resposta vazia.');
+
+		\update_post_meta($att_id, '_wp_attachment_image_alt', $alt_text);
+		\wp_send_json_success(['alt' => $alt_text]);
+	}
+
+	public static function ajax_batch_alt() {
+		$nonce = $_POST['_wpnonce'] ?? $_GET['_wpnonce'] ?? '';
+		if (!\wp_verify_nonce($nonce, 'ib_batch_alt')) \wp_die('Falha de segurança.');
+		if (!\current_user_can('upload_files')) \wp_die('Sem permissão.');
+
+		$queue = \get_transient('ib_alt_batch_queue');
+		if (!$queue) {
+			$images = \get_posts([
+				'post_type' => 'attachment',
+				'post_mime_type' => ['image/jpeg', 'image/png', 'image/webp', 'image/avif'],
+				'posts_per_page' => -1,
+				'fields' => 'ids',
+				'post_status' => 'inherit',
+			]);
+			$need = [];
+			foreach ($images as $id) {
+				if (!\get_post_meta($id, '_wp_attachment_image_alt', true)) $need[] = $id;
+			}
+			if (empty($need)) {
+				\wp_redirect(\add_query_arg('page', 'ib-seo-dashboard', \admin_url('admin.php')));
+				exit;
+			}
+			\set_transient('ib_alt_batch_queue', $need, 3600);
+			\set_transient('ib_alt_batch_total', count($need), 3600);
+			\set_transient('ib_alt_batch_progress', 0, 3600);
+			$queue = $need;
+		}
+
+		$batch = array_splice($queue, 0, 2);
+		$remaining = $queue;
+		$done = (int) \get_transient('ib_alt_batch_progress');
+		$total = (int) \get_transient('ib_alt_batch_total');
+
+		foreach ($batch as $id) {
+			$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
+			if (!$key) continue;
+			$url = \wp_get_attachment_image_url($id, 'medium');
+			if (!$url) continue;
+			$resp = \wp_remote_post('https://api.deepseek.com/chat/completions', [
+				'headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $key],
+				'body' => \json_encode([
+					'model' => 'deepseek-v4-flash',
+					'messages' => [[
+						'role' => 'user',
+						'content' => [
+							['type' => 'text', 'text' => 'Descreva esta imagem em ate 120 caracteres em portugues para alt text. Responda APENAS com a descricao.'],
+							['type' => 'image_url', 'image_url' => ['url' => $url]],
+						],
+					]],
+					'max_tokens' => 200,
+				]),
+				'timeout' => 30,
+			]);
+			if (\is_wp_error($resp)) continue;
+			$body = \json_decode(\wp_remote_retrieve_body($resp), true);
+			if (!empty($body['error'])) continue;
+			$alt = trim($body['choices'][0]['message']['content'] ?? '');
+			if ($alt) \update_post_meta($id, '_wp_attachment_image_alt', $alt);
+			$done++;
+		}
+
+		if (empty($remaining)) {
+			\delete_transient('ib_alt_batch_queue');
+			\delete_transient('ib_alt_batch_progress');
+			\delete_transient('ib_alt_batch_total');
+			\wp_redirect(\add_query_arg(['page' => 'ib-seo-dashboard', 'alt_done' => $done], \admin_url('admin.php')));
+		} else {
+			\set_transient('ib_alt_batch_progress', $done, 3600);
+			\set_transient('ib_alt_batch_queue', $remaining, 3600);
+			\wp_redirect(\add_query_arg(['page' => 'ib-seo-dashboard', 'alt_batch' => 'active', 'alt_done' => $done, 'alt_total' => $total], \admin_url('admin.php')));
+		}
+		exit;
 	}
 
 	private static function deepseek_summarize_excerpt($content, $key) {

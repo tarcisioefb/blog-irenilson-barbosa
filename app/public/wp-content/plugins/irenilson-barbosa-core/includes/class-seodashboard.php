@@ -42,30 +42,26 @@ class SEODashboard {
 					<button type="submit" class="button button-primary" style="background:#4a5d3e;border-color:#4a5d3e">⚡ Gerar todos</button>
 				</form>
 			</h1>
-			<p style="color:var(--tx-2)">Visão geral da saúde de SEO do blog. Última verificação: <?php echo date('d/m/Y H:i'); ?></p>
-
-			<div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0">
-				<?php self::stat_card($score['icon'], $score['label'], $score['desc'], $score['color']); ?>
-				<?php self::stat_card('📄', 'Conteúdos', count($issues['posts'] ?? []), '#3E2C1B'); ?>
-				<?php self::stat_card('📋', 'Problemas encontrados', count($issues['no_description']) + count($issues['no_thumb']) + count($issues['no_excerpt']) + count($issues['short_content']), '#991B1B'); ?>
-				<?php self::stat_card('✅', 'OK', count($issues['ok'] ?? []), '#2E7D32'); ?>
-			</div>
-
-			<?php if (!empty($issues['no_description'])) : ?>
-			<div class="ib-seo-section">
-				<h2>📝 Artigos sem meta description <span class="ib-seo-count"><?php echo count($issues['no_description']); ?></span></h2>
-				<p class="ib-seo-desc">O Google pode gerar a descrição automaticamente, mas o ideal é ter uma descrição única por post.</p>
-				<table class="wp-list-table widefat fixed striped">
-					<thead><tr><th>Post</th><th>Ação</th></tr></thead>
-					<tbody>
-					<?php foreach ($issues['no_description'] as $p) : ?>
-						<tr><td><a href="<?php echo get_edit_post_link($p->ID); ?>"><?php echo esc_html($p->post_title); ?></a></td><td><a href="<?php echo get_edit_post_link($p->ID); ?>">Editar</a> | <form method="post" action="<?php echo admin_url('admin-ajax.php'); ?>" style="display:inline"><?php wp_nonce_field('ib_gen_desc'); ?><input type="hidden" name="action" value="ib_gen_desc"><input type="hidden" name="post_id" value="<?php echo (int) $p->ID; ?>"><button type="submit" style="background:none;border:none;color:#2271b1;cursor:pointer;padding:0;font:inherit;text-decoration:underline">⚡ Gerar</button></form></td></tr>
-					<?php endforeach; ?>
-					</tbody>
-				</table>
-			</div>
-			<?php endif; ?>
-
+		<?php if (!empty($_GET['alt_done'])) : ?>
+			<div class="notice notice-success is-dismissible"><p>Generados <?php echo (int) $_GET['alt_done']; ?> alt texts.</p></div>
+		<?php endif; if (!empty($_GET['alt_batch'])) : 
+			$alt_done2 = (int) ($_GET['alt_done'] ?? 0);
+			$alt_total2 = (int) ($_GET['alt_total'] ?? 0);
+			$alt_pct2 = $alt_total2 > 0 ? round($alt_done2 / $alt_total2 * 100) : 0;
+			echo '<div class="notice notice-info"><p>Gerando alt texts... ' . $alt_done2 . ' de ' . $alt_total2 . ' (' . $alt_pct2 . '%)</p><progress value="' . $alt_done2 . '" max="' . $alt_total2 . '" style="width:100%;height:8px;border-radius:4px"></progress></div>';
+			$alt_url2 = admin_url('admin-ajax.php');
+			$alt_nonce2 = wp_create_nonce('ib_batch_alt');
+			echo '<script>
+			var altUrl = "' . $alt_url2 . '";
+			var altNonce = "' . $alt_nonce2 . '";
+			setTimeout(function(){
+				var f=document.createElement("form");f.method="POST";f.action=altUrl;
+				var i1=document.createElement("input");i1.name="action";i1.value="ib_batch_alt";f.appendChild(i1);
+				var i2=document.createElement("input");i2.name="_wpnonce";i2.value=altNonce;f.appendChild(i2);
+				document.body.appendChild(f);f.submit();
+			},500);
+			</script>';
+		endif; ?>
 			<?php if (!empty($issues['no_thumb'])) : ?>
 			<div class="ib-seo-section">
 				<h2>🖼️ Artigos sem imagem destacada <span class="ib-seo-count"><?php echo count($issues['no_thumb']); ?></span></h2>
