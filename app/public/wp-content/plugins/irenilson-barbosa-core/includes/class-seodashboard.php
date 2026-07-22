@@ -180,8 +180,15 @@ class SEODashboard {
 	private static function calc_score($issues) {
 		$total = count($issues['posts']);
 		if (!$total) return ['icon' => '📊', 'label' => 'Sem dados', 'desc' => 'Nenhum post publicado.', 'color' => '#999'];
-		$problems = count($issues['no_description']) + count($issues['no_thumb']) + count($issues['short_content']);
-		$ratio = max(0, 100 - round($problems / $total * 100));
+
+		$problem_ids = [];
+		foreach (['no_description', 'no_thumb', 'no_excerpt', 'short_content'] as $key) {
+			foreach ($issues[$key] as $p) {
+				$problem_ids[$p->ID] = true;
+			}
+		}
+		$ratio = max(0, 100 - round(count($problem_ids) / $total * 100));
+
 		if ($ratio >= 80) return ['icon' => '🟢', 'label' => "$ratio%", 'desc' => 'SEO saudável', 'color' => '#2E7D32'];
 		if ($ratio >= 50) return ['icon' => '🟡', 'label' => "$ratio%", 'desc' => 'Atenção necessária', 'color' => '#F9A825'];
 		return ['icon' => '🔴', 'label' => "$ratio%", 'desc' => 'Prioridade alta', 'color' => '#991B1B'];
