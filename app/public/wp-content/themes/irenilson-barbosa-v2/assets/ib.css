@@ -167,8 +167,8 @@ a{color:inherit;text-decoration:none}
 .eh-h-item{display:flex;gap:var(--space-3);text-decoration:none;color:inherit;padding:var(--space-2) 0;border-bottom:var(--border-w) solid var(--border-c);transition:background .2s;align-items:center;border-radius:var(--radius-sm);flex-shrink:0}
 .eh-h-item:last-of-type:not(.eh-h-item--all){border-bottom:none}
 .eh-h-item:hover{background:var(--paper-2)}
-.eh-h-item__img{flex-shrink:0;width:24px;height:36px;border-radius:var(--radius-sm);overflow:hidden;background:var(--paper-2)}
-.eh-h-item__img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+.eh-h-item__img{flex-shrink:0;width:24px;height:36px;border-radius:var(--radius-sm);overflow:hidden;background:var(--paper-2);aspect-ratio:2/3}
+.eh-h-item__img img{width:100%;height:100%;object-fit:contain;display:block}
 .eh-h-item__body{display:flex;flex-direction:column;gap:2px;min-width:0}
 .eh-h-item__t{font-size:var(--text-sm);font-weight:700;line-height:var(--leading-snug);color:var(--ink);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .eh-h-item__meta{font-size:var(--text-xxs);color:var(--tx-2)}
@@ -206,7 +206,7 @@ a{color:inherit;text-decoration:none}
 
 /* ==================== POIÉSIS HOME ==================== */
 .eh-poem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5)}
-.eh-poem-card{display:block;text-align:center;padding:var(--space-6) var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);text-decoration:none;color:inherit;transition:all .25s}
+.eh-poem-card{display:block;text-align:center;padding:var(--space-6) var(--space-4);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);text-decoration:none;color:inherit;transition:all .25s;min-height:180px}
 .eh-poem-card:hover{box-shadow:var(--shadow-card);transform:translateY(-2px)}
 .eh-poem-card__t{font-family:var(--font-heading);font-size:clamp(1rem,2.5vw,var(--text-lg));font-weight:700;color:var(--ink);margin:0 0 var(--space-1);line-height:var(--leading-tight);text-wrap:balance}
 .eh-poem-card:hover .eh-poem-card__t{color:var(--accent)}
