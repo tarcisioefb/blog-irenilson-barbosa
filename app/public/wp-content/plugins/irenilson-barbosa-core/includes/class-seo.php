@@ -76,9 +76,9 @@ class SEO {
 
 	private static function gemini_summarize($content, $key) {
 		$text = \wp_strip_all_tags($content);
-		$text = \mb_substr($text, 0, 3000);
+		$text = \mb_substr($text, 0, 2000);
 
-		$prompt = "Resuma o artigo abaixo em até 160 caracteres para ser uma meta description do Google. Seja direto e atraente:\n\n$text";
+		$prompt = "Resuma o artigo abaixo em até 160 caracteres para ser uma meta description do Google. Seja direto e atraente. Responda APENAS com a descrição, sem aspas ou formatacao:\n\n$text";
 
 		$resp = \wp_remote_post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $key, [
 			'headers' => ['Content-Type' => 'application/json'],
@@ -86,8 +86,15 @@ class SEO {
 			'timeout' => 15,
 		]);
 
-		if (\is_wp_error($resp)) return '';
+		if (\is_wp_error($resp)) {
+			\error_log('Gemini API error: ' . $resp->get_error_message());
+			return '';
+		}
 		$body = \json_decode(\wp_remote_retrieve_body($resp), true);
+		if (!empty($body['error'])) {
+			\error_log('Gemini API error: ' . ($body['error']['message'] ?? 'unknown'));
+			return '';
+		}
 		$text = $body['candidates'][0]['content']['parts'][0]['text'] ?? '';
 		$text = trim($text);
 		return $text ? \mb_substr($text, 0, 160) : '';
