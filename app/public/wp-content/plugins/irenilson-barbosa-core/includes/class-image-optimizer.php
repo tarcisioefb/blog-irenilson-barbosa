@@ -25,6 +25,11 @@ class ImageOptimizer {
 		if (defined('DOING_AJAX') && DOING_AJAX) return $metadata;
 		if (did_action('wp') && !is_admin()) return $metadata;
 
+		$ext = strtolower(pathinfo($metadata['file'], PATHINFO_EXTENSION));
+		if ($ext === 'avif' && empty($metadata['sizes'])) {
+			$metadata = self::generate_avif_sizes($metadata, $attachment_id);
+		}
+
 		$uploads = wp_upload_dir();
 		$base = $uploads['basedir'] . '/' . dirname($metadata['file']);
 
@@ -35,13 +40,61 @@ class ImageOptimizer {
 			$file = $base . '/' . $size['file'];
 			if (!file_exists($file)) continue;
 
-			$webp = $file . '.webp';
-			$avif = $file . '.avif';
-
-			if (!file_exists($webp)) self::convert_to($file, $webp, 'webp');
-			if (!file_exists($avif)) self::convert_to($file, $avif, 'avif');
+			if (!file_exists($file . '.webp')) self::convert_to($file, $file . '.webp', 'webp');
+			if (!file_exists($file . '.avif')) self::convert_to($file, $file . '.avif', 'avif');
 		}
 
+		return $metadata;
+	}
+
+	private static function generate_avif_sizes($metadata, $attachment_id) {
+		$uploads = wp_upload_dir();
+		$src = $uploads['basedir'] . '/' . $metadata['file'];
+		if (!file_exists($src)) return $metadata;
+
+		$img = @imagecreatefromavif($src);
+		if (!$img) return $metadata;
+
+		$w = imagesx($img);
+		$h = imagesy($img);
+		$metadata['width'] = $w;
+		$metadata['height'] = $h;
+
+		$sizes = wp_get_registered_image_subsizes();
+		$base_dir = $uploads['basedir'] . '/' . dirname($metadata['file']);
+		$new_sizes = [];
+
+		foreach ($sizes as $name => $s) {
+			$sw = (int) $s['width'];
+			$sh = (int) $s['height'];
+			$crop = !empty($s['crop']);
+			$dims = image_resize_dimensions($w, $h, $sw, $sh, $crop);
+			if (!$dims) continue;
+
+			$dst_w = $dims[4];
+			$dst_h = $dims[5];
+			$thumb = imagescale($img, $dst_w, $dst_h);
+			if (!$thumb) continue;
+
+			$filename = wp_basename($metadata['file'], '.avif') . "-{$sw}x{$sh}.jpg";
+			$filepath = $base_dir . '/' . $filename;
+			imagejpeg($thumb, $filepath, 85);
+			imagedestroy($thumb);
+
+			$new_sizes[$name] = [
+				'file'      => $filename,
+				'width'     => $dst_w,
+				'height'    => $dst_h,
+				'mime-type' => 'image/jpeg',
+				'filesize'  => file_exists($filepath) ? filesize($filepath) : 0,
+			];
+			self::convert_to($filepath, $filepath . '.webp', 'webp');
+			self::convert_to($filepath, $filepath . '.avif', 'avif');
+		}
+
+		imagedestroy($img);
+		$metadata['sizes'] = $new_sizes;
+		wp_update_attachment_metadata($attachment_id, $metadata);
 		return $metadata;
 	}
 
