@@ -8,6 +8,35 @@ class Security {
 		add_action('wp_login_failed', [__CLASS__, 'track_login_failed']);
 		add_filter('authenticate', [__CLASS__, 'check_login_locked'], 30, 3);
 		add_action('wp_loaded', [__CLASS__, 'clean_debug_log']);
+		add_action('login_head', [__CLASS__, 'custom_login_logo']);
+		add_filter('login_headerurl', [__CLASS__, 'custom_login_url']);
+		add_filter('login_headertext', [__CLASS__, 'custom_login_title']);
+	}
+
+	public static function custom_login_logo() {
+		$logo = \IrenilsonBarbosa\Core\AdminSettings::opt('site_logo');
+		if (!$logo) return;
+		?>
+		<style>
+		#login h1 a {
+			background-image: url('<?php echo esc_url($logo); ?>') !important;
+			background-size: contain !important;
+			background-position: center !important;
+			width: auto !important;
+			max-width: 280px;
+			height: 80px;
+			pointer-events: none;
+		}
+		</style>
+		<?php
+	}
+
+	public static function custom_login_url() {
+		return home_url('/');
+	}
+
+	public static function custom_login_title() {
+		return get_bloginfo('name');
 	}
 
 	public static function disable_xmlrpc() {
