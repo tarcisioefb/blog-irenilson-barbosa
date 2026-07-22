@@ -175,7 +175,8 @@ class SEO {
 	}
 
 	public static function ajax_batch_seo() {
-		if (!\wp_verify_nonce($_POST['_wpnonce'] ?? '', 'ib_batch_seo')) \wp_die('Falha de segurança.');
+		$nonce = $_POST['_wpnonce'] ?? $_GET['_wpnonce'] ?? '';
+		if (!\wp_verify_nonce($nonce, 'ib_batch_seo')) \wp_die('Falha de segurança.');
 		if (!\current_user_can('edit_pages')) \wp_die('Sem permissão.');
 
 		$types = \get_post_types(['public' => true, 'show_ui' => true], 'names');
@@ -187,32 +188,55 @@ class SEO {
 			'suppress_filters' => false,
 		]);
 
-		$desc_filled = 0;
-		$excerpt_filled = 0;
-
-		foreach ($posts as $pid) {
-			$post = \get_post($pid);
-			$meta = \get_post_meta($pid, '_ib_description', true);
-			if (!$meta) {
-				$desc = self::generate_description($post);
-				if ($desc) {
-					\update_post_meta($pid, '_ib_description', $desc);
-					$desc_filled++;
+		$queue = \get_transient('ib_seo_batch_queue');
+		if (!$queue) {
+			$needed = [];
+			foreach ($posts as $pid) {
+				$post = \get_post($pid);
+				$needs_desc = !\get_post_meta($pid, '_ib_description', true);
+				$needs_excerpt = empty($post->post_excerpt) && !empty($post->post_content);
+				if ($needs_desc || $needs_excerpt) {
+					$needed[] = ['id' => $pid, 'desc' => $needs_desc, 'excerpt' => $needs_excerpt];
 				}
 			}
-			if (empty($post->post_excerpt) && !empty($post->post_content)) {
-				$excerpt = \wp_trim_words(\wp_strip_all_tags($post->post_content), 30);
-				\wp_update_post(['ID' => $pid, 'post_excerpt' => $excerpt]);
-				$excerpt_filled++;
+			if (empty($needed)) {
+				\wp_redirect(\add_query_arg('page', 'ib-seo-dashboard', \admin_url('admin.php')));
+				exit;
+			}
+			\set_transient('ib_seo_batch_queue', $needed, 3600);
+			\set_transient('ib_seo_batch_progress', 0, 3600);
+			\set_transient('ib_seo_batch_total', count($needed), 3600);
+			$queue = $needed;
+		}
+
+		$batch = array_splice($queue, 0, 3);
+		$remaining = $queue;
+
+		foreach ($batch as $item) {
+			$post = \get_post($item['id']);
+			if ($item['desc']) {
+				\delete_post_meta($item['id'], '_ib_description');
+				$desc = self::generate_description($post);
+				if ($desc) \update_post_meta($item['id'], '_ib_description', $desc);
+			}
+			if ($item['excerpt']) {
+				\wp_update_post(['ID' => $item['id'], 'post_excerpt' => \wp_trim_words(\wp_strip_all_tags($post->post_content), 30)]);
 			}
 		}
 
-		\wp_redirect(\add_query_arg([
-			'page' => 'ib-seo-dashboard',
-			'generated' => $desc_filled + $excerpt_filled,
-			'desc_filled' => $desc_filled,
-			'excerpt_filled' => $excerpt_filled,
-		], \admin_url('admin.php')));
+		$done = (int) \get_transient('ib_seo_batch_progress') + count($batch);
+		$total = (int) \get_transient('ib_seo_batch_total');
+
+		if (empty($remaining)) {
+			\delete_transient('ib_seo_batch_queue');
+			\delete_transient('ib_seo_batch_progress');
+			\delete_transient('ib_seo_batch_total');
+			\wp_redirect(\add_query_arg(['page' => 'ib-seo-dashboard', 'generated' => $done], \admin_url('admin.php')));
+		} else {
+			\set_transient('ib_seo_batch_progress', $done, 3600);
+			\set_transient('ib_seo_batch_queue', $remaining, 3600);
+			\wp_redirect(\add_query_arg(['page' => 'ib-seo-dashboard', 'batch' => 'active', 'done' => $done, 'total' => $total], \admin_url('admin.php')));
+		}
 		exit;
 	}
 

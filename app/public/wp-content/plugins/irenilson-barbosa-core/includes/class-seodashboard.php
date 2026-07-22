@@ -24,9 +24,14 @@ class SEODashboard {
 		$score = self::calc_score($issues);
 
 		if (!empty($_GET['generated'])) {
-			$desc = (int) ($_GET['desc_filled'] ?? 0);
-			$excerpt = (int) ($_GET['excerpt_filled'] ?? 0);
-			echo '<div class="notice notice-success is-dismissible"><p>✅ ' . $desc . ' meta descriptions e ' . $excerpt . ' excerpts gerados automaticamente.</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>✅ Geração concluída. ' . (int) $_GET['generated'] . ' itens processados.</p></div>';
+		}
+		if (!empty($_GET['batch'])) {
+			$done = (int) ($_GET['done'] ?? 0);
+			$total = (int) ($_GET['total'] ?? 0);
+			$pct = $total > 0 ? round($done / $total * 100) : 0;
+			echo '<div class="notice notice-info"><p>⏳ Gerando... ' . $done . ' de ' . $total . ' (' . $pct . '%)</p><progress value="' . $done . '" max="' . $total . '" style="width:100%;height:8px;border-radius:4px"></progress></div>';
+			echo '<script>setTimeout(function(){var f=document.createElement("form");f.method="POST";f.action="' . admin_url('admin-ajax.php') . '";var i1=document.createElement("input");i1.name="action";i1.value="ib_batch_seo";f.appendChild(i1);var i2=document.createElement("input");i2.name="_wpnonce";i2.value="' . wp_create_nonce('ib_batch_seo') . '";f.appendChild(i2);document.body.appendChild(f);f.submit();},500);</script>';
 		}
 		?>
 		<div class="wrap">
