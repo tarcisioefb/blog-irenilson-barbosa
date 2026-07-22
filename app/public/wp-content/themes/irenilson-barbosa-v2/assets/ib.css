@@ -348,11 +348,15 @@ a{color:inherit;text-decoration:none}
 .article__body table{display:block;width:100%;overflow-x:auto;border-collapse:collapse;font-size:var(--text-base)}
 .article__body pre{overflow-x:auto;max-width:100%;background:var(--paper-2);padding:18px;border-radius:var(--r);font-size:var(--text-base)}
 
-.ib-toc{margin:var(--space-5) 0 var(--space-7);background:var(--paper-2);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5)}
-.ib-toc[open]{padding-bottom:var(--space-3)}
-.ib-toc__summary{display:flex;align-items:center;gap:var(--space-2);font-weight:700;font-size:var(--text-sm);color:var(--ink);cursor:pointer;user-select:none;list-style:none}
-.ib-toc__summary::-webkit-details-marker{display:none}
-.ib-toc__nav{margin-top:var(--space-3);padding-top:var(--space-3);border-top:var(--border-w) solid var(--border-c)}
+.ib-toc{margin-bottom:var(--space-6);padding:var(--space-3) var(--space-4);background:var(--paper-2);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md)}
+.ib-toc__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);cursor:pointer;user-select:none}
+.ib-toc__head-inner{display:flex;align-items:center;gap:var(--space-2)}
+.ib-toc__toggle{flex-shrink:0;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;border:0;background:var(--line);border-radius:50%;cursor:pointer;color:var(--ink);transition:transform .2s,background .15s;font-size:12px;line-height:1}
+.ib-toc.is-open .ib-toc__toggle{transform:rotate(180deg)}
+.ib-toc__toggle:hover{background:var(--accent);color:#fff}
+.ib-toc__title{font-weight:700;font-size:var(--text-13);color:var(--ink)}
+.ib-toc__body{display:none;margin-top:var(--space-3);padding-top:var(--space-3);border-top:var(--border-w) solid var(--border-c)}
+.ib-toc.is-open .ib-toc__body{display:block}
 .ib-toc__list,.ib-toc__sublist{margin:0;padding:0;list-style:none}
 .ib-toc__item{margin:0}
 .ib-toc__link{display:block;padding:var(--space-1) 0;font-size:var(--text-base);color:var(--tx-2);text-decoration:none;transition:color .15s;line-height:var(--leading-snug)}
