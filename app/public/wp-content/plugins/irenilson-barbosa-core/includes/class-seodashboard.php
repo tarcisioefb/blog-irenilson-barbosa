@@ -125,36 +125,50 @@ class SEODashboard {
 		<?php
 	}
 
+	private static function get_scan_types() {
+		return \get_post_types(['public' => true, 'show_ui' => true], 'objects');
+	}
+
 	private static function scan() {
 		$issues = ['no_description' => [], 'no_thumb' => [], 'no_excerpt' => [], 'short_content' => [], 'ok' => [], 'posts' => []];
-		$posts = get_posts([
-			'post_type' => 'post',
-			'post_status' => 'publish',
-			'posts_per_page' => 200,
-			'fields' => 'ids',
-			'suppress_filters' => false,
-		]);
-		$issues['posts'] = $posts;
+		$all_posts = [];
 
-		foreach ($posts as $pid) {
-			$meta_desc = get_post_meta($pid, '_ib_description', true);
-			if (!$meta_desc) $issues['no_description'][] = get_post($pid);
+		foreach (self::get_scan_types() as $type) {
+			$ids = \get_posts([
+				'post_type' => $type->name,
+				'post_status' => 'publish',
+				'posts_per_page' => 200,
+				'fields' => 'ids',
+				'suppress_filters' => false,
+			]);
+			$all_posts = array_merge($all_posts, $ids);
+		}
 
-			if (!has_post_thumbnail($pid)) $issues['no_thumb'][] = get_post($pid);
+		$issues['posts'] = $all_posts;
 
-			$post_obj = get_post($pid);
+		foreach ($all_posts as $pid) {
+			$meta_desc = \get_post_meta($pid, '_ib_description', true);
+			if (!$meta_desc) $issues['no_description'][] = \get_post($pid);
+
+			if (!\has_post_thumbnail($pid)) $issues['no_thumb'][] = \get_post($pid);
+
+			$post_obj = \get_post($pid);
 			if (empty($post_obj->post_excerpt)) $issues['no_excerpt'][] = $post_obj;
 
-			$words = str_word_count(wp_strip_all_tags($post_obj->post_content));
+			$words = \str_word_count(\wp_strip_all_tags($post_obj->post_content));
 			if ($words < 300) {
 				$post_obj->word_count = $words;
 				$issues['short_content'][] = $post_obj;
 			}
 		}
 
-		if (empty($issues['no_description'])) $issues['ok'][] = 'Todos os posts têm meta description';
-		if (empty($issues['no_thumb'])) $issues['ok'][] = 'Todos os posts têm imagem destacada';
-		if (empty($issues['short_content'])) $issues['ok'][] = 'Todos os posts têm conteúdo adequado (+300 palavras)';
+		$type_names = [];
+		foreach (self::get_scan_types() as $t) $type_names[] = $t->label;
+		$type_list = implode(', ', $type_names);
+
+		if (empty($issues['no_description'])) $issues['ok'][] = "Todos os $type_list têm meta description";
+		if (empty($issues['no_thumb'])) $issues['ok'][] = "Todos os $type_list têm imagem destacada";
+		if (empty($issues['short_content'])) $issues['ok'][] = "Todos os $type_list têm conteúdo adequado (+300 palavras)";
 
 		return $issues;
 	}
