@@ -71,7 +71,6 @@ while (have_posts()) : the_post(); ?>
 					<span>🆔 <a href="<?php echo esc_url($sobre_orcid); ?>" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">ORCID</a></span>
 				</div>
 
-				<p style="font-size:var(--text-xs);color:var(--tx-dim);margin:0;padding-top:var(--space-4);border-top:var(--border-w) solid var(--border-c)">Informações compiladas do Currículo Lattes.</p>
 			</div>
 		</div>
 	</article>
