@@ -42,40 +42,95 @@ class SEO {
 	public static function render_sobre_meta($post) {
 		if ($post->post_name !== 'sobre') return;
 		\wp_nonce_field('ib_sobre_save', 'ib_sobre_nonce');
-		$fields = [
-			'ib_sobre_foto' => ['Foto (URL)', 'text'],
-			'ib_sobre_descricao' => ['Descrição principal', 'textarea'],
-			'ib_sobre_formacao' => ['Formação acadêmica (uma por linha: período | curso)', 'textarea'],
-			'ib_sobre_grupos' => ['Grupos de pesquisa', 'text'],
-			'ib_sobre_publicacoes' => ['Texto de publicações (HTML permitido)', 'textarea'],
-			'ib_sobre_contato' => ['Contatos (um por linha: email ou URL)', 'textarea'],
-		];
+
+		$foto = \get_post_meta($post->ID, 'ib_sobre_foto', true);
+		$desc = \get_post_meta($post->ID, 'ib_sobre_descricao', true);
+		$formacao = \get_post_meta($post->ID, 'ib_sobre_formacao', true);
+		$grupos = \get_post_meta($post->ID, 'ib_sobre_grupos', true);
+		$pub = \get_post_meta($post->ID, 'ib_sobre_publicacoes', true);
+		$email = \get_post_meta($post->ID, 'ib_sobre_email', true);
 		?>
-		<p style="font-size:12px;color:#666;margin:0 0 12px">Campos editáveis da página Sobre. Substituem o conteúdo padrão do template.</p>
+		<p style="font-size:12px;color:#666;margin:0 0 12px">Campos editáveis da página Sobre. Deixe vazio para usar o valor padrão.</p>
 		<table class="form-table">
-		<?php foreach ($fields as $key => $label) : $val = \get_post_meta($post->ID, $key, true); ?>
-		<tr>
-			<th scope="row"><label for="<?php echo $key; ?>" style="font-weight:600;font-size:12px"><?php echo esc_html($label[0]); ?></label></th>
-			<td><?php if ($label[1] === 'textarea') : ?>
-				<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" rows="5" style="width:100%;font-size:12px"><?php echo esc_textarea($val); ?></textarea>
-			<?php else : ?>
-				<input type="text" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo esc_attr($val); ?>" style="width:100%;font-size:12px">
-			<?php endif; ?></td>
-		</tr>
-		<?php endforeach; ?>
+		<tr><th scope="row"><label for="ib_sobre_foto" style="font-weight:600;font-size:12px">Foto (URL)</label></th>
+			<td><input type="text" id="ib_sobre_foto" name="ib_sobre_foto" value="<?php echo esc_attr($foto); ?>" style="width:100%;font-size:12px" placeholder="https://..."></td></tr>
+		<tr><th scope="row"><label for="ib_sobre_descricao" style="font-weight:600;font-size:12px">Descrição principal</label></th>
+			<td><textarea id="ib_sobre_descricao" name="ib_sobre_descricao" rows="3" style="width:100%;font-size:12px"><?php echo esc_textarea($desc); ?></textarea></td></tr>
+		<tr><th scope="row"><label style="font-weight:600;font-size:12px">Formação acadêmica</label></th>
+			<td><div id="ib-formacao-list">
+				<?php $items = $formacao ? array_filter(array_map('trim', explode("\n", $formacao))) : ['|']; foreach ($items as $i => $item) : $parts = explode('|', $item, 2); ?>
+				<div class="ib-formacao-row" style="display:flex;gap:6px;margin-bottom:4px">
+					<input type="text" name="ib_formacao_periodo[]" value="<?php echo esc_attr(trim($parts[0] ?? '')); ?>" placeholder="Período" style="width:100px;font-size:12px">
+					<input type="text" name="ib_formacao_curso[]" value="<?php echo esc_attr(trim($parts[1] ?? $parts[0] ?? '')); ?>" placeholder="Curso / Instituição" style="flex:1;font-size:12px">
+					<button type="button" class="button ib-formacao-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>
+				</div>
+				<?php endforeach; ?>
+			</div>
+			<button type="button" class="button" id="ib-formacao-add" style="font-size:11px;margin-top:2px">+ Adicionar formação</button>
+			<script>
+			document.getElementById('ib-formacao-add')?.addEventListener('click',function(){
+				var d=document.createElement('div');d.className='ib-formacao-row';d.style.cssText='display:flex;gap:6px;margin-bottom:4px';
+				d.innerHTML='<input type="text" name="ib_formacao_periodo[]" placeholder="Período" style="width:100px;font-size:12px"> <input type="text" name="ib_formacao_curso[]" placeholder="Curso / Instituição" style="flex:1;font-size:12px"> <button type="button" class="button ib-formacao-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>';
+				document.getElementById('ib-formacao-list').appendChild(d);
+			});
+			</script></td></tr>
+		<tr><th scope="row"><label for="ib_sobre_grupos" style="font-weight:600;font-size:12px">Grupos de pesquisa</label></th>
+			<td><div id="ib-grupos-list">
+				<?php $gitems = $grupos ? array_filter(array_map('trim', explode("\n", $grupos))) : ['']; foreach ($gitems as $g) : ?>
+				<div class="ib-grupo-row" style="display:flex;gap:6px;margin-bottom:4px">
+					<input type="text" name="ib_sobre_grupos[]" value="<?php echo esc_attr($g); ?>" placeholder="Nome do grupo (instituição)" style="flex:1;font-size:12px">
+					<button type="button" class="button ib-grupo-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>
+				</div>
+				<?php endforeach; ?>
+			</div>
+			<button type="button" class="button" id="ib-grupos-add" style="font-size:11px;margin-top:2px">+ Adicionar grupo</button>
+			<script>
+			document.getElementById('ib-grupos-add')?.addEventListener('click',function(){
+				var d=document.createElement('div');d.className='ib-grupo-row';d.style.cssText='display:flex;gap:6px;margin-bottom:4px';
+				d.innerHTML='<input type="text" name="ib_sobre_grupos[]" placeholder="Nome do grupo (instituição)" style="flex:1;font-size:12px"> <button type="button" class="button ib-grupo-remove" style="font-size:11px" onclick="this.parentElement.remove()">—</button>';
+				document.getElementById('ib-grupos-list').appendChild(d);
+			});
+			</script></td></tr>
+		<tr><th scope="row"><label for="ib_sobre_publicacoes" style="font-weight:600;font-size:12px">Pesquisa e publicações</label></th>
+			<td><textarea id="ib_sobre_publicacoes" name="ib_sobre_publicacoes" rows="4" style="width:100%;font-size:12px"><?php echo esc_textarea($pub); ?></textarea>
+			<p style="font-size:11px;color:#666;margin:2px 0 0">HTML permitido. Deixe vazio para usar o texto padrão.</p></td></tr>
+		<tr><th scope="row"><label for="ib_sobre_email" style="font-weight:600;font-size:12px">E-mail de contato</label></th>
+			<td><input type="email" id="ib_sobre_email" name="ib_sobre_email" value="<?php echo esc_attr($email); ?>" style="width:100%;font-size:12px" placeholder="email@exemplo.com"></td></tr>
+		<tr><th scope="row" style="padding-top:20px"><label style="font-weight:600;font-size:12px">Mais informações</label></th>
+			<td style="padding-top:20px"><p style="font-size:11px;color:#666;margin:0 0 8px">Links acadêmicos — deixe vazio para usar o padrão.</p>
+			<div style="display:flex;flex-direction:column;gap:4px">
+				<input type="url" name="ib_sobre_lattes" value="<?php echo esc_attr(\get_post_meta($post->ID, 'ib_sobre_lattes', true)); ?>" placeholder="URL do Lattes" style="width:100%;font-size:12px;border:1px solid #8c8f94;border-radius:4px;padding:4px 8px">
+				<input type="url" name="ib_sobre_scholar" value="<?php echo esc_attr(\get_post_meta($post->ID, 'ib_sobre_scholar', true)); ?>" placeholder="URL do Google Scholar" style="width:100%;font-size:12px;border:1px solid #8c8f94;border-radius:4px;padding:4px 8px">
+				<input type="url" name="ib_sobre_orcid" value="<?php echo esc_attr(\get_post_meta($post->ID, 'ib_sobre_orcid', true)); ?>" placeholder="URL do ORCID" style="width:100%;font-size:12px;border:1px solid #8c8f94;border-radius:4px;padding:4px 8px">
+			</div></td></tr>
 		</table>
+		<style>.ib-formacao-row input,.ib-grupo-row input{border:1px solid #8c8f94;border-radius:4px;padding:4px 8px}.ib-formacao-remove,.ib-grupo-remove{color:#b32d2e}.ib-formacao-remove:hover,.ib-grupo-remove:hover{color:#8a1f1f}</style>
 		<?php
 	}
 
 	public static function save_sobre_meta($post_id) {
 		if (!isset($_POST['ib_sobre_nonce']) || !\wp_verify_nonce($_POST['ib_sobre_nonce'], 'ib_sobre_save')) return;
 		if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-		$keys = ['ib_sobre_foto', 'ib_sobre_descricao', 'ib_sobre_formacao', 'ib_sobre_grupos', 'ib_sobre_publicacoes', 'ib_sobre_contato'];
-		foreach ($keys as $k) {
-			if (isset($_POST[$k])) {
-				\update_post_meta($post_id, $k, \sanitize_textarea_field($_POST[$k]));
-			}
+
+		if (isset($_POST['ib_sobre_foto'])) \update_post_meta($post_id, 'ib_sobre_foto', \esc_url_raw($_POST['ib_sobre_foto']));
+		if (isset($_POST['ib_sobre_descricao'])) \update_post_meta($post_id, 'ib_sobre_descricao', \sanitize_textarea_field($_POST['ib_sobre_descricao']));
+		if (isset($_POST['ib_sobre_publicacoes'])) \update_post_meta($post_id, 'ib_sobre_publicacoes', \sanitize_textarea_field($_POST['ib_sobre_publicacoes']));
+		if (isset($_POST['ib_sobre_email'])) \update_post_meta($post_id, 'ib_sobre_email', \sanitize_email($_POST['ib_sobre_email']));
+		foreach (['ib_sobre_lattes', 'ib_sobre_scholar', 'ib_sobre_orcid'] as $k) {
+			if (isset($_POST[$k])) \update_post_meta($post_id, $k, \esc_url_raw($_POST[$k]));
 		}
+
+		$periodos = $_POST['ib_formacao_periodo'] ?? [];
+		$cursos = $_POST['ib_formacao_curso'] ?? [];
+		$linhas = [];
+		foreach ($periodos as $i => $p) {
+			$c = $cursos[$i] ?? '';
+			if (trim($p) || trim($c)) $linhas[] = trim($p) . '|' . trim($c);
+		}
+		\update_post_meta($post_id, 'ib_sobre_formacao', implode("\n", $linhas));
+
+		$grupos = array_filter(array_map('trim', $_POST['ib_sobre_grupos'] ?? []));
+		\update_post_meta($post_id, 'ib_sobre_grupos', implode("\n", $grupos));
 	}
 
 	public static function add_meta_box() {

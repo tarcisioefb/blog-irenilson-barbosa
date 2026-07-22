@@ -8,10 +8,12 @@ $sobre_descricao   = get_post_meta($pid, 'ib_sobre_descricao', true) ?: 'Profess
 $sobre_formacao    = get_post_meta($pid, 'ib_sobre_formacao', true) ?: "2024–2025|Pós-Doutorando — Democracia e Direitos Humanos, Ius Gentium Conimbrigae, Universidade de Coimbra\n2023–2024|Pós-Doutorado — Ciências da Educação, FPCEUP/Universidade do Porto\n2012–2016|Doutorado — Educação, UFBA\n2002–2004|Mestrado — Educação, UFBA\n2001|Licenciatura — Pedagogia, UFBA\n1990|Bacharelado — Teologia, STBSB";
 $sobre_grupos      = get_post_meta($pid, 'ib_sobre_grupos', true) ?: 'Educação, Sociedade e Diversidade (UFRB); Educação Especial, Diversidade e Contemporaneidade (UFRB); Currículo, Avaliação, Formação e Tecnologias em Educação (CAFTe) — CIIE/FPCEUP (Portugal).';
 $sobre_publicacoes = get_post_meta($pid, 'ib_sobre_publicacoes', true) ?: 'Autor de livros, capítulos de livros e artigos sobre educação inclusiva, educação especial, direitos humanos, teologia e interseccionalidades raciais, poemas e reflexões. <strong>"O Homem que Não Sabia Ser Santo"</strong> marca sua estreia na ficção, mesclando realismo mágico sertanejo com reflexões filosóficas e psicanalíticas sobre identidade, fé e humanidade — temperadas na filosofia de cozinha que brota do chão rachado da Bahia. Também autor de <strong>"Um Negro no Gólgota"</strong> (2015) e <strong>"A Vida em Poesia"</strong> (2015).';
-$sobre_contato     = get_post_meta($pid, 'ib_sobre_contato', true) ?: "irenilsonjb@yahoo.com.br\nirenilsonjb@ufrb.edu.br\nhttp://lattes.cnpq.br/1666550999462374\nhttps://scholar.google.com/citations?user=YKHWTRsAAAAJ\nhttps://orcid.org/0000-0001-6638-3620";
+$sobre_email       = get_post_meta($pid, 'ib_sobre_email', true) ?: 'irenilsonjb@yahoo.com.br';
+$sobre_lattes      = get_post_meta($pid, 'ib_sobre_lattes', true) ?: 'http://lattes.cnpq.br/1666550999462374';
+$sobre_scholar     = get_post_meta($pid, 'ib_sobre_scholar', true) ?: 'https://scholar.google.com/citations?user=YKHWTRsAAAAJ';
+$sobre_orcid       = get_post_meta($pid, 'ib_sobre_orcid', true) ?: 'https://orcid.org/0000-0001-6638-3620';
 
 $formacao_items = array_filter(array_map('trim', explode("\n", $sobre_formacao)));
-$contato_links  = array_filter(array_map('trim', explode("\n", $sobre_contato)));
 
 get_header();
 while (have_posts()) : the_post(); ?>
@@ -56,10 +58,15 @@ while (have_posts()) : the_post(); ?>
 				<p style="font-size:var(--text-base);line-height:var(--leading-relax);color:var(--tx-2);margin:0 0 var(--space-8)"><?php echo $sobre_publicacoes; ?></p>
 
 				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Contato</h2>
+				<div style="margin-bottom:var(--space-6);font-size:var(--text-13);color:var(--tx-2)">
+					<span>✉️ <a href="mailto:<?php echo esc_attr($sobre_email); ?>" style="color:var(--ink);text-decoration:none"><?php echo esc_html($sobre_email); ?></a></span>
+				</div>
+
+				<h2 style="font-size:var(--text-sm);font-weight:var(--weight-bold);letter-spacing:var(--track-wider);text-transform:uppercase;color:var(--ink);margin:0 0 var(--space-4);padding-bottom:var(--space-2);border-bottom:var(--border-w) solid var(--border-c)">Mais informações</h2>
 				<div style="display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-8);font-size:var(--text-13);color:var(--tx-2)">
-					<?php foreach ($contato_links as $link) : $link = trim($link); if (!$link) continue; $is_email = filter_var($link, FILTER_VALIDATE_EMAIL); ?>
-					<span><?php echo $is_email ? '✉️' : '🔗'; ?> <a href="<?php echo $is_email ? 'mailto:' . esc_attr($link) : esc_url($link); ?>" style="color:var(--ink);text-decoration:none"><?php echo esc_html($link); ?></a></span>
-					<?php endforeach; ?>
+					<span>📄 <a href="<?php echo esc_url($sobre_lattes); ?>" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Currículo Lattes</a></span>
+					<span>🎓 <a href="<?php echo esc_url($sobre_scholar); ?>" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Google Scholar</a></span>
+					<span>🆔 <a href="<?php echo esc_url($sobre_orcid); ?>" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">ORCID</a></span>
 				</div>
 
 				<p style="font-size:var(--text-xs);color:var(--tx-dim);margin:0;padding-top:var(--space-4);border-top:var(--border-w) solid var(--border-c)">Informações compiladas do Currículo Lattes.</p>

@@ -68,6 +68,13 @@ add_filter('use_block_editor_for_post', function ($enabled, $post) {
 	return $enabled;
 }, 10, 2);
 
+add_action('admin_head', function () {
+	$screen = get_current_screen();
+	if ($screen && $screen->id === 'page' && ($_GET['post'] ?? '') && get_post($_GET['post'])->post_name === 'sobre') {
+		echo '<style>#postdivrich,#postdivrich_0,#postdivrich_1{display:none!important}</style>';
+	}
+});
+
 add_action('wp_enqueue_scripts', function () {
 	wp_enqueue_style('irenilson', get_template_directory_uri() . '/assets/ib.css', [], IRENILSON_VER);
 	wp_enqueue_script('irenilson', get_template_directory_uri() . '/assets/ib.js', [], IRENILSON_VER, true);
