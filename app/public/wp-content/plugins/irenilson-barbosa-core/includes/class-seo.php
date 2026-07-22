@@ -115,6 +115,21 @@ class SEO {
 
 	private static function generate_description($post) {
 		$content = trim($post->post_content ?? '');
+
+		if ($post->post_type === 'page' && empty($content)) {
+			$slug = $post->post_name;
+			$arch_map = [
+				'artigos' => 'arch_desc_artigos', 'publicacoes' => 'arch_desc_publicacoes',
+				'publicação' => 'arch_desc_publicacoes', 'publicacoes-2' => 'arch_desc_publicacoes',
+				'livros' => 'arch_desc_livros', 'materiais' => 'arch_desc_materiais',
+				'poiesis' => 'arch_desc_poiesis',
+			];
+			if (isset($arch_map[$slug])) {
+				$arch_desc = \IrenilsonBarbosa\Core\AdminSettings::opt($arch_map[$slug]);
+				if ($arch_desc) return $arch_desc;
+			}
+		}
+
 		if (empty($content) && $post->post_type === 'page') {
 			$url = \get_permalink($post);
 			if ($url) {
