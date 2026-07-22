@@ -68,8 +68,8 @@ add_filter('plugins_api', function ($result, $action, $args) {
 	preg_match('/^=== (.+?) ===/m', $content, $name);
 	preg_match('/^Stable tag: (.+)/m', $content, $ver);
 	preg_match('/^Contributors: (.+)/m', $content, $contrib);
-	preg_match('/^== Description ==\n(.+?)(?=\n== )/ms', $content, $desc);
-	preg_match('/^== Installation ==\n(.+?)(?=\n== )/ms', $content, $install);
+	preg_match('/^== Description ==\n(.+?)(?=\n== (Installation|Changelog) )/ms', $content, $desc);
+	preg_match('/^== Installation ==\n(.+?)(?=\n== (Custom|Description|Changelog|Screenshots|Upgrade|Frequently|Authors|Contributors) )/ms', $content, $install);
 	preg_match('/^== Changelog ==\n(.+?)$/ms', $content, $changelog);
 
 	return (object) [
