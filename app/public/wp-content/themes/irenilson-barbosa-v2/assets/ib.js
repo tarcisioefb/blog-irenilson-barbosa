@@ -1,6 +1,7 @@
 /* IRENILSON BARBOSA — comportamento do tema: gaveta mobile, busca, sticky, copiar link, micro-interações. */
 (function () {
 	'use strict';
+	if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 	function ready(fn){ if(document.readyState!=='loading'){fn();} else {document.addEventListener('DOMContentLoaded',fn);} }
 	ready(function () {
 		// === DRAWER (gaveta mobile) ===
