@@ -61,16 +61,20 @@ class SEO {
 	}
 
 	private static function generate_description($post) {
-		if (empty($post->post_content)) return '';
+		$content = $post->post_content;
+		if (empty($content) && !empty($post->post_title)) {
+			$content = 'Esta é a página "' . $post->post_title . '" do site ' . \get_bloginfo('name') . '.';
+		}
+		if (empty($content)) return '';
 
 		$key = \IrenilsonBarbosa\Core\AdminSettings::opt('deepseek_key');
 		if ($key) {
-			$ds = self::deepseek_summarize($post->post_content, $key);
+			$ds = self::deepseek_summarize($content, $key);
 			if ($ds) return $ds;
 		}
 
 		if (!empty($post->post_excerpt)) return \wp_trim_words($post->post_excerpt, 25);
-		return self::local_summarize($post->post_content);
+		return self::local_summarize($content);
 	}
 
 	private static function deepseek_summarize($content, $key) {
