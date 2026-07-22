@@ -151,7 +151,7 @@ class Setup {
 		if (!$screen || !in_array($screen->post_type, ['livro', 'material', 'publicacao', 'poiesis'], true)) return;
 		wp_enqueue_media();
 		$theme_uri = get_template_directory_uri();
-		wp_enqueue_script('ib-admin', $theme_uri . '/assets/ib-admin.js', ['jquery'], IRENILSON_CORE_VERSION, true);
+		wp_enqueue_script('ib-admin', $theme_uri . '/assets/ib-admin.js', ['jquery'], ZUCA_CORE_VERSION, true);
 	}
 
 	public static function render_poiesis_fields($post) {

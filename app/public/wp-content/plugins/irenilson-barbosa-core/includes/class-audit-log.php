@@ -57,7 +57,7 @@ class AuditLog {
 	public static function create_table() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . self::$table;
-		if (get_option('ib_audit_log_version') === IRENILSON_CORE_VERSION) return;
+		if (get_option('ib_audit_log_version') === ZUCA_CORE_VERSION) return;
 		$charset = $wpdb->get_charset_collate();
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -78,7 +78,7 @@ class AuditLog {
 		) $charset;";
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta($sql);
-		update_option('ib_audit_log_version', IRENILSON_CORE_VERSION);
+		update_option('ib_audit_log_version', ZUCA_CORE_VERSION);
 	}
 
 	public static function log($action, $object_type, $object_id = 0, $object_title = '', $summary = '') {

@@ -1,4 +1,4 @@
-=== Irenilson Barbosa Core ===
+=== Zucatech Blog Core ===
 Contributors: zucatech
 Tags: seo, lgpd, tts, newsletter, audit, security
 Requires at least: 6.0
@@ -6,11 +6,11 @@ Tested up to: 7.0.2
 Stable tag: 1.1.0
 License: GPLv2 or later
 
-Gerencia CPTs, SEO, LGPD, TTS, newsletter, audit log e segurança do portal editorial de Irenilson Barbosa.
+Gerencia CPTs, SEO, LGPD, TTS, newsletter, audit log e segurança do portal editorial. Solução white-label para blogs.
 
 == Description ==
 
-Plugin funcionalidades do portal editorial — CPTs, taxonomias, metadados e componentes personalizados.
+Plugin funcionalidades para portais editoriais — CPTs, taxonomias, metadados, SEO, LGPD, TTS e segurança. Solução white-label desenvolvida por Zucatech.
 
 = Conteúdo =
 = Custom Post Types =

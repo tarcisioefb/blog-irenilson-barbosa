@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Irenilson Barbosa Core
- * Plugin URI:  https://irenilsonbarbosa.com.br
- * Description: Gerencia CPTs, SEO, LGPD, TTS, newsletter e segurança do portal editorial. Desenvolvido por Zucatech (zucatech.com).
+ * Plugin Name: Zucatech Blog Core
+ * Plugin URI:  https://zucatech.com
+ * Description: Gerencia CPTs, SEO, LGPD, TTS, newsletter e segurança do portal editorial. Solução white-label para blogs.
  * Version:     1.1.0
  * Author:      Zucatech
  * Author URI:  https://zucatech.com
@@ -11,15 +11,15 @@
 
 defined('ABSPATH') || exit;
 
-define('IRENILSON_CORE_VERSION', '1.1.0');
-define('IRENILSON_CORE_PATH', plugin_dir_path(__FILE__));
+define('ZUCA_CORE_VERSION', '1.1.0');
+define('ZUCA_CORE_PATH', plugin_dir_path(__FILE__));
 
 /**
  * Autoload de classes.
  */
 spl_autoload_register(function ($class) {
 	$prefix = 'IrenilsonBarbosa\\Core\\';
-	$base   = IRENILSON_CORE_PATH . 'includes/';
+	$base   = ZUCA_CORE_PATH . 'includes/';
 
 	if (strpos($class, $prefix) !== 0) {
 		return;
@@ -60,8 +60,8 @@ if (defined('WP_CLI') && WP_CLI) {
 
 add_filter('plugins_api', function ($result, $action, $args) {
 	$slug = is_object($args) ? ($args->slug ?? '') : ($args['slug'] ?? '');
-	if ($action !== 'plugin_information' || $slug !== 'irenilson-barbosa-core') return $result;
-	$readme = IRENILSON_CORE_PATH . 'readme.txt';
+	if ($action !== 'plugin_information' || $slug !== 'zucatech-blog-core') return $result;
+	$readme = ZUCA_CORE_PATH . 'readme.txt';
 	if (!file_exists($readme)) return $result;
 
 	$content = file_get_contents($readme);
@@ -78,9 +78,9 @@ add_filter('plugins_api', function ($result, $action, $args) {
 	}
 
 	return (object) [
-		'name'            => $name[1] ?? 'Irenilson Barbosa Core',
-		'slug'            => 'irenilson-barbosa-core',
-		'version'         => $ver[1] ?? IRENILSON_CORE_VERSION,
+		'name'            => $name[1] ?? 'Zucatech Blog Core',
+		'slug'            => 'zucatech-blog-core',
+		'version'         => $ver[1] ?? ZUCA_CORE_VERSION,
 		'author'          => '<a href="https://zucatech.com">Zucatech</a>',
 		'requires'        => '6.0',
 		'tested'          => '7.0.2',
@@ -121,7 +121,7 @@ function readme_to_html($text) {
 }
 
 add_filter('plugin_row_meta', function ($meta, $file) {
-	if ($file !== plugin_basename(IRENILSON_CORE_PATH . 'irenilson-barbosa-core.php')) return $meta;
-	$meta[] = '<a href="' . self_admin_url('plugin-install.php?tab=plugin-information&plugin=irenilson-barbosa-core&TB_iframe=true&width=600&height=550') . '" class="thickbox open-plugin-details-modal" aria-label="Ver detalhes">Ver detalhes</a>';
+	if ($file !== plugin_basename(ZUCA_CORE_PATH . 'irenilson-barbosa-core.php')) return $meta;
+	$meta[] = '<a href="' . self_admin_url('plugin-install.php?tab=plugin-information&plugin=zucatech-blog-core&TB_iframe=true&width=600&height=550') . '" class="thickbox open-plugin-details-modal" aria-label="Ver detalhes">Ver detalhes</a>';
 	return $meta;
 }, 10, 2);

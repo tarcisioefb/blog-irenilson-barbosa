@@ -87,7 +87,7 @@ class SEO {
 		$img   = self::get_image();
 		$type  = self::get_og_type();
 
-		echo "\n<!-- SEO — Irenilson Barbosa Core -->\n";
+		echo "\n<!-- SEO — Zucatech Blog Core -->\n";
 		?>
 <meta name="robots" content="<?php echo esc_attr(self::get_robots()); ?>">
 <meta name="description" content="<?php echo esc_attr($desc); ?>">

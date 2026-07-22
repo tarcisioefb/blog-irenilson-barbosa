@@ -23,7 +23,7 @@ class TTS {
 		}
 
 		$theme_uri = get_template_directory_uri();
-		wp_enqueue_script('ib-tts', $theme_uri . '/assets/ib-tts.js', [], IRENILSON_CORE_VERSION, true);
+		wp_enqueue_script('ib-tts', $theme_uri . '/assets/ib-tts.js', [], ZUCA_CORE_VERSION, true);
 		wp_localize_script('ib-tts', 'ibTTS', [
 			'title'       => get_the_title($post_id),
 			'author'      => $author_name,
