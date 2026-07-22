@@ -190,9 +190,8 @@ class SEODashboard {
 		}
 		$ratio = max(0, 100 - round(count($problem_ids) / $total * 100));
 
-		if ($ratio >= 80) return ['icon' => '🟢', 'label' => "$ratio%", 'desc' => 'SEO saudável', 'color' => '#2E7D32'];
-		if ($ratio >= 50) return ['icon' => '🟡', 'label' => "$ratio%", 'desc' => 'Atenção necessária', 'color' => '#F9A825'];
-		return ['icon' => '🔴', 'label' => "$ratio%", 'desc' => 'Prioridade alta', 'color' => '#991B1B'];
+		$desc = $ratio >= 80 ? 'SEO saudável' : ($ratio >= 50 ? 'Atenção necessária' : 'Prioridade alta');
+		return ['icon' => $ratio >= 80 ? '🟢' : ($ratio >= 50 ? '🟡' : '🔴'), 'label' => $desc, 'desc' => "$ratio% dos conteúdos sem problemas", 'color' => $ratio >= 80 ? '#2E7D32' : ($ratio >= 50 ? '#F9A825' : '#991B1B')];
 	}
 
 	private static function stat_card($icon, $label, $value, $color) {
