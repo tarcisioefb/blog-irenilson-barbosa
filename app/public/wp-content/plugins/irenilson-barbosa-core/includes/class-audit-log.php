@@ -6,7 +6,7 @@ class AuditLog {
 
 	public static function init() {
 		self::create_table();
-		add_action('post_updated', [__CLASS__, 'log_post_update'], 10, 3);
+		add_action('wp_after_insert_post', [__CLASS__, 'log_post_save'], 10, 4);
 		add_action('before_delete_post', [__CLASS__, 'log_post_delete']);
 		add_action('wp_trash_post', [__CLASS__, 'log_post_trash']);
 		add_action('untrashed_post', [__CLASS__, 'log_post_untrash']);
@@ -18,6 +18,27 @@ class AuditLog {
 		add_action('user_register', [__CLASS__, 'log_user_register']);
 		add_action('admin_menu', [__CLASS__, 'register_menu']);
 		add_action('wp_ajax_ib_export_logs', [__CLASS__, 'ajax_export']);
+	}
+
+	public static function log_post_save($post_id, $post, $update, $post_before) {
+		if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
+		if ($post->post_status === 'auto-draft' || $post->post_status === 'trash') return;
+		$type = get_post_type($post_id);
+		$title = get_the_title($post_id);
+		if (! $update) {
+			self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
+			return;
+		}
+		if (! $post_before) {
+			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title}");
+			return;
+		}
+		$changes = [];
+		if ($post_before->post_title !== $post->post_title) $changes[] = 'título';
+		if ($post_before->post_status !== $post->post_status) $changes[] = "status: {$post->post_status}";
+		if ($post_before->post_date !== $post->post_date) $changes[] = 'data';
+		if (empty($changes)) $changes[] = 'outros';
+		self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
 	}
 
 	public static function register_menu() {
@@ -72,26 +93,6 @@ class AuditLog {
 			'ip'           => $_SERVER['REMOTE_ADDR'] ?? '',
 		];
 		$wpdb->insert($table, $data);
-	}
-
-	public static function log_post_update($post_id, $post_after, $post_before) {
-		try {
-			if (wp_is_post_revision($post_id) || wp_is_autosave($post_id)) return;
-			if (empty($post_after) || empty($post_before)) return;
-			if ($post_after->post_status === 'auto-draft') return;
-			$type = get_post_type($post_id);
-			$title = get_the_title($post_id);
-			if ($post_before->post_status === 'auto-draft') {
-				self::log('created', $type, $post_id, $title, "Criou {$type}: {$title}");
-				return;
-			}
-			$changes = [];
-			if ($post_before->post_title !== $post_after->post_title) $changes[] = 'título';
-			if ($post_before->post_status !== $post_after->post_status) $changes[] = "status: {$post_after->post_status}";
-			if ($post_before->post_date !== $post_after->post_date) $changes[] = 'data';
-			if (empty($changes)) $changes[] = 'outros';
-			self::log('updated', $type, $post_id, $title, "Editou {$type}: {$title} (" . implode(', ', $changes) . ')');
-		} catch (\Throwable $e) {}
 	}
 
 	public static function log_post_delete($post_id) {
