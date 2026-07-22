@@ -151,11 +151,12 @@ class SEO {
 		}
 
 		if (count($items) < 2) return;
-		?><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[<?php
+		$list = [];
 		foreach ($items as $i) {
 			$item_url = $i['item'] ?? home_url('/');
-			echo '{"@type":"ListItem","position":' . (int)$i['position'] . ',"name":"' . esc_js($i['name']) . '","item":"' . esc_js($item_url) . '"},';
-		} ?></script><?php
+			$list[] = '{"@type":"ListItem","position":' . (int)$i['position'] . ',"name":"' . esc_js($i['name']) . '","item":"' . esc_js($item_url) . '"}';
+		}
+		?><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[<?php echo implode(',', $list); ?>]}</script><?php
 	}
 
 	private static function output_global_schema() {
