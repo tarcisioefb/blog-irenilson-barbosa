@@ -12,6 +12,7 @@ class SEO {
 		add_action('init', function () { 		\remove_action('wp_head', 'rel_canonical'); }, 0);
 		add_action('wp_head', [__CLASS__, 'pagination_links'], 2);
 		add_filter('wp_sitemaps_posts_entry', [__CLASS__, 'sitemap_image'], 10, 2);
+		add_filter('wp_sitemaps_posts_pre_url_list', [__CLASS__, 'sitemap_archive_urls'], 10, 3);
 		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
 		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
@@ -32,6 +33,10 @@ class SEO {
 		return "User-agent: *\nAllow: /\nDisallow: /wp-admin/\nDisallow: /wp-includes/\nSitemap: " . home_url('/wp-sitemap.xml') . "\n";
 	}
 
+	public static function filter_title() {
+		return self::get_title();
+	}
+
 	public static function ping_sitemap($post_id) {
 		if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
 		\wp_remote_get('https://www.google.com/ping?sitemap=' . \urlencode(\home_url('/wp-sitemap.xml')), ['timeout' => 5, 'blocking' => false]);
@@ -47,10 +52,6 @@ class SEO {
 			if ($paged > 1) echo '<link rel="prev" href="' . \esc_url(\get_pagenum_link($paged - 1)) . '">' . "\n";
 			if ($paged < $max) echo '<link rel="next" href="' . \esc_url(\get_pagenum_link($paged + 1)) . '">' . "\n";
 		}
-	}
-
-	public static function filter_title() {
-		return self::get_title();
 	}
 
 	public static function filter_wp_title($title, $sep) {
@@ -918,6 +919,21 @@ class SEO {
 }
 </script>
 		<?php
+	}
+
+	public static function sitemap_archive_urls($url_list, $post_type, $page_num) {
+		if ($post_type !== 'page' || $page_num > 1) return $url_list;
+		$archives = ['poiesis', 'publicacao', 'livro', 'material'];
+		$extras = [];
+		foreach ($archives as $cpt) {
+			$url = \get_post_type_archive_link($cpt);
+			if ($url && !\get_page_by_path($cpt, OBJECT, 'page')) {
+				$extras[] = ['loc' => $url, 'lastmod' => \current_time('c')];
+			}
+		}
+		if (empty($extras)) return $url_list;
+		if (\is_null($url_list)) $url_list = [];
+		return \array_merge($url_list, $extras);
 	}
 
 	public static function sitemap_image($entry, $post) {
