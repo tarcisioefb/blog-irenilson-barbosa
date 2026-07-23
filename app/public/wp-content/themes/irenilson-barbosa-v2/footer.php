@@ -3,20 +3,23 @@
 <footer class="footer" role="contentinfo">
 	<div class="wrap">
 		<div class="footer__row">
-			<div class="footer__logo"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" aria-label="Ir para o início"><?php $logo = ib_opt('site_logo'); if ($logo) : $logo_id = attachment_url_to_postid($logo); if ($logo_id) : echo wp_get_attachment_image($logo_id, 'medium', false, ['alt' => esc_attr(get_bloginfo('name')), 'loading' => false]); else : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>"><?php endif; else : ?><span style="font-family:var(--serif);font-weight:700;color:var(--ink)"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php endif; ?></a></div>
+			<div class="footer__left">
+				<div class="footer__logo"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" aria-label="Ir para o início"><?php $logo = ib_opt('site_logo'); if ($logo) : $logo_id = attachment_url_to_postid($logo); if ($logo_id) : echo wp_get_attachment_image($logo_id, 'medium', false, ['alt' => esc_attr(get_bloginfo('name')), 'loading' => false]); else : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>"><?php endif; else : ?><span style="font-family:var(--serif);font-weight:700;color:var(--ink)"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span><?php endif; ?></a></div>
 
-			<div class="footer__links">
-				<a href="<?php echo esc_url( home_url( '/artigos/' ) ); ?>">Artigos</a>
-				<a href="<?php echo esc_url( home_url( '/poiesis/' ) ); ?>">Poiésis</a>
-				<a href="<?php echo esc_url( home_url( '/publicacoes/' ) ); ?>">Publicações</a>
-				<a href="<?php echo esc_url( home_url( '/livros/' ) ); ?>">Livros</a>
-				<a href="<?php echo esc_url( home_url( '/materiais/' ) ); ?>">Materiais</a>
-				<a href="<?php echo esc_url( home_url( '/sobre/' ) ); ?>">Sobre</a>
-				<a href="<?php echo esc_url( home_url( '/contato/' ) ); ?>">Contato</a>
-				<a href="<?php echo esc_url( home_url( '/privacidade/' ) ); ?>">Privacidade</a>
+				<div class="footer__links">
+					<a href="<?php echo esc_url( home_url( '/artigos/' ) ); ?>">Artigos</a>
+					<a href="<?php echo esc_url( home_url( '/poiesis/' ) ); ?>">Poiésis</a>
+					<a href="<?php echo esc_url( home_url( '/publicacoes/' ) ); ?>">Publicações</a>
+					<a href="<?php echo esc_url( home_url( '/livros/' ) ); ?>">Livros</a>
+					<a href="<?php echo esc_url( home_url( '/materiais/' ) ); ?>">Materiais</a>
+					<a href="<?php echo esc_url( home_url( '/sobre/' ) ); ?>">Sobre</a>
+					<a href="<?php echo esc_url( home_url( '/contato/' ) ); ?>">Contato</a>
+					<a href="<?php echo esc_url( home_url( '/privacidade/' ) ); ?>">Privacidade</a>
+				</div>
 			</div>
 
-		<p class="footer__cr">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> Irenilson Barbosa. Todos os direitos reservados.</p>
+			<p class="footer__cr">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> Irenilson Barbosa. Todos os direitos reservados.</p>
+		</div>
 	</div>
 </footer>
 
