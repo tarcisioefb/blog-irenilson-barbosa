@@ -86,9 +86,8 @@ a{color:inherit;text-decoration:none}
 .topbar__row{display:flex;align-items:center;justify-content:space-between;min-height:40px;font-size:var(--text-13)}
 .topbar__date{color:var(--tx-inv-dim);letter-spacing:.02em}
 .topbar__right{display:flex;align-items:center;gap:var(--space-5)}
-.topbar__place{color:var(--tx-inv-dim);letter-spacing:.03em}
+.topbar__place{color:var(--tx-inv-dim);font-size:13px;letter-spacing:.03em;line-height:inherit}
 .topbar__place b{color:#D7D3C9;font-weight:600}
-h1.topbar__place{font-size:13px;margin:0;font-weight:400;line-height:inherit}
 .topbar__social{display:flex;gap:var(--space-2)}
 .soc{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line-dark);transition:background .18s,border-color .18s;flex-shrink:0}
 .soc svg{width:14px;height:14px;color:#e8dbcc;transition:color .18s}
