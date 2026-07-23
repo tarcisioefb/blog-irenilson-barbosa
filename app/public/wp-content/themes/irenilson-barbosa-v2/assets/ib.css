@@ -521,7 +521,13 @@ a{color:inherit;text-decoration:none}
      lg ≤1024px · md ≤768px · sm ≤640px · xs ≤480px   (base = desktop)
    Tipografia e espaçamento já são fluidos (clamp), então os breakpoints
    cuidam só de LAYOUT. Ordem grande→pequeno (o menor sobrescreve).
-   ========================================================================== */
+    ========================================================================== */
+
+/* ---- ≤1200: copyright abaixo do footer_left ---- */
+@media(max-width:1200px){
+	.footer__row{flex-direction:column;align-items:flex-start;gap:var(--space-3)}
+	.footer__cr{margin:0}
+}
 
 /* ---- lg ≤1024: some a coluna lateral, header vira mobile, hero em mosaico compacto ---- */
 @media(max-width:1024px){
