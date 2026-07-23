@@ -9,7 +9,7 @@ class SEO {
 		add_action('save_post', [__CLASS__, 'save_sobre_meta']);
 		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
 		add_action('save_post', [__CLASS__, 'ping_sitemap'], 99);
-		\remove_action('wp_head', 'rel_canonical');
+		add_action('init', function () { \remove_action('wp_head', 'rel_canonical'); }, 0);
 		add_action('wp_head', [__CLASS__, 'pagination_links'], 2);
 		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
 		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
@@ -741,8 +741,8 @@ class SEO {
 	}
 
 	private static function get_url() {
+		if (is_front_page() || is_home()) return home_url('/');
 		if (is_singular()) return get_permalink(get_queried_object_id());
-		if (is_home() || is_front_page()) return home_url('/');
 		if (is_archive()) return get_pagenum_link(1);
 		return home_url('/');
 	}
