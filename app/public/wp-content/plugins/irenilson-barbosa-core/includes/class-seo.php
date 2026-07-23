@@ -8,7 +8,9 @@ class SEO {
 		add_action('save_post', [__CLASS__, 'save_meta_box']);
 		add_action('save_post', [__CLASS__, 'save_sobre_meta']);
 		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
+		add_action('save_post', [__CLASS__, 'ping_sitemap'], 99);
 		\remove_action('wp_head', 'rel_canonical');
+		add_action('wp_head', [__CLASS__, 'pagination_links'], 2);
 		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
 		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
@@ -28,6 +30,23 @@ class SEO {
 	public static function robots_txt($output, $public) {
 		if (!$public) return $output;
 		return "User-agent: *\nAllow: /\nDisallow: /wp-admin/\nDisallow: /wp-includes/\nSitemap: " . home_url('/wp-sitemap.xml') . "\n";
+	}
+
+	public static function ping_sitemap($post_id) {
+		if (\wp_is_post_revision($post_id) || \wp_is_post_autosave($post_id)) return;
+		\wp_remote_get('https://www.google.com/ping?sitemap=' . \urlencode(\home_url('/wp-sitemap.xml')), ['timeout' => 5, 'blocking' => false]);
+	}
+
+	public static function pagination_links() {
+		if (!\is_archive() && !\is_search() && !\is_home()) return;
+		global $wp_query;
+		$max = $wp_query->max_num_pages;
+		if ($max < 2) return;
+		$paged = (int) (\get_query_var('paged') ?: 1);
+		if (\function_exists('get_pagenum_link')) {
+			if ($paged > 1) echo '<link rel="prev" href="' . \esc_url(\get_pagenum_link($paged - 1)) . '">' . "\n";
+			if ($paged < $max) echo '<link rel="next" href="' . \esc_url(\get_pagenum_link($paged + 1)) . '">' . "\n";
+		}
 	}
 
 	public static function filter_title() {
