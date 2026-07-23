@@ -88,6 +88,7 @@ a{color:inherit;text-decoration:none}
 .topbar__date{color:var(--tx-inv-dim);letter-spacing:.02em}
 .topbar__right{display:flex;align-items:center;gap:var(--space-5)}
 .topbar__place{color:var(--tx-inv-dim);font-size:13px;letter-spacing:.03em;line-height:inherit}
+.topbar__desc{display:inline}
 .topbar__place b{color:#D7D3C9;font-weight:600}
 .topbar__social{display:flex;gap:var(--space-2)}
 .soc{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line-dark);transition:background .18s,border-color .18s;flex-shrink:0}
@@ -631,7 +632,7 @@ a{color:inherit;text-decoration:none}
 	.footer__row{flex-direction:column;align-items:flex-start;gap:var(--space-4)}
 	.footer__social{margin-left:0}
 	.topbar__row{flex-wrap:wrap;gap:2px 0}
-	.topbar__place{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+	.topbar__desc{display:none}
 	.eh-lead{min-height:clamp(260px,58vw,320px)}
 	.eh-feat{min-height:clamp(120px,32vw,150px)}
 	/* share */
