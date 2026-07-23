@@ -9,15 +9,15 @@ class SEO {
 		add_action('save_post', [__CLASS__, 'save_sobre_meta']);
 		add_action('save_post', [__CLASS__, 'auto_description'], 20, 2);
 		add_action('save_post', [__CLASS__, 'ping_sitemap'], 99);
-		add_action('init', function () { \remove_action('wp_head', 'rel_canonical'); }, 0);
+		add_action('init', function () { 		\remove_action('wp_head', 'rel_canonical'); }, 0);
 		add_action('wp_head', [__CLASS__, 'pagination_links'], 2);
+		add_filter('wp_sitemaps_posts_entry', [__CLASS__, 'sitemap_image'], 10, 2);
 		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
 		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
 		add_filter('pre_get_document_title', [__CLASS__, 'filter_title']);
 		add_filter('wp_title', [__CLASS__, 'filter_wp_title'], 10, 2);
 		add_filter('robots_txt', [__CLASS__, 'robots_txt'], 10, 2);
-		add_filter('wp_sitemaps_posts_entry', [__CLASS__, 'sitemap_image'], 10, 2);
 		add_filter('the_excerpt_rss', [__CLASS__, 'rss_thumbnail']);
 		add_filter('the_content_feed', [__CLASS__, 'rss_thumbnail']);
 		add_action('add_meta_boxes', [__CLASS__, 'add_faq_meta_box']);
