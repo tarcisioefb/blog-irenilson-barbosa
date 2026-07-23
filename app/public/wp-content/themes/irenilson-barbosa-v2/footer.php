@@ -8,9 +8,12 @@
 			<div class="footer__links">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Início</a>
 				<a href="<?php echo esc_url( home_url( '/artigos/' ) ); ?>">Artigos</a>
+				<a href="<?php echo esc_url( home_url( '/poiesis/' ) ); ?>">Poiésis</a>
 				<a href="<?php echo esc_url( home_url( '/publicacoes/' ) ); ?>">Publicações</a>
 				<a href="<?php echo esc_url( home_url( '/livros/' ) ); ?>">Livros</a>
 				<a href="<?php echo esc_url( home_url( '/materiais/' ) ); ?>">Materiais</a>
+				<a href="<?php echo esc_url( home_url( '/sobre/' ) ); ?>">Sobre</a>
+				<a href="<?php echo esc_url( home_url( '/contato/' ) ); ?>">Contato</a>
 			</div>
 		</div>
 
