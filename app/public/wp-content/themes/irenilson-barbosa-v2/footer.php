@@ -17,7 +17,7 @@
 				<a href="<?php echo esc_url( home_url( '/privacidade/' ) ); ?>">Privacidade</a>
 			</div>
 
-		<p class="footer__cr">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> Irenilson Barbosa. Todos os direitos reservados. <span style="font-size:var(--text-xs);color:var(--tx-dim)">Desenvolvido por <a href="https://zucatech.com" target="_blank" rel="noopener" style="color:inherit" aria-label="Zucatech (abre em nova janela)">Zucatech</a>.</span></p>
+		<p class="footer__cr">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> Irenilson Barbosa. Todos os direitos reservados.</p>
 	</div>
 </footer>
 
