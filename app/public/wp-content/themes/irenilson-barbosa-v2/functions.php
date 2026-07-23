@@ -6,7 +6,7 @@
 
 defined('ABSPATH') || exit;
 
-define('IRENILSON_VER', '2.0.9');
+define('IRENILSON_VER', '2.1.0');
 
 require get_template_directory() . '/inc/template-tags.php';
 
