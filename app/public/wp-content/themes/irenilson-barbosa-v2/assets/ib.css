@@ -630,7 +630,8 @@ a{color:inherit;text-decoration:none}
 	.footer__cr{font-size:var(--text-13)}
 	.footer__row{flex-direction:column;align-items:flex-start;gap:var(--space-4)}
 	.footer__social{margin-left:0}
-	.topbar__place{display:none}
+	.topbar__row{flex-wrap:wrap;gap:2px 0}
+	.topbar__place{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
 	.eh-lead{min-height:clamp(260px,58vw,320px)}
 	.eh-feat{min-height:clamp(120px,32vw,150px)}
 	/* share */
@@ -642,10 +643,10 @@ a{color:inherit;text-decoration:none}
 	.eh-news__form button{width:100%;padding:14px 18px;font-size:var(--text-13)}
 }
 
-/* ---- xs ≤480: topbar só com a data; respiros menores ---- */
+/* ---- xs ≤480: topbar adaptável; respiros menores ---- */
 @media(max-width:480px){
-	.topbar__right{display:none}
-	.topbar__row{justify-content:flex-start}
+	.topbar__date{display:none}
+	.topbar__right{gap:var(--space-2)}
 	.eh-feat__body,.eh-feat--wide .eh-feat__body{padding:var(--space-3) 14px}
 	.eh-lead__body{padding:var(--space-5) 18px 22px}
 }
