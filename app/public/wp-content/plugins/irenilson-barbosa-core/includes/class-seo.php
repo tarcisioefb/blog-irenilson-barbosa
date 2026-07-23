@@ -12,7 +12,6 @@ class SEO {
 		add_action('init', function () { 		\remove_action('wp_head', 'rel_canonical'); }, 0);
 		add_action('wp_head', [__CLASS__, 'pagination_links'], 2);
 		add_filter('wp_sitemaps_posts_entry', [__CLASS__, 'sitemap_image'], 10, 2);
-		add_filter('wp_sitemaps_posts_pre_url_list', [__CLASS__, 'sitemap_archive_urls'], 10, 3);
 		add_action('wp_ajax_ib_gen_alt', [__CLASS__, 'ajax_gen_alt']);
 		add_action('wp_ajax_ib_batch_alt', [__CLASS__, 'ajax_batch_alt']);
 		add_action('wp_head', [__CLASS__, 'output'], 1);
@@ -919,21 +918,6 @@ class SEO {
 }
 </script>
 		<?php
-	}
-
-	public static function sitemap_archive_urls($url_list, $post_type, $page_num) {
-		if ($post_type !== 'page' || $page_num > 1) return $url_list;
-		$archives = ['poiesis', 'publicacao', 'livro', 'material'];
-		$extras = [];
-		foreach ($archives as $cpt) {
-			$url = \get_post_type_archive_link($cpt);
-			if ($url && !\get_page_by_path($cpt, OBJECT, 'page')) {
-				$extras[] = ['loc' => $url, 'lastmod' => \current_time('c')];
-			}
-		}
-		if (empty($extras)) return $url_list;
-		if (\is_null($url_list)) $url_list = [];
-		return \array_merge($url_list, $extras);
 	}
 
 	public static function sitemap_image($entry, $post) {
