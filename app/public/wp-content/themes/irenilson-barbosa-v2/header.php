@@ -26,8 +26,7 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 <header class="eh">
 	<div class="topbar">
 		<div class="wrap topbar__row">
-			<div class="topbar__date"><?php echo esc_html( ucfirst( date_i18n( 'l, j \d\e F \d\e Y' ) ) ); ?></div>
-			<div class="topbar__right">
+			<div class="topbar__left">
 				<?php
 			$topbar_title = get_bloginfo('name');
 			$topbar_desc  = get_bloginfo('description');
@@ -40,6 +39,9 @@ $ib_menu = array( 'theme_location' => 'primary', 'container' => false, 'menu_cla
 				}
 			}
 			if (is_front_page()) : ?><h1 class="topbar__place"><?php else : ?><span class="topbar__place"><?php endif; ?><b><?php echo esc_html($topbar_title); ?></b><?php echo $topbar_desc ? ' · ' . esc_html($topbar_desc) : ''; ?><?php if (is_front_page()) : ?></h1><?php else : ?></span><?php endif; ?>
+			</div>
+			<div class="topbar__right">
+				<div class="topbar__date"><?php echo esc_html( ucfirst( date_i18n( 'l, j \d\e F \d\e Y' ) ) ); ?></div>
 				<div class="topbar__social"><?php ib_render_social( 'soc' ); ?></div>
 			</div>
 		</div>
