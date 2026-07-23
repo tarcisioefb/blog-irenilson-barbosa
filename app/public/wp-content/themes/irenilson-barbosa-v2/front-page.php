@@ -16,6 +16,7 @@ if ( empty( $editorias ) ) {
 
 <main class="eh-home" id="main">
 
+	<h1 class="screen-reader-text"><?php echo esc_html( get_bloginfo( 'name' ) . ' — ' . get_bloginfo( 'description' ) ); ?></h1>
 	<?php if ( $lead ) :
 		$lc = ib_primary_cat( $lead );
 		$lt_id = get_post_thumbnail_id( $lead );
@@ -27,7 +28,7 @@ if ( empty( $editorias ) ) {
 				<?php if ( $lt_id ) : ?><?php echo wp_get_attachment_image( $lt_id, 'large', false, ['class' => 'eh-lead__img', 'alt' => '', 'loading' => false, 'fetchpriority' => 'high', 'data-no-lazy' => '1'] ); ?><?php endif; ?>
 				<span class="eh-lead__body">
 					<?php if ( $lc ) : ?><span class="en-tag en-tag--solid"><?php echo esc_html( $lc->name ); ?></span><br><?php endif; ?>
-					<h1 class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></h1>
+					<h2 class="eh-lead__title"><?php echo esc_html( get_the_title( $lead ) ); ?></h2>
 				</span>
 			</a>
 
