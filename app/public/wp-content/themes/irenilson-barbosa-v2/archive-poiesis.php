@@ -16,9 +16,6 @@ get_header(); ?>
 				<article class="ib-poem-card" style="text-align:center;padding:var(--space-6);background:var(--paper);border:var(--border-w) solid var(--border-c);border-radius:var(--radius-md);transition:box-shadow .25s">
 					<a href="<?php the_permalink(); ?>" style="text-decoration:none;color:inherit">
 						<h2 style="font-family:var(--font-heading);font-size:var(--text-lg);font-weight:700;color:var(--ink);margin:0 0 var(--space-2);line-height:var(--leading-tight)"><?php the_title(); ?></h2>
-						<?php if (has_excerpt()) : ?>
-							<p style="font-size:var(--text-sm);color:var(--tx-dim);font-style:italic;margin:0 0 var(--space-3);line-height:var(--leading-snug)"><?php echo esc_html(get_the_excerpt()); ?></p>
-						<?php endif; ?>
 						<span style="font-size:var(--text-xs);color:var(--tx-dim)"><?php echo esc_html(get_the_date('j F Y')); ?></span>
 					</a>
 				</article>
