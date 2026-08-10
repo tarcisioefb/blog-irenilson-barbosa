@@ -3,7 +3,7 @@
  * Plugin Name: Zucatech Blog Core
  * Plugin URI:  https://zucatech.com
  * Description: Gerencia CPTs, SEO, LGPD, TTS, newsletter e segurança do portal editorial. Solução white-label para blogs.
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      Zucatech
  * Author URI:  https://zucatech.com
  * Text Domain: irenilson-barbosa-core
@@ -11,7 +11,7 @@
 
 defined('ABSPATH') || exit;
 
-define('ZUCA_CORE_VERSION', '1.1.0');
+define('ZUCA_CORE_VERSION', '1.2.0');
 define('ZUCA_CORE_PATH', plugin_dir_path(__FILE__));
 
 /**

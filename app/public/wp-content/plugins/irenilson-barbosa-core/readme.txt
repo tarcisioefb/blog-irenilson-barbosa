@@ -3,7 +3,7 @@ Contributors: zucatech
 Tags: seo, lgpd, tts, newsletter, audit, security
 Requires at least: 6.0
 Tested up to: 7.0.2
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 
 Gerencia CPTs, SEO, LGPD, TTS, newsletter, audit log e segurança do portal editorial. Solução white-label para blogs.
@@ -105,6 +105,15 @@ Plugin funcionalidades para portais editoriais — CPTs, taxonomias, metadados, 
 3. Configure em "Irenilson Barbosa" no menu admin
 
 == Changelog ==
+
+= 1.2.0 =
+* SEO: sitemap com URLs de archives de CPT, ping no publish, rel prev/next, canonical sem duplicacao, H1 na topbar
+* SEO Dashboard: diagnostico de meta descriptions/excerpts/thumbnails/word count por tipo, geracao individual e em lote
+* DeepSeek: meta descriptions e alt text de imagens com IA (vision), fallback local inteligente
+* Pagina Sobre: meta box editavel (foto, nome, subtitulo, formacao, grupos, publicacoes, email, links academicos) com editor WYSIWYG
+* ToC: tabela de conteudos collapsivel robusta com preg_replace_callback
+* Tema: header H1, topbar configuravel, footer menu completo, responsividade
+* Cache: TTL navegador 0, Cache-Control no-cache, botao limpar cache
 
 = 1.1.0 =
 * SEO: BlogPosting schema, sameAs dinâmico, articleSection + keywords, image sitemap, FAQ schema
